@@ -26,6 +26,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.WorkingIntroActivity"></activity>
         <activity android:name=".Activities.IssueActivity" />
+
+
+
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -46,7 +50,9 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-
+       <activity android:name=".ServiceImplementation.InLensGallery.MainActivity"
+           android:screenOrientation="portrait"
+           android:theme="@style/AppTheme"/>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->

@@ -967,7 +967,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case R.id.upload_activity:
-                                startActivity(new Intent(MainActivity.this, com.integrals.inlens.GridView.MainActivity.class));
+                                startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
                                 break;
                             case R.id.profile_pic:
                                 DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
