@@ -105,6 +105,8 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
+import io.github.tonnyl.light.Light;
+
 import com.integrals.inlens.Activities.CloudAlbum;
 import com.integrals.inlens.Activities.CreateCloudAlbum;
 import com.integrals.inlens.Activities.IntroActivity;
@@ -967,6 +969,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case R.id.upload_activity:
+
                                 startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
                                 break;
                             case R.id.profile_pic:

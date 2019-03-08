@@ -1,8 +1,10 @@
+
 package com.integrals.inlens.ServiceImplementation.InLensGallery;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,37 +17,37 @@ import java.util.List;
 import java.util.Vector;
 
 class FileUtil {
+    private static int count;
+    private static ContentCheck contentCheck;
+    private static List<String> fileList;
+    private static  Cursor cursor;
+    private static String[] arrPath;
 
+    public static List<String> findMediaFiles(Context context) {
 
-	public static List<String> findMediaFiles(Context context) {
-		List<String> fileList = new ArrayList<>();
-
-		final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID,MediaStore.Images.Media.DATE_ADDED };
-		final String orderBy = MediaStore.Images.Media._ID;
-
-		//Stores all the images from the gallery in Cursor
-		Cursor cursor = context.getContentResolver().query(
+		 fileList = new ArrayList<>();
+		 final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID,MediaStore.Images.Media.DATE_ADDED };
+		 final String orderBy = MediaStore.Images.Media._ID;
+		 cursor = context.getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
 				null, orderBy);
 
+        contentCheck=new ContentCheck("",context);
 
         if (cursor != null) {
-			//Total number of images
-			int count = cursor.getCount();
-			//Create an array to store path to all the images
-			String[] arrPath = new String[count];
-
-			for (int i = count; i >=0; i--) {
+			 count = cursor.getCount();
+			 arrPath = new String[count];
+			for (int i = (count-1); i >0; i--) {
 				cursor.moveToPosition(i);
-
 				int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-
 				arrPath[i] = cursor.getString(dataColumnIndex);
+				Log.d("Date:", "date_modified::"+contentCheck.getImageModifiedDate(arrPath[i]));
 				fileList.add(arrPath[i]);
-
-
 			}
 			cursor.close();
+
+
+
 		}
 		return fileList;
 	}
@@ -102,4 +104,7 @@ class FileUtil {
 		}
 		return files;
 	}
+
+
+
 }
