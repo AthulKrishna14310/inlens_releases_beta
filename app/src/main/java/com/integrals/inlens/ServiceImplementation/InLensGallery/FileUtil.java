@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.integrals.inlens.Helper.CurrentDatabase;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -22,7 +24,8 @@ class FileUtil {
     private static List<String> fileList;
     private static  Cursor cursor;
     private static String[] arrPath;
-
+    private static String requiredDate;
+    private static String albumExpiry;
     public static List<String> findMediaFiles(Context context) {
 
 		 fileList = new ArrayList<>();
@@ -33,17 +36,33 @@ class FileUtil {
 				null, orderBy);
 
         contentCheck=new ContentCheck("",context);
-
-        if (cursor != null) {
+		CurrentDatabase currentDatabase=new CurrentDatabase(context,"",null,1);
+		albumExpiry=currentDatabase.GetAlbumExpiry();
+	    if (cursor != null) {
 			 count = cursor.getCount();
 			 arrPath = new String[count];
 			for (int i = (count-1); i >0; i--) {
 				cursor.moveToPosition(i);
 				int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
 				arrPath[i] = cursor.getString(dataColumnIndex);
-				Log.d("Date:", "date_modified::"+contentCheck.getImageModifiedDate(arrPath[i]));
-				fileList.add(arrPath[i]);
-			}
+				if(contentCheck.getImageAddedDate(arrPath[i])==null){
+                	continue;
+				}
+
+				requiredDate=contentCheck.getImageAddedDate(arrPath[i]).substring(8,10)+"-"
+						+contentCheck.getImageAddedDate(arrPath[i]).substring(5,7)+"-"+
+				contentCheck.getImageAddedDate(arrPath[i]).substring(0,4)  ;
+
+                if(contentCheck.isImageDateAfterAlbumExpiryDate(requiredDate,albumExpiry)==true){
+					Log.d("Date:", "date_modified::" + requiredDate);
+					fileList.add(arrPath[i]);
+
+				}else {
+				break;
+                }
+
+
+                }
 			cursor.close();
 
 
