@@ -10,17 +10,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+import android.view.View;
 
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.R;
-import com.integrals.inlens.ViewHolder.GridImageAdapter;
+import com.integrals.inlens.ServiceImplementation.JobScheduler.JobHelper;
 import com.vistrav.ask.Ask;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.github.tonnyl.light.Light;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private Activity activity;
     private RecyclerView recyclerView;
     List<String> mFiles;
+    // Test Implementation
+    private JobHelper jobHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +39,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setHasFixedSize(true);
 
+        jobHelper=new JobHelper(getApplicationContext());
+
           // media file or
 //        List<String> mFiles = FileUtil.findImageFileInDirectory(DIRECTORY, new String[]{"png", "jpg"}); // device file
+
+        //for test implementation
 
     }
 
@@ -85,12 +90,15 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Snackbar.make(recyclerView,"Your album time is expired to upload photos ",Snackbar.LENGTH_LONG).show();
         }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        jobHelper=new JobHelper(getApplicationContext());
+        jobHelper.initiateJobInfo();
+        jobHelper.scheduleJob();
      }
 
     private void requirePermission() {
@@ -104,4 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 .go();
 
     }
+
+
+
 }

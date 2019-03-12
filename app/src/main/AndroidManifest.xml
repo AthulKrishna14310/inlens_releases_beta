@@ -135,6 +135,11 @@
 
         <service android:name=".Services.OreoService" />
 
+        <service
+            android:name=".ServiceImplementation.JobScheduler.JobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+
         <activity android:name=".Activities.ResetPassword" />
         <activity android:name=".Activities.PhotoView" />
         <activity
