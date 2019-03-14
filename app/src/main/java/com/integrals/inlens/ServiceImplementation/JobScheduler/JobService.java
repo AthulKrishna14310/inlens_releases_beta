@@ -4,16 +4,26 @@ import android.app.job.JobParameters;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
+
 public class JobService extends android.app.job.JobService {
     private static final String TAG = "MyJob::";
     boolean isWorking = false;
     boolean jobCancelled = false;
+    private NotificationHelper notificationHelper;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        notificationHelper=new NotificationHelper(getBaseContext());
+        }
 
     // Called by the Android system when it's time to run the job
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         Log.d(TAG, "Job started!");
         isWorking = true;
+        notificationHelper.notifyRecentImage();
         // We need 'jobParameters' so we can call 'jobFinished'
         startWorkOnNewThread(jobParameters); // Services do NOT run on a separate thread
 

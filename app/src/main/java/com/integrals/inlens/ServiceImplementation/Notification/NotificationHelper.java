@@ -15,27 +15,27 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
-
 import com.integrals.inlens.GridView.MainActivity;
 import com.integrals.inlens.R;
 
 public class NotificationHelper extends ContextWrapper {
+
     private NotificationManager notificationManager;
     private NotificationManager uploadnotificationManager;
     private NotificationCompat.Builder uploadbuilder;
     private RemoteViews remoteViews;
     private Bitmap      logoBitmap;
+    private Context     context;
 
     public NotificationHelper(Context base) {
         super(base);
-        createNotificationChannels();
+        context=base;
+
         Resources res = getApplicationContext().getResources();
         int id = R.drawable.inlens_logo_m;
         logoBitmap = BitmapFactory.decodeResource(res, id);
 
-    }
 
-    private void createNotificationChannels() {
         NotificationChannel notificationChannel= null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationChannel = new NotificationChannel("ID_503","Recent Image Notification",NotificationManager.IMPORTANCE_HIGH);
@@ -66,7 +66,9 @@ public class NotificationHelper extends ContextWrapper {
         }
 
 
+
     }
+
 
     public NotificationManager getNotificationManager() {
         if(notificationManager==null)
@@ -75,26 +77,55 @@ public class NotificationHelper extends ContextWrapper {
     }
 
 
-    public void buildRecentImageNotificationOreo(){
-        String input = intent.getStringExtra("inputExtra");
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, 0);
+
+    public void notifyRecentImage()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder builder = this.builderNotificationForRecentImageOreo();
+            builder.setOnlyAlertOnce(true);
+            this.getNotificationManager().notify(7907, builder.build());
+        }else{
+            remoteViews = new RemoteViews(getPackageName(), R.layout.notification_layout);
+            NotificationManager notificationManager =
+                    (NotificationManager)
+                            getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            Intent upload_intent = new Intent("ADD_FOR_UPLOAD_INLENS");
+            Intent attach_intent = new Intent("ATTACH_ACTIVITY_INLENS");
+            Intent upload_activity_intent = new Intent("RECENT_IMAGES_GRID_INLENS");
+            Intent intent = new Intent(getApplicationContext(), com.integrals.inlens.GridView.MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 9388, upload_intent, 0);
+            PendingIntent pendingIntent3 = PendingIntent.getBroadcast(getApplicationContext(), 1428, upload_activity_intent, 0);
+
+            remoteViews.setOnClickPendingIntent(R.id.AddForUpload, pendingIntent1);
+            remoteViews.setOnClickPendingIntent(R.id.GotoUploadActivity, pendingIntent3);
 
 
-        Notification notification = new NotificationCompat.Builder(this, "ID_505")
-                .setContentTitle("InLens Service")
-                .setContentText(input)
-                .setSmallIcon(R.drawable.inlens_notification)
-                .setContentIntent(pendingIntent)
-                .build();
+            NotificationCompat.Builder builder =
+                    (NotificationCompat.Builder)
+                            new NotificationCompat.Builder(getApplicationContext())
+                                    .setContentTitle("New image detected")
+                                    .setContentText("Inlens has detected a new image. Expand to get more info.")
+                                    .setDefaults(Notification.DEFAULT_ALL)
+                                    .setOnlyAlertOnce(true)
+                                    .setCustomBigContentView(remoteViews)
+                                    .setWhen(System.currentTimeMillis())
+                                    .setSmallIcon(R.drawable.inlens_logo_m)
+                                    .setLargeIcon(logoBitmap)
+                                    .setPriority(Notification.PRIORITY_MAX);
+            builder.setContentIntent(pendingIntent);
+            notificationManager.notify(0, builder.build());
 
-        context.startForeground(1, notification);
 
+        }
 
     }
 
-    public Notification.Builder builderNotificationForRecentImageOreo(){
+
+    public Notification.Builder builderNotificationForRecentImageOreo()
+    {
         Intent upload_intent;
         Intent attach_intent ;
         Intent upload_activity_intent;
@@ -109,7 +140,6 @@ public class NotificationHelper extends ContextWrapper {
             upload_intent.setAction("ADD_FOR_UPLOAD_INLENS");
             attach_intent = new Intent("ATTACH_ACTIVITY_INLENS");
             upload_activity_intent = new Intent("RECENT_IMAGES_GRID_INLENS");
-
             upload_intent.setComponent(new ComponentName(getPackageName(),"integrals.inlens.Broadcast_Receivers.NotificationWorks"));
             attach_intent.setComponent(new ComponentName(getPackageName(),"integrals.inlens.Broadcast_Receivers.NotificationWorks"));
             upload_activity_intent.setComponent(new ComponentName(getPackageName(),"integrals.inlens.Broadcast_Receivers.NotificationWorks"));
@@ -124,15 +154,6 @@ public class NotificationHelper extends ContextWrapper {
 
 
         }
-
-
-
-
-
-
-
-
-
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 9388, upload_intent, 0);
         PendingIntent pendingIntent3 = PendingIntent.getBroadcast(getApplicationContext(), 1428, upload_activity_intent, 0);
@@ -158,9 +179,7 @@ public class NotificationHelper extends ContextWrapper {
 
         return builder;
     }
-
-
-    public Notification.Builder buildNotificationForUploadDataOreo(
+    public Notification.Builder builderNotificationForUploadDataOreo(
             int uploadID,int Record
     ){
 
@@ -185,61 +204,34 @@ public class NotificationHelper extends ContextWrapper {
     }
 
 
-    ///For the purpose of building notification on devices before Oreo
-    public void buildRecentImageNotification(){
-        remoteViews = new RemoteViews(getPackageName(), R.layout.notification_layout);
-        NotificationManager notificationManager =
-                (NotificationManager)
-                        getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent upload_intent = new Intent("ADD_FOR_UPLOAD_INLENS");
-        Intent attach_intent = new Intent("ATTACH_ACTIVITY_INLENS");
-        Intent upload_activity_intent = new Intent("RECENT_IMAGES_GRID_INLENS");
-        Intent intent = new Intent(getApplicationContext(), com.integrals.inlens.GridView.MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    public void notifyUploadData(int uploadID,int record)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder builder=this.builderNotificationForUploadDataOreo(
+                    uploadID,
+                    record
+            );
+            builder.setAutoCancel(true);
+            this.getNotificationManager().notify(672,builder.build());
 
-        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 9388, upload_intent, 0);
-        PendingIntent pendingIntent3 = PendingIntent.getBroadcast(getApplicationContext(), 1428, upload_activity_intent, 0);
+            }
+        else{
+            uploadnotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            uploadbuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
+                    .setContentTitle("Upload Started")
+                    .setContentText("Uploading " + uploadID + "/" + record)
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.inlens_logo_m)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setOngoing(true)
+                    .setProgress(100, 0, true);
 
-        remoteViews.setOnClickPendingIntent(R.id.AddForUpload, pendingIntent1);
-        remoteViews.setOnClickPendingIntent(R.id.GotoUploadActivity, pendingIntent3);
+            uploadnotificationManager.notify(672, uploadbuilder.build());
 
+        }
 
-        NotificationCompat.Builder builder =
-                (NotificationCompat.Builder)
-                        new NotificationCompat.Builder(getApplicationContext())
-                                .setContentTitle("New image detected")
-                                .setContentText("Inlens has detected a new image. Expand to get more info.")
-                                .setDefaults(Notification.DEFAULT_ALL)
-                                .setOnlyAlertOnce(true)
-                                .setCustomBigContentView(remoteViews)
-                                .setWhen(System.currentTimeMillis())
-                                .setSmallIcon(R.drawable.inlens_logo_m)
-                                .setLargeIcon(logoBitmap)
-                                .setPriority(Notification.PRIORITY_MAX);
-        builder.setContentIntent(pendingIntent);
-        notificationManager.notify(0, builder.build());
+        }
 
-
-
-    }
-
-   ///For the purpose of building notification on devices before Oreo
-    public void buildNotificationForUploadData(int uploadID,int record){
-        uploadnotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        uploadbuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
-                .setContentTitle("Upload Started")
-                .setContentText("Uploading " + uploadID + "/" + record)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.inlens_logo_m)
-                .setPriority(Notification.PRIORITY_MAX)
-                .setOngoing(true)
-                .setProgress(100, 0, true);
-
-
-        uploadnotificationManager.notify(672, uploadbuilder.build());
-
-    }
 
 
 }

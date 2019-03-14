@@ -24,6 +24,7 @@ public void initiateJobInfo(){
             .setRequiresCharging(true)
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .setPeriodic(15*60*60)
+            .setPersisted(true)
             .build();
 
     }
