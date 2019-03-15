@@ -14,7 +14,9 @@ import android.view.View;
 
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.R;
+import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
 import com.integrals.inlens.ServiceImplementation.JobScheduler.JobHelper;
+import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
 import com.vistrav.ask.Ask;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     List<String> mFiles;
     // Test Implementation
     private JobHelper jobHelper;
-
+    private NotificationHelper notificationHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         jobHelper=new JobHelper(getApplicationContext());
-
+        notificationHelper=new NotificationHelper(getBaseContext());
+        RecentImage recentImage=new RecentImage(getApplicationContext());
+        notificationHelper.notifyRecentImage(recentImage.recentImagePath());
           // media file or
 //        List<String> mFiles = FileUtil.findImageFileInDirectory(DIRECTORY, new String[]{"png", "jpg"}); // device file
 
@@ -99,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
         jobHelper=new JobHelper(getApplicationContext());
         jobHelper.initiateJobInfo();
         jobHelper.scheduleJob();
-     }
+
+    }
 
     private void requirePermission() {
         Ask.on(this)

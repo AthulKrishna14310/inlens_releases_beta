@@ -14,7 +14,8 @@ import com.integrals.inlens.R;
 
 import java.util.List;
 
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.CustomViewHolder> {
+public class GalleryAdapter extends
+        RecyclerView.Adapter<GalleryAdapter.CustomViewHolder> {
 
     private final List<String> mFileList;
     private final Activity mActivity;

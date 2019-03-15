@@ -14,9 +14,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 import com.integrals.inlens.GridView.MainActivity;
 import com.integrals.inlens.R;
+
+import java.io.File;
+import java.io.IOException;
+
+import id.zelory.compressor.Compressor;
 
 public class NotificationHelper extends ContextWrapper {
 
@@ -26,6 +32,7 @@ public class NotificationHelper extends ContextWrapper {
     private RemoteViews remoteViews;
     private Bitmap      logoBitmap;
     private Context     context;
+    private Bitmap      recentImageBitmap;
 
     public NotificationHelper(Context base) {
         super(base);
@@ -78,61 +85,73 @@ public class NotificationHelper extends ContextWrapper {
 
 
 
-    public void notifyRecentImage()
+    public void notifyRecentImage(String imageLocation)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification.Builder builder = this.builderNotificationForRecentImageOreo();
-            builder.setOnlyAlertOnce(true);
-            this.getNotificationManager().notify(7907, builder.build());
-        }else{
+        try {
+            generateNotificationBitmap(imageLocation);
             remoteViews = new RemoteViews(getPackageName(), R.layout.notification_layout);
-            NotificationManager notificationManager =
-                    (NotificationManager)
-                            getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            Intent upload_intent = new Intent("ADD_FOR_UPLOAD_INLENS");
-            Intent attach_intent = new Intent("ATTACH_ACTIVITY_INLENS");
-            Intent upload_activity_intent = new Intent("RECENT_IMAGES_GRID_INLENS");
-            Intent intent = new Intent(getApplicationContext(), com.integrals.inlens.GridView.MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setImageViewBitmap(R.id.UploadImageViewNotification,recentImageBitmap);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Notification.Builder builder = this.builderNotificationForRecentImageOreo();
+                builder.setOnlyAlertOnce(true);
+                this.getNotificationManager().notify(7907, builder.build());
+            }else{
+                NotificationManager notificationManager =
+                        (NotificationManager)
+                                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                Intent intent = new Intent(getApplicationContext(), com.integrals.inlens.GridView.MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 9388, upload_intent, 0);
-            PendingIntent pendingIntent3 = PendingIntent.getBroadcast(getApplicationContext(), 1428, upload_activity_intent, 0);
-
-            remoteViews.setOnClickPendingIntent(R.id.AddForUpload, pendingIntent1);
-            remoteViews.setOnClickPendingIntent(R.id.GotoUploadActivity, pendingIntent3);
-
-
-            NotificationCompat.Builder builder =
-                    (NotificationCompat.Builder)
-                            new NotificationCompat.Builder(getApplicationContext())
-                                    .setContentTitle("New image detected")
-                                    .setContentText("Inlens has detected a new image. Expand to get more info.")
-                                    .setDefaults(Notification.DEFAULT_ALL)
-                                    .setOnlyAlertOnce(true)
-                                    .setCustomBigContentView(remoteViews)
-                                    .setWhen(System.currentTimeMillis())
-                                    .setSmallIcon(R.drawable.inlens_logo_m)
-                                    .setLargeIcon(logoBitmap)
-                                    .setPriority(Notification.PRIORITY_MAX);
-            builder.setContentIntent(pendingIntent);
-            notificationManager.notify(0, builder.build());
+                NotificationCompat.Builder builder =
+                        (NotificationCompat.Builder)
+                                new NotificationCompat.Builder(getApplicationContext())
+                                        .setContentTitle("New image detected")
+                                        .setContentText("Inlens has detected a new image. Expand to get more info.")
+                                        .setDefaults(Notification.DEFAULT_ALL)
+                                        .setOnlyAlertOnce(true)
+                                        .setCustomBigContentView(remoteViews)
+                                        .setWhen(System.currentTimeMillis())
+                                        .setSmallIcon(R.drawable.inlens_logo_m)
+                                        .setLargeIcon(logoBitmap)
+                                        .setPriority(Notification.PRIORITY_MAX);
+                builder.setContentIntent(pendingIntent);
+                notificationManager.notify(0, builder.build());
 
 
+            }
+
+           }catch (NullPointerException e){
+            e.printStackTrace();
+            Log.d("InLens","No recent image found");
         }
+
+    }
+
+    private void generateNotificationBitmap(String imageLocation) {
+        File imageFile=new File(imageLocation);
+        try {
+             recentImageBitmap = new Compressor(getApplicationContext())
+                    .setMaxHeight(130)
+                    .setMaxWidth(130)
+                    .setQuality(75)
+                    .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                    .compressToBitmap(imageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 
     }
 
 
     public Notification.Builder builderNotificationForRecentImageOreo()
     {
-        Intent upload_intent;
-        Intent attach_intent ;
-        Intent upload_activity_intent;
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-
+/*
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -160,8 +179,9 @@ public class NotificationHelper extends ContextWrapper {
 
         remoteViews.setOnClickPendingIntent(R.id.AddForUpload, pendingIntent1);
         remoteViews.setOnClickPendingIntent(R.id.GotoUploadActivity, pendingIntent3);
+*/
 
-
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification.Builder builder = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder = (Notification.Builder)
