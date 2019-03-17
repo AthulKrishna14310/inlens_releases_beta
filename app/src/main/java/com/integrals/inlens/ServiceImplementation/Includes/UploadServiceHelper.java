@@ -27,7 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.integrals.inlens.Helper.CurrentDatabase;
@@ -74,7 +73,7 @@ public class UploadServiceHelper {
 
         );
         this.context=context;
-        downloadThumbUrl=null;
+        this.downloadThumbUrl=null;
         this.titleValue=titleValue;
         this.timeTaken=timeTaken;
 
@@ -84,6 +83,7 @@ public class UploadServiceHelper {
 
     @SuppressLint("StaticFieldLeak")
     public void initiateUploadOperation(){
+
         uploadAsyncTask=new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -126,12 +126,8 @@ public class UploadServiceHelper {
                             FilePath.putFile(uploadImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                                     downloadUrl = taskSnapshot.getDownloadUrl();
-
-
-
-                                }
+                                    }
                             }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -139,7 +135,7 @@ public class UploadServiceHelper {
 
                                         Log.d("inLens_upload"," image file uploaded");
 
-                                        notificationHelper.cancelUploadDataNotification();
+                                          notificationHelper.cancelUploadDataNotification();
                                             final DatabaseReference NewPost = postDatabaseReference.push();
                                             inUserReference.addValueEventListener(new ValueEventListener() {
                                             @Override
@@ -210,7 +206,10 @@ public class UploadServiceHelper {
                         .child("Communities")
                         .child(communityID)
                         .child("BlogPosts");
-                inUserReference = FirebaseDatabase.getInstance().getReference().child("Users")
+                inUserReference = FirebaseDatabase
+                        .getInstance()
+                        .getReference()
+                        .child("Users")
                         .child(firebaseUser.getUid());
 
                 Log.d("inLens_upload","Async task pre-excecuted");
