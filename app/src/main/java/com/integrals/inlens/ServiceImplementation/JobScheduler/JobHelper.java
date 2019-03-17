@@ -4,6 +4,7 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import static android.content.Context.JOB_SCHEDULER_SERVICE;
@@ -20,14 +21,24 @@ public JobHelper( Context context) {
 
 public void initiateJobInfo(){
 
-    jobInfo = new JobInfo.Builder(12, componentName)
-            .setRequiresCharging(true)
-            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-            .setPeriodic(15*60*60)
-            .setPersisted(true)
-            .build();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        jobInfo = new JobInfo.Builder(12, componentName)
+                .setRequiresCharging(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                .setPeriodic(900000)
+                .build();
+    }else{
+        jobInfo = new JobInfo.Builder(12, componentName)
+                .setRequiresCharging(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                .setPeriodic(90000)
+                .build();
 
     }
+
+}
 public void scheduleJob(){
     JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
     int resultCode = jobScheduler.schedule(jobInfo);

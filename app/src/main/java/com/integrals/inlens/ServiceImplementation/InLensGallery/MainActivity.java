@@ -10,8 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.R;
 import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setHasFixedSize(true);
 
-        jobHelper=new JobHelper(getApplicationContext());
+
         notificationHelper=new NotificationHelper(getBaseContext());
         RecentImage recentImage=new RecentImage(getApplicationContext());
         notificationHelper.notifyRecentImage(recentImage.recentImagePath());
@@ -100,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         jobHelper=new JobHelper(getApplicationContext());
         jobHelper.initiateJobInfo();
         jobHelper.scheduleJob();

@@ -134,7 +134,7 @@ public class NotificationHelper extends ContextWrapper {
              recentImageBitmap = new Compressor(getApplicationContext())
                     .setMaxHeight(130)
                     .setMaxWidth(130)
-                    .setQuality(75)
+                    .setQuality(85)
                     .setCompressFormat(Bitmap.CompressFormat.JPEG)
                     .compressToBitmap(imageFile);
         } catch (IOException e) {
@@ -187,6 +187,7 @@ public class NotificationHelper extends ContextWrapper {
             builder = (Notification.Builder)
                     new Notification.Builder(getApplicationContext(), "ID_503")
                             .setContentTitle("New image detected")
+
                             .setContentText("Inlens has detected a new image. Expand to get more info.")
                             .setOnlyAlertOnce(true)
                             .setCustomBigContentView(remoteViews)

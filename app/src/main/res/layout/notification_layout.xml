@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="false"
         android:layout_alignParentBottom="false"
         android:layout_centerHorizontal="true"
-        android:alpha="0.6"
+        android:alpha="0.8"
         android:background="@android:color/black"
         android:scaleType="centerCrop"
         android:visibility="visible" />
@@ -61,7 +61,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@color/colorPrimary"
-        android:text="Recent image updated"
+        android:text="Tap here to upload the recent images to Cloud"
         android:textAlignment="center"
         android:textColor="#FFFF"
         android:textSize="13sp" />
