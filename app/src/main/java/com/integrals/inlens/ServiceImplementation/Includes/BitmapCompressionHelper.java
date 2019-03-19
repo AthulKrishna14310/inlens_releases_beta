@@ -34,7 +34,7 @@ public class BitmapCompressionHelper  {
         this.context = context;
         this.resultUri = resultUri;
         this.pictureFile = pictureFile;
-        Log.d("inLens_upload","Bitmap compression initialised");
+        Log.d("inLens_upload","Bitmap compression initialised as constructor");
 
     }
 
@@ -109,7 +109,7 @@ public class BitmapCompressionHelper  {
             image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             resultUri = Uri.fromFile(pictureFile);
 
-            Log.d("inLens_upload","result image uri generated");
+            Log.d("inLens_upload","Result image uri generated");
 
             fos.close();
         } catch (FileNotFoundException e) {
@@ -139,11 +139,14 @@ public class BitmapCompressionHelper  {
         File mediaFile;
         String mImageName = "InLens_" + System.currentTimeMillis() + ".jpg";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
-        Log.d("inLens_upload","compressed image file saved");
+        Log.d("inLens_upload","Compressed image file saved");
         return mediaFile;
     }
 
-
+    public void deleteFile(File file){
+        file.delete();
+        Log.d("inLens_upload","Deleting file");
+    }
 
 
     public Uri getResultUri() {

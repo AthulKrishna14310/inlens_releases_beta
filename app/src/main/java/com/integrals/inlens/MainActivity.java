@@ -85,6 +85,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
+import com.integrals.inlens.ServiceImplementation.Includes.UploadServiceHelper;
+import com.integrals.inlens.ServiceImplementation.Service.UploadService;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -969,8 +972,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case R.id.upload_activity:
-
-                                startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
+                                //startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
+                                startService(getApplicationContext(),new Intent(getApplicationContext(),UploadService.class));
                                 break;
                             case R.id.profile_pic:
                                 DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());

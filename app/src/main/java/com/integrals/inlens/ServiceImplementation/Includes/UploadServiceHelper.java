@@ -54,13 +54,16 @@ public class UploadServiceHelper {
     private Uri                     downloadUrl;
     private String                  titleValue;
     private String                  timeTaken;
+    private File                    thumbFile;
+    private File                    imageFile;
 
     public UploadServiceHelper(Context context,
+                               ArrayList<String>stringArrayList,
                                String titleValue,
                                String timeTaken
     )
     {
-        stringArrayList=new ArrayList<>();
+        this.stringArrayList=stringArrayList;
         uploadUrl=stringArrayList.get(uploadID);
         notificationHelper=new NotificationHelper(context);
 
@@ -95,9 +98,10 @@ public class UploadServiceHelper {
                 uploadImageUri=bitmapCompressionHelper.getResultUri();
                 bitmapCompressionHelper.compressThumbImageFile();
                 thumbImageUri=bitmapCompressionHelper.getResultUri();
+                thumbFile=new File(thumbImageUri.getPath());
+                imageFile=new File(uploadImageUri.getPath());
 
-
-                Log.d("inLens_upload","uploading started");
+                Log.d("inLens_upload","Uploading started");
 
                 final StorageReference FilePath = postStorageReference.child("CommunityPosts").child(uploadImageUri.getLastPathSegment());
                 final StorageReference ThumbNailImage = postStorageReference.child("OriginalImage_thumb").child(uploadImageUri.getLastPathSegment() + System.currentTimeMillis());
@@ -107,7 +111,7 @@ public class UploadServiceHelper {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 downloadThumbUrl = taskSnapshot.getDownloadUrl();
-                                Log.d("inLens_upload","thumb image uploaded");
+                                Log.d("inLens_upload","Thumb image uploaded");
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -115,6 +119,9 @@ public class UploadServiceHelper {
                     public void onFailure(@NonNull Exception e) {
                         //OriginalFilePath.delete();
                         ThumbNailImage.delete();
+                        bitmapCompressionHelper.deleteFile(imageFile);
+                        bitmapCompressionHelper.deleteFile(thumbFile);
+
 
 
                     }
@@ -133,7 +140,7 @@ public class UploadServiceHelper {
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
 
-                                        Log.d("inLens_upload"," image file uploaded");
+                                        Log.d("inLens_upload","Image file uploaded");
 
                                           notificationHelper.cancelUploadDataNotification();
                                             final DatabaseReference NewPost = postDatabaseReference.push();
@@ -154,15 +161,20 @@ public class UploadServiceHelper {
                                                 NewPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
                                                 NewPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
 
-                                                Log.d("inLens_upload","data uploaded");
-
-                                                }
+                                                Log.d("inLens_upload","Data uploaded");
+                                                bitmapCompressionHelper.deleteFile(imageFile);
+                                                bitmapCompressionHelper.deleteFile(thumbFile);
+                                                Log.d("inLens_upload","All upload operation done");
+                                            }
 
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
                                                 // OriginalFilePath.delete();
                                                 ThumbNailImage.delete();
                                                 FilePath.delete();
+                                                bitmapCompressionHelper.deleteFile(imageFile);
+                                                bitmapCompressionHelper.deleteFile(thumbFile);
+
                                             }
                                         });
 
@@ -175,6 +187,8 @@ public class UploadServiceHelper {
                                     //OriginalFilePath.delete();
                                     ThumbNailImage.delete();
                                     FilePath.delete();
+                                    bitmapCompressionHelper.deleteFile(imageFile);
+                                    bitmapCompressionHelper.deleteFile(thumbFile);
 
                                 }
                             });
@@ -218,21 +232,36 @@ public class UploadServiceHelper {
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                Log.d("inLens_upload","upload done");
+                Log.d("inLens_upload","Upload Post-Excecuted");
 
             }
+
+            @Override
+            protected void onCancelled(Object o) {
+                super.onCancelled(o);
+                bitmapCompressionHelper.deleteFile(imageFile);
+                bitmapCompressionHelper.deleteFile(thumbFile);
+
+                }
+
+            @Override
+            protected void onProgressUpdate(Object[] values) {
+                super.onProgressUpdate(values);
+                Log.d("inLens_upload","Upload on progress");
+            }
         };
+
     }
 
     public void proceedUploadOperation(){
         uploadAsyncTask.execute("");
-        Log.d("inLens_upload","upload process started to run on async task");
+        Log.d("inLens_upload","Upload process started to run on async task");
 
     }
 
     public void cancelUploadOperation(){
         uploadAsyncTask.cancel(true);
-        Log.d("inLens_upload","upload process stopped");
+        Log.d("inLens_upload","Upload process stopped");
 
     }
 
