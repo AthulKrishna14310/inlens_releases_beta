@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                         if(firebaseUser!=null && firebaseUser.isEmailVerified())
                         {
-                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            startActivity(new Intent(LoginActivity.this,MainActivity.class).putExtra("ShowTour",true));
                             overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
                             finish();
                         }

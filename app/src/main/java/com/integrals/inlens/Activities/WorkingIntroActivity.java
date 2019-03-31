@@ -48,7 +48,7 @@ public class WorkingIntroActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(WorkingIntroActivity.this, MainActivity.class));
+                startActivity(new Intent(WorkingIntroActivity.this, MainActivity.class).putExtra("ShowTour",true));
                 overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
                 finish();
 

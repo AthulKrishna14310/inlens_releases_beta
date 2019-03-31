@@ -269,14 +269,25 @@ public class CreateCloudAlbum extends AppCompatActivity {
         EventDialogwindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         EventDialogwindow.setDimAmount(0.75f);
 
-        final RadioButton EventWedding = EventDialog.findViewById(R.id.event_type_wedding_btn);
-        final RadioButton EventCeremony = EventDialog.findViewById(R.id.event_type_ceremony_btn);
-        final RadioButton EventOthers = EventDialog.findViewById(R.id.event_type_others_btn);
-        final RadioButton EventParty = EventDialog.findViewById(R.id.event_type_party_btn);
-        final RadioButton EventTravel = EventDialog.findViewById(R.id.event_type_travel_btn);
-        final RadioButton EventHangout = EventDialog.findViewById(R.id.event_type_hangouts_btn);
+        final Button EventWedding = EventDialog.findViewById(R.id.event_type_wedding_btn);
+        final Button EventCeremony = EventDialog.findViewById(R.id.event_type_ceremony_btn);
+        final Button EventOthers = EventDialog.findViewById(R.id.event_type_others_btn);
+        final Button EventParty = EventDialog.findViewById(R.id.event_type_party_btn);
+        final Button EventTravel = EventDialog.findViewById(R.id.event_type_travel_btn);
+        final Button EventHangout = EventDialog.findViewById(R.id.event_type_hangouts_btn);
+        final TextView SelectedEvent = EventDialog.findViewById(R.id.selected_event_type);
+        SelectedEvent.setText("Selected Event Type : "+EventType );
+        final ImageButton EventTypeDone  = EventDialog.findViewById(R.id.event_done_btn);
 
-        ImageButton EventTypeDone  = EventDialog.findViewById(R.id.event_done_btn);
+        if(!TextUtils.isEmpty(EventType))
+        {
+            EventTypeDone.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            EventTypeDone.setVisibility(View.GONE);
+
+        }
 
         EventTypeDone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,7 +312,18 @@ public class CreateCloudAlbum extends AppCompatActivity {
             public void onClick(View view) {
 
                 SetCheckFalse(EventWedding,EventOthers,EventParty,EventTravel,EventHangout);
+                EventCeremony.setBackgroundResource(R.drawable.radiobutton_pressed);
                 EventType = "Ceremony";
+                SelectedEvent.setText("Selected Event Type : "+EventType );
+                if(!TextUtils.isEmpty(EventType))
+                {
+                    EventTypeDone.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    EventTypeDone.setVisibility(View.GONE);
+
+                }
             }
         });
 
@@ -310,7 +332,18 @@ public class CreateCloudAlbum extends AppCompatActivity {
             public void onClick(View view) {
 
                 SetCheckFalse(EventCeremony,EventOthers,EventParty,EventTravel,EventHangout);
+                EventWedding.setBackgroundResource(R.drawable.radiobutton_pressed);
                 EventType = "Wedding";
+                SelectedEvent.setText("Selected Event Type : "+EventType );
+                if(!TextUtils.isEmpty(EventType))
+                {
+                    EventTypeDone.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    EventTypeDone.setVisibility(View.GONE);
+
+                }
             }
         });
 
@@ -319,7 +352,18 @@ public class CreateCloudAlbum extends AppCompatActivity {
             public void onClick(View view) {
 
                 SetCheckFalse(EventWedding,EventCeremony,EventParty,EventTravel,EventHangout);
+                EventOthers.setBackgroundResource(R.drawable.radiobutton_pressed);
                 EventType = "Others";
+                SelectedEvent.setText("Selected Event Type : "+EventType );
+                if(!TextUtils.isEmpty(EventType))
+                {
+                    EventTypeDone.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    EventTypeDone.setVisibility(View.GONE);
+
+                }
             }
         });
 
@@ -328,7 +372,18 @@ public class CreateCloudAlbum extends AppCompatActivity {
             public void onClick(View view) {
 
                 SetCheckFalse(EventWedding,EventOthers,EventCeremony,EventTravel,EventHangout);
+                EventParty.setBackgroundResource(R.drawable.radiobutton_pressed);
                 EventType = "Party";
+                SelectedEvent.setText("Selected Event Type : "+EventType );
+                if(!TextUtils.isEmpty(EventType))
+                {
+                    EventTypeDone.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    EventTypeDone.setVisibility(View.GONE);
+
+                }
             }
         });
 
@@ -337,7 +392,18 @@ public class CreateCloudAlbum extends AppCompatActivity {
             public void onClick(View view) {
 
                 SetCheckFalse(EventWedding,EventOthers,EventParty,EventCeremony,EventHangout);
+                EventTravel.setBackgroundResource(R.drawable.radiobutton_pressed);
                 EventType = "Travel";
+                SelectedEvent.setText("Selected Event Type : "+EventType );
+                if(!TextUtils.isEmpty(EventType))
+                {
+                    EventTypeDone.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    EventTypeDone.setVisibility(View.GONE);
+
+                }
             }
         });
 
@@ -346,27 +412,32 @@ public class CreateCloudAlbum extends AppCompatActivity {
             public void onClick(View view) {
 
                 SetCheckFalse(EventWedding,EventOthers,EventParty,EventCeremony,EventParty);
+                EventHangout.setBackgroundResource(R.drawable.radiobutton_pressed);
                 EventType = "Hangouts";
+                SelectedEvent.setText("Selected Event Type : "+EventType );
+                if(!TextUtils.isEmpty(EventType))
+                {
+                    EventTypeDone.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    EventTypeDone.setVisibility(View.GONE);
+
+                }
             }
         });
 
 
     }
 
-    private void SetCheckFalse(RadioButton btn1,
-                               RadioButton btn2,
-                               RadioButton btn3,
-                               RadioButton btn4,
-                               RadioButton btn5) {
+    private void SetCheckFalse(Button btn1,Button btn2,Button btn3,Button btn4,Button btn5) {
 
-        btn1.setChecked(false);
-        btn2.setChecked(false);
-        btn3.setChecked(false);
-        btn4.setChecked(false);
-        btn5.setChecked(false);
-
+        btn1.setBackgroundResource(R.drawable.radiobutton_unpressed);
+        btn2.setBackgroundResource(R.drawable.radiobutton_unpressed);
+        btn3.setBackgroundResource(R.drawable.radiobutton_unpressed);
+        btn4.setBackgroundResource(R.drawable.radiobutton_unpressed);
+        btn5.setBackgroundResource(R.drawable.radiobutton_unpressed);
     }
-
     private void PostingStarts() {
         final String TitleValue = CommunityAlbumTitle.getText().toString().trim();
         final String DescriptionValue = CommunityAlbumDescription.getText().toString().trim();

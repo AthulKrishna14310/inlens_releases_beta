@@ -88,7 +88,10 @@ import com.google.zxing.common.BitMatrix;
 import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
 import com.integrals.inlens.ServiceImplementation.Includes.UploadServiceHelper;
 import com.integrals.inlens.ServiceImplementation.Service.UploadService;
+import com.integrals.inlens.UI.Extras.Tour;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vistrav.ask.Ask;
@@ -133,6 +136,7 @@ import com.integrals.inlens.ViewHolder.ParticipantsViewHolder;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int FLAG=0;
     private RecyclerView MemoryRecyclerView;
     private DatabaseReference InDatabaseReference;
 
@@ -212,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
             AlbumEndTime, AlbumPostCount, AlbumMemberCount;
     private int PostCount, MemberCount;
     private TextView NoAlbumTextView;
-    private SharedPreferences FirstRunMain;
+
+    private Boolean SHOW_TOUR;
+    private Tour MainFirstTour;
 
     private JobSchedulerHelper jobSchedulerHelper;
     public MainActivity() {
@@ -236,7 +242,9 @@ public class MainActivity extends AppCompatActivity {
         MainDimBackground = findViewById(R.id.main_dim_background);
         MainDimBackground.setVisibility(View.GONE);
 
+        SHOW_TOUR = getIntent().getBooleanExtra("ShowTour",false);
         QRCodeVisible = getIntent().getBooleanExtra("QRCodeVisible", false);
+
         if (QRCodeVisible) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -251,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
         // to handle album clicks
 
         AlbumClickDetails = getSharedPreferences("LastClickedAlbum", MODE_PRIVATE);
-        FirstRunMain = getSharedPreferences("MainActivityPref", MODE_PRIVATE);
         //Snackbar
         RootForMainActivity = findViewById(R.id.root_for_main_activity);
 
@@ -303,11 +310,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         DecryptDeepLink();
-        if (FirstRunMain.getBoolean("FirstRun", true)) {
+
+        if (SHOW_TOUR)
+        {
             ShowAllTapTargets();
-            SharedPreferences.Editor FirstRunMainEditor = FirstRunMain.edit();
-            FirstRunMainEditor.putBoolean("FirstRun", false);
-            FirstRunMainEditor.apply();
         }
 
         jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
@@ -315,10 +321,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ShowAllTapTargets() {
-
         TapTargetView.showFor(this,
                 TapTarget.forView(findViewById(R.id.main_fab_btn), "Adding New Albums", "Click here to create new album or join one.")
                         .tintTarget(false)
+                        .cancelable(false)
                         .outerCircleColor(R.color.colorPrimaryDark)
                         .textColor(R.color.white),
                 new TapTargetView.Listener() {
@@ -329,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
                         TapTargetView.showFor(MainActivity.this,
                                 TapTarget.forView(findViewById(R.id.main_create_album_fab_btn), "Create New Albums", "Click here to create new album.")
                                         .tintTarget(false)
+                                        .cancelable(false)
                                         .outerCircleColor(R.color.colorPrimaryDark)
                                         .textColor(R.color.white),
                                 new TapTargetView.Listener() {
@@ -339,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
                                         TapTargetView.showFor(MainActivity.this,
                                                 TapTarget.forView(findViewById(R.id.main_scan_qr_fab_btn), "Join Albums", "Click here to join a new album.")
                                                         .tintTarget(false)
+                                                        .cancelable(false)
                                                         .outerCircleColor(R.color.colorPrimaryDark)
                                                         .textColor(R.color.white),
                                                 new TapTargetView.Listener() {
@@ -350,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
                                                         TapTargetView.showFor(MainActivity.this,
                                                                 TapTarget.forView(findViewById(0), "Search", "Click here perform a search on albums.")
                                                                         .tintTarget(false)
+                                                                        .cancelable(false)
                                                                         .outerCircleColor(R.color.colorPrimaryDark)
                                                                         .textColor(R.color.white)
                                                                         .targetCircleColor(R.color.black),
@@ -361,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
                                                                         TapTargetView.showFor(MainActivity.this,
                                                                                 TapTarget.forView(findViewById(1), "More Options", "Click here get more options.")
                                                                                         .tintTarget(false)
+                                                                                        .cancelable(false)
                                                                                         .targetCircleColor(R.color.black)
                                                                                         .outerCircleColor(R.color.colorPrimaryDark)
                                                                                         .textColor(R.color.white),
@@ -712,6 +722,7 @@ public class MainActivity extends AppCompatActivity {
             CreateAlbumFab.setAnimation(FabClose);
             CreateAlbumFab.getAnimation().start();
 
+            /*
             MainScanQrTxtview.clearAnimation();
             MainScanQrTxtview.setAnimation(FabClose);
             MainScanQrTxtview.getAnimation().start();
@@ -719,11 +730,12 @@ public class MainActivity extends AppCompatActivity {
             MainCreateAlbumTxtview.clearAnimation();
             MainCreateAlbumTxtview.setAnimation(FabClose);
             MainCreateAlbumTxtview.getAnimation().start();
+             */
 
             CreateAlbumFab.setVisibility(View.INVISIBLE);
             ScanQrFab.setVisibility(View.INVISIBLE);
-            MainCreateAlbumTxtview.setVisibility(View.INVISIBLE);
-            MainScanQrTxtview.setVisibility(View.INVISIBLE);
+            //MainCreateAlbumTxtview.setVisibility(View.INVISIBLE);
+            //MainScanQrTxtview.setVisibility(View.INVISIBLE);
 
             MainFab.clearAnimation();
             MainFab.setAnimation(FabRotateBackward);
@@ -740,6 +752,7 @@ public class MainActivity extends AppCompatActivity {
             CreateAlbumFab.setAnimation(FabOpen);
             CreateAlbumFab.getAnimation().start();
 
+            /*
             MainScanQrTxtview.clearAnimation();
             MainScanQrTxtview.setAnimation(FabOpen);
             MainScanQrTxtview.getAnimation().start();
@@ -747,11 +760,12 @@ public class MainActivity extends AppCompatActivity {
             MainCreateAlbumTxtview.clearAnimation();
             MainCreateAlbumTxtview.setAnimation(FabOpen);
             MainCreateAlbumTxtview.getAnimation().start();
+             */
 
             CreateAlbumFab.setVisibility(View.VISIBLE);
             ScanQrFab.setVisibility(View.VISIBLE);
-            MainScanQrTxtview.setVisibility(View.VISIBLE);
-            MainCreateAlbumTxtview.setVisibility(View.VISIBLE);
+            //MainScanQrTxtview.setVisibility(View.VISIBLE);
+            //MainCreateAlbumTxtview.setVisibility(View.VISIBLE);
 
             MainFab.clearAnimation();
             MainFab.setAnimation(FabRotateForward);
@@ -977,7 +991,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case R.id.profile_pic:
                                 DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                DbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                DbRef.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -990,10 +1004,34 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                         if (dataSnapshot.hasChild("Profile_picture")) {
                                             String image = dataSnapshot.child("Profile_picture").getValue().toString();
+                                            if (image.equals("default")) {
+                                                Toast.makeText(getApplicationContext(),"No profile picture detected.",Toast.LENGTH_SHORT).show();
+                                                Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
+                                                progressBar.setVisibility(View.GONE);
+                                            }
+                                            else if (!TextUtils.isEmpty(image) && !image.equals("default")) {
+                                                progressBar.setVisibility(View.VISIBLE);
+                                                AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
+                                                Picasso.get().load(image).into(UserImage, new Callback() {
+                                                    @Override
+                                                    public void onSuccess() {
 
-                                            if (!TextUtils.isEmpty(image)) {
+                                                        progressBar.setVisibility(View.GONE);
+
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Exception e) {
+                                                        Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
+                                                        progressBar.setVisibility(View.GONE);
+
+                                                    }
+                                                });
+
+                                                /*
+                                                Toast.makeText(getApplicationContext(),image,Toast.LENGTH_SHORT).show();
                                                 RequestOptions requestOptions = new RequestOptions()
-                                                        .fitCenter();
+                                                        .fitCenter().placeholder(R.drawable.ic_account_200dp);
 
                                                 Glide.with(MainActivity.this)
                                                         .load(image)
@@ -1002,22 +1040,23 @@ public class MainActivity extends AppCompatActivity {
                                                             @Override
                                                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                                                 progressBar.setVisibility(View.GONE);
-                                                                return false;
+                                                                Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
+                                                                return true;
                                                             }
 
                                                             @Override
                                                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                                                 progressBar.setVisibility(View.GONE);
-                                                                return false;
+                                                                return true;
                                                             }
                                                         })
                                                         .into(UserImage);
+                                                 */
 
-                                            } else if (image.equals("default")) {
-
+                                            }  else {
+                                                Toast.makeText(getApplicationContext(),"Loading failed.",Toast.LENGTH_SHORT).show();
                                                 Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
-                                            } else {
-                                                Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
+                                                progressBar.setVisibility(View.GONE);
                                             }
                                         } else {
                                             Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
@@ -1078,6 +1117,14 @@ public class MainActivity extends AppCompatActivity {
                                 finish();
                             }
                             break;
+                            case R.id.invite:
+                                try{
+                                    QRCodeDialog.show();
+                                }
+                                catch (Exception e)
+                                {
+                                    Snackbar.make(RootForMainActivity,"Failed to initialize QR code",Snackbar.LENGTH_SHORT).show();
+                                }
                         }
                     }
                 }).show();
@@ -1546,12 +1593,15 @@ public class MainActivity extends AppCompatActivity {
                                                                 Toast.makeText(MainActivity.this, "SUCCESSFULLY UPLOADED", Toast.LENGTH_LONG).show();
                                                                 progressBar.setVisibility(View.GONE);
                                                                 ProfileDialog.setCancelable(true);
+                                                                ProfileDialog.dismiss();
+                                                                ProfileDialog.show();
 
                                                             }
                                                         } else {
                                                             progressBar.setVisibility(View.GONE);
                                                             ProfileDialog.setCancelable(true);
                                                             Toast.makeText(MainActivity.this, "FAILED TO SAVE TO DATABASE.MAKE SURE YOUR INTERNET IS CONNECTED AND TRY AGAIN.", Toast.LENGTH_LONG).show();
+                                                            ProfileDialog.dismiss();
                                                         }
 
                                                     }
@@ -1560,6 +1610,7 @@ public class MainActivity extends AppCompatActivity {
                                         progressBar.setVisibility(View.GONE);
                                         ProfileDialog.setCancelable(true);
                                         Toast.makeText(MainActivity.this, "FAILED TO UPLOAD THUMBNAIL", Toast.LENGTH_LONG).show();
+                                        ProfileDialog.dismiss();
                                     }
 
                                 }
@@ -1569,6 +1620,7 @@ public class MainActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE);
                             ProfileDialog.setCancelable(true);
                             Toast.makeText(MainActivity.this, "FAILED TO UPLOAD", Toast.LENGTH_LONG).show();
+                            ProfileDialog.dismiss();
                         }
                     }
 
@@ -1610,12 +1662,20 @@ public class MainActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     AlbumCoverEditDialog.setCancelable(true);
+                                    FirebaseDatabase.getInstance().getReference()
+                                            .child("Communities")
+                                            .child(PostKeyForEdit)
+                                            .child("AlbumCoverImage")
+                                            .setValue(downloadUrl);
                                     AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
-                                    Toast.makeText(MainActivity.this, "Succesfully changed the Cover-Photo.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MainActivity.this, "Successfully changed the Cover-Photo.", Toast.LENGTH_LONG).show();
+                                    AlbumCoverEditDialog.dismiss();
+                                    AlbumCoverEditDialog.show();
                                 } else {
                                     AlbumCoverEditDialog.setCancelable(true);
                                     AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
+                                    AlbumCoverEditDialog.dismiss();
 
                                 }
                             }
@@ -1624,6 +1684,7 @@ public class MainActivity extends AppCompatActivity {
                         AlbumCoverEditDialog.setCancelable(true);
                         AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
+                        AlbumCoverEditDialog.dismiss();
 
                     }
 
@@ -1872,36 +1933,87 @@ public class MainActivity extends AppCompatActivity {
                     AlbumCoverEditProfileUserEmail.setText(String.format("Change Cover for the album \" %s \"", AlbumList.get(position).getAlbumTitle()));
 
                     PostKeyForEdit = AlbumKeyIDs.get(position);
-                    FirebaseDatabase.getInstance().getReference().child("Users")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child("Communities")
+                    FirebaseDatabase.getInstance().getReference().child("Communities")
                             .child(PostKeyForEdit)
                             .addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                                     String Image = dataSnapshot.child("AlbumCoverImage").getValue().toString();
-                                    RequestOptions requestOptions = new RequestOptions()
-                                            .fitCenter();
+                                    if (Image.equals("default"))
+                                    {
 
-                                    Glide.with(getApplicationContext())
-                                            .load(Image)
-                                            .thumbnail(0.1f)
-                                            .apply(requestOptions)
-                                            .listener(new RequestListener<Drawable>() {
-                                                @Override
-                                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                    AlbumCoverEditprogressBar.setVisibility(View.GONE);
-                                                    return false;
-                                                }
+                                        Toast.makeText(getApplicationContext(),"No cover image detected.",Toast.LENGTH_SHORT).show();
 
-                                                @Override
-                                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                    AlbumCoverEditprogressBar.setVisibility(View.GONE);
-                                                    return false;
-                                                }
-                                            })
-                                            .into(AlbumCoverEditUserImage);
+                                        Glide.with(getApplicationContext())
+                                                .load(R.drawable.image_avatar)
+                                                .thumbnail(0.1f)
+                                                .into(AlbumCoverEditUserImage);
+                                        AlbumCoverEditprogressBar.setVisibility(View.GONE);
+
+                                    }
+                                    else if(!TextUtils.isEmpty(Image) && !Image.equals("default"))
+                                    {
+
+                                        AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
+                                        Picasso.get().load(Image).into(AlbumCoverEditUserImage, new Callback() {
+                                            @Override
+                                            public void onSuccess() {
+
+                                                AlbumCoverEditprogressBar.setVisibility(View.GONE);
+
+                                            }
+
+                                            @Override
+                                            public void onError(Exception e) {
+                                                Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
+                                                AlbumCoverEditprogressBar.setVisibility(View.GONE);
+
+                                            }
+                                        });
+                                        /*
+
+                                        Toast.makeText(getApplicationContext(),Image,Toast.LENGTH_SHORT).show();
+                                        RequestOptions requestOptions = new RequestOptions()
+                                                .fitCenter().placeholder(R.drawable.image_avatar);
+
+                                        Glide.with(getApplicationContext())
+                                                .load(Image)
+                                                .thumbnail(0.1f)
+                                                .apply(requestOptions)
+                                                .listener(new RequestListener<Drawable>() {
+                                                    @Override
+                                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                        AlbumCoverEditprogressBar.setVisibility(View.GONE);
+                                                        FLAG=1;
+                                                        return true;
+                                                    }
+                                                    @Override
+                                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                        Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
+                                                        AlbumCoverEditprogressBar.setVisibility(View.GONE);
+                                                        return true;
+                                                    }
+
+                                                })
+                                                .into(AlbumCoverEditUserImage);
+                                         */
+
+
+                                    }
+
+                                    else
+                                    {
+                                        Toast.makeText(getApplicationContext(),"Loading failed.",Toast.LENGTH_SHORT).show();
+                                        Glide.with(getApplicationContext())
+                                                .load(R.drawable.image_avatar)
+                                                .thumbnail(0.1f)
+                                                .into(AlbumCoverEditUserImage);
+                                        AlbumCoverEditprogressBar.setVisibility(View.GONE);
+                                        Toast.makeText(getApplicationContext(),"Loading failed.",Toast.LENGTH_SHORT).show();
+
+                                    }
+
 
                                 }
 
@@ -1999,9 +2111,11 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             QRCodeImageView.setVisibility(View.INVISIBLE);
             textView.setText("You must be in an album to generate QR code");
+            InviteLinkButton.setVisibility(View.GONE);
         } catch (NullPointerException e) {
             QRCodeImageView.setVisibility(View.INVISIBLE);
             textView.setText("You must be in an album to generate QR code");
+            InviteLinkButton.setVisibility(View.GONE);
 
         }
         InviteLinkButton.setOnClickListener(new View.OnClickListener() {

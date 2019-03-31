@@ -6,5 +6,6 @@
     <item android:id="@+id/quit_cloud_album" android:title="Quit Current Cloud-Album" android:icon="@drawable/ic_close_album"/>
     <item android:id="@+id/create_issues" android:title="Report Issue" android:icon="@drawable/ic_info_final_"/>
     <item android:id="@+id/working_tour" android:title="App About" android:icon="@drawable/ic_app_working_tour"/>
+    <item android:id="@+id/invite" android:title="Invite Friends" android:icon="@drawable/ic_card_giftcard_30dp"/>
 
 </menu>

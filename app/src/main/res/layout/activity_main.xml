@@ -71,7 +71,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_fab_create_album"
         android:textAlignment="center"
@@ -91,7 +91,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="0dp"
         android:src="@drawable/ic_fab_scan_qr"
         android:visibility="invisible"
         app:borderWidth="0.5dp"
@@ -103,14 +103,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/main_scan_qr_fab_btn"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toStartOf="@id/main_scan_qr_fab_btn"
         android:background="@drawable/curved_corners"
         android:backgroundTint="#ffffff"
-        android:padding="7dp"
+        android:padding="5dp"
         android:text="Scan QR code"
         android:textColor="@android:color/black"
-        android:textSize="17sp"
+        android:textSize="12sp"
         android:visibility="invisible" />
 
     <TextView
@@ -118,14 +118,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/main_create_album_fab_btn"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toStartOf="@id/main_create_album_fab_btn"
         android:background="@drawable/curved_corners"
         android:backgroundTint="#ffffff"
-        android:padding="7dp"
+        android:padding="5dp"
         android:text="Create album"
         android:textColor="@android:color/black"
-        android:textSize="17sp"
+        android:textSize="12sp"
         android:visibility="invisible" />
 
 </RelativeLayout>
