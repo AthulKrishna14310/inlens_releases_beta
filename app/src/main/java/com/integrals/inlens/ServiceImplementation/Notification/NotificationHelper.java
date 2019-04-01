@@ -16,6 +16,8 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
+
 import com.integrals.inlens.GridView.MainActivity;
 import com.integrals.inlens.R;
 
@@ -218,7 +220,12 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     public void cancelUploadDataNotification(){
-        notificationManager.cancel(672);
+        try {
+            notificationManager.cancel(672);
+        }catch (NullPointerException e)
+        {
+            Toast.makeText(getApplicationContext(),"NotificationHelper NullPointer Exception.",Toast.LENGTH_SHORT).show();
+        }
     }
     public void cancelNotificationRecentImage(){
         notificationManager.cancel(7907);

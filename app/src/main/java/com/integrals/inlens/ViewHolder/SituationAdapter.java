@@ -60,6 +60,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
     private TextView mBottomSheetDialogTitle;
     private ProgressBar mBottomSheetDialogProgressbar;
 
+    long lastclicktime =0;
 
     public SituationAdapter(Context context,
                             List<SituationModel> situation,
@@ -158,6 +159,43 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                long clicktime = System.currentTimeMillis();
+                if(clicktime-lastclicktime>=300)
+                {
+                    try {
+                        photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
+                        photoListHelper.DisplayBottomSheet(
+                                mBottomSheetDialog,
+                                mBottomSheetDialogRecyclerView,
+                                mBottomSheetDialogCloseBtn,
+                                mBottomSheetDialogTitle,
+                                mBottomSheetDialogProgressbar,
+                                Situation.get(position).getSituationTime(),
+                                Situation.get(position + 1).getSituationTime(),
+                                CommunityID,
+                                Situation.get(position).getTitle(),
+                                false);
+
+                    } catch (IndexOutOfBoundsException e) {
+                        photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
+                        photoListHelper.DisplayBottomSheet(
+                                mBottomSheetDialog,
+                                mBottomSheetDialogRecyclerView,
+                                mBottomSheetDialogCloseBtn,
+                                mBottomSheetDialogTitle,
+                                mBottomSheetDialogProgressbar,
+                                Situation.get(position).getSituationTime(),
+                                Situation.get(position).getSituationTime(),
+                                CommunityID,
+                                Situation.get(position).getTitle(),
+                                true);
+
+                    }
+                }
+
+                lastclicktime = clicktime;
+
                 try {
                     photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
                     photoListHelper.DisplayBottomSheet(

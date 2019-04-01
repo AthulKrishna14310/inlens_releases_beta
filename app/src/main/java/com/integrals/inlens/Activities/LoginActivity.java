@@ -14,6 +14,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser      firebaseUser;
     private TextView          ForgotPassword;
     private RelativeLayout RootForLoginActivity;
+    private ImageButton ShowPasswordBtn;
+    private Boolean PASSWORD_SHOWN = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         RootForLoginActivity = findViewById(R.id.root_for_login_activity);
-
+        ShowPasswordBtn = findViewById(R.id.login_show_password);
 
         EmailField=(EditText)findViewById(R.id.EmailEditText);
         PassWordField=(EditText)findViewById(R.id.PasswordField);
@@ -93,6 +98,29 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        ShowPasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!TextUtils.isEmpty(PassWordField.getText()))
+                {
+
+                    if(!PASSWORD_SHOWN)
+                    {
+                        PASSWORD_SHOWN = true;
+                        PassWordField.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    else
+                    {
+                        PASSWORD_SHOWN = false;
+                        PassWordField.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+
+                    }
+                }
+
+            }
+        });
 
     }
 

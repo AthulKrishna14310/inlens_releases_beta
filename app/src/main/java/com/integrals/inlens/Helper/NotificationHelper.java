@@ -136,9 +136,8 @@ public class NotificationHelper extends ContextWrapper {
     }
 
 
-    public Notification.Builder buildNotificationForUploadData(
-            int uploadID,int Record
-    ){
+    public Notification.Builder buildNotificationForUploadData(int uploadID,int Record)
+    {
 
         Notification.Builder Uploadbuilder = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -152,6 +151,24 @@ public class NotificationHelper extends ContextWrapper {
 
         return Uploadbuilder;
     }
+
+    public Notification.Builder buildNotificationForUploadData(String Title ,String Content)
+    {
+
+        Notification.Builder Uploadbuilder = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Uploadbuilder = (Notification.Builder) new Notification.Builder(getApplicationContext(),"ID_503")
+                    .setContentTitle(Title)
+                    .setContentText(Content)
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.inlens_logo_m)
+                    .setProgress(100, 0, true);
+        }
+
+        return Uploadbuilder;
+    }
+
+
 
     public void cancelUploadDataNotification(){
         notificationManager.cancel(672);

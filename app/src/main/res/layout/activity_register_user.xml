@@ -43,49 +43,93 @@
             android:hint="Type your Email " />
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/PasswordLayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/field_password_reg"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_below="@+id/EmailLayout"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:hint="Password">
+        >
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/Password"
-            android:layout_width="match_parent"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/PasswordLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/EmailLayout"
-            android:layout_centerHorizontal="true"
-            android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="20dp"
+            android:hint="Password"
+            android:layout_weight="20">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/RePasswordLayout"
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/EmailLayout"
+                android:layout_centerHorizontal="true"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <ImageButton
+            android:id="@+id/reg_show_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_visibility_off"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/PasswordLayout"
+        android:orientation="horizontal"
+        android:id="@+id/field_password_reg_confirm"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:hint="Confirm Password">
+        android:layout_below="@+id/field_password_reg"
+        >
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/RePassword"
-            android:layout_width="match_parent"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/RePasswordLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/EmailLayout"
-            android:layout_centerHorizontal="true"
-            android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="20dp"
+            android:hint="Confirm Password"
+            android:layout_weight="20">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/RePassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/EmailLayout"
+                android:layout_centerHorizontal="true"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <ImageButton
+            android:id="@+id/reg_confirm_show_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_visibility_off"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
+
+
 
     <Button
         android:id="@+id/ProceedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/RePasswordLayout"
+        android:layout_below="@+id/field_password_reg_confirm"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="@drawable/border"

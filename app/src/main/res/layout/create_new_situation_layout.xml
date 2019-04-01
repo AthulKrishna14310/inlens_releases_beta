@@ -66,25 +66,25 @@
             android:layout_marginTop="20dp">
 
             <Button
-                android:id="@+id/done_btn"
+                android:id="@+id/cancel_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
                 android:layout_marginTop="15dp"
                 android:background="@android:color/transparent"
                 android:padding="2dp"
-                android:text="Done"
+                android:text="Cancel"
                 android:layout_marginBottom="5dp"
                 android:textColor="@color/colorPrimaryDark" />
 
             <Button
-                android:id="@+id/cancel_btn"
+                android:id="@+id/done_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:background="@android:color/transparent"
                 android:padding="2dp"
-                android:text="Cancel"
+                android:text="Done"
                 android:layout_marginStart="50dp"
                 android:textColor="@color/colorPrimaryDark" />
 

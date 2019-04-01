@@ -10,12 +10,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -48,6 +51,9 @@ public class RegisterUser extends AppCompatActivity {
 
     private RelativeLayout RootForRegisterActivity;
 
+    private Boolean SHOW_PASSWORD = false, SHOW_PASSWORD_CONFIRM = false;
+    private ImageButton ShowPasswordBtn , ShowPasswordConfirmBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +62,9 @@ public class RegisterUser extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        ShowPasswordBtn = findViewById(R.id.reg_show_password);
+        ShowPasswordConfirmBtn = findViewById(R.id.reg_confirm_show_password);
 
         RootForRegisterActivity = findViewById(R.id.root_for_register_activity);
         mAuth = FirebaseAuth.getInstance();
@@ -68,6 +77,46 @@ public class RegisterUser extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         VerifiedButton.setEnabled(false);
+
+        ShowPasswordConfirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!TextUtils.isEmpty(ReTypePassword.getText()))
+                {
+                    if(!SHOW_PASSWORD_CONFIRM)
+                    {
+                        SHOW_PASSWORD_CONFIRM=true;
+                        ReTypePassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    else
+                    {
+                        SHOW_PASSWORD_CONFIRM = false;
+                        ReTypePassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    }
+                }
+            }
+        });
+
+        ShowPasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!TextUtils.isEmpty(mPassword.getText()))
+                {
+                    if(!SHOW_PASSWORD)
+                    {
+                        SHOW_PASSWORD=true;
+                        mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
+                    }
+                    else
+                    {
+                        SHOW_PASSWORD = false;
+                        mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                    }
+                }
+            }
+        });
 
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override

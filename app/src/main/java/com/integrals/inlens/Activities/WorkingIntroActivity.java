@@ -23,7 +23,8 @@ public class WorkingIntroActivity extends AppCompatActivity {
     private IntroAdapter introAdapter;
     private ViewPager IntroViewPager;
     private int i = 1;
-
+    private Boolean SHOW_TOUR = true;
+    private String StringShowTour;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +45,20 @@ public class WorkingIntroActivity extends AppCompatActivity {
             }
         });
 
+        StringShowTour = getIntent().getStringExtra("ShowTour");
+        if(StringShowTour.equals("no"))
+        {
+            SHOW_TOUR = false;
+        }
+        else
+        {
+            SHOW_TOUR=true;
+        }
         findViewById(R.id.initial_skip_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(WorkingIntroActivity.this, MainActivity.class).putExtra("ShowTour",true));
+                startActivity(new Intent(WorkingIntroActivity.this, MainActivity.class).putExtra("ShowTour",SHOW_TOUR));
                 overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
                 finish();
 

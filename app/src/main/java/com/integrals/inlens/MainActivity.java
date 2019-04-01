@@ -5,11 +5,13 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteReadOnlyDatabaseException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -24,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -79,12 +82,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.integrals.inlens.Helper.NotificationHelper;
 import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
 import com.integrals.inlens.ServiceImplementation.Includes.UploadServiceHelper;
 import com.integrals.inlens.ServiceImplementation.Service.UploadService;
@@ -136,7 +141,6 @@ import com.integrals.inlens.ViewHolder.ParticipantsViewHolder;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int FLAG=0;
     private RecyclerView MemoryRecyclerView;
     private DatabaseReference InDatabaseReference;
 
@@ -218,7 +222,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView NoAlbumTextView;
 
     private Boolean SHOW_TOUR;
-    private Tour MainFirstTour;
+    private NotificationManager ImageNotyManager;
+    private NotificationCompat.Builder ImageNotyBuilder;
+    private NotificationHelper ImageNotyHelper;
+
 
     private JobSchedulerHelper jobSchedulerHelper;
     public MainActivity() {
@@ -230,13 +237,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(25);
 
-        QRCodeInit();
-        PermissionsInit();
-        FabAnimationAndButtonsInit();
-        ProfileDialogInit();
-        AlbumCoverEditDialogInit();
-        ParticipantsBottomSheetDialogInit();
-        DetailsDialogInit();
+        ImageNotyHelper=new NotificationHelper(getBaseContext());
 
         NoAlbumTextView = findViewById(R.id.nocloudalbumtextview);
         MainDimBackground = findViewById(R.id.main_dim_background);
@@ -278,6 +279,14 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     CurrentUser = firebaseUser.getUid();
+                    QRCodeInit();
+                    PermissionsInit();
+                    FabAnimationAndButtonsInit();
+                    ProfileDialogInit();
+                    AlbumCoverEditDialogInit();
+                    ParticipantsBottomSheetDialogInit();
+                    DetailsDialogInit();
+                    CheckIfUserImageExist(CurrentUser);
                 }
             }
 
@@ -318,6 +327,33 @@ public class MainActivity extends AppCompatActivity {
 
         jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
 
+    }
+
+    private void CheckIfUserImageExist(String currentUser) {
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.hasChild("Profile_picture"))
+                {
+                    String Image = dataSnapshot.child("Profile_picture").getValue().toString();
+                    if(Image.equals("default"))
+                    {
+                        ProfileDialog.show();
+                    }
+                }
+                else
+                {
+                    ProfileDialog.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void ShowAllTapTargets() {
@@ -570,6 +606,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void StartUpload(String Title ,String Content) {
+
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Notification.Builder builder=ImageNotyHelper.buildNotificationForUploadData(
+                    Title,
+                    Content
+            );
+            builder.setAutoCancel(true);
+            ImageNotyHelper.getNotificationManager().notify(503,builder.build());
+
+        }
+        else {
+
+            ImageNotyManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            ImageNotyBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
+                    .setContentTitle(Title)
+                    .setContentText(Content)
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.inlens_logo_m)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setOngoing(true)
+                    .setProgress(100, 0, true);
+
+
+            ImageNotyManager.notify(503, ImageNotyBuilder.build());
+
+        }
+
+
+
+    }
+
 
     private void ProfileDialogInit() {
 
@@ -1081,7 +1151,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case R.id.working_tour:
                             {
-                                startActivity(new Intent(MainActivity.this, WorkingIntroActivity.class));
+                                startActivity(new Intent(MainActivity.this, WorkingIntroActivity.class).putExtra("ShowTour","no"));
                                 overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
                                 finish();
                                 break;
@@ -1560,7 +1630,7 @@ public class MainActivity extends AppCompatActivity {
 
                 final StorageReference filepath = mStorageRef.child("profile_images").child(current_u_i_d + ".jpg");
                 final StorageReference thumb_filepath = mStorageRef.child("profile_images").child("thumbs").child(current_u_i_d + ".jpg");
-
+                StartUpload("Updating Profile Picture","Please wait until profile picture is updated.");
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -1596,12 +1666,27 @@ public class MainActivity extends AppCompatActivity {
                                                                 ProfileDialog.dismiss();
                                                                 ProfileDialog.show();
 
+                                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                                    ImageNotyHelper.cancelUploadDataNotification();
+                                                                }
+                                                                else
+                                                                {
+                                                                    ImageNotyManager.cancel(503);
+                                                                }
+
                                                             }
                                                         } else {
                                                             progressBar.setVisibility(View.GONE);
                                                             ProfileDialog.setCancelable(true);
                                                             Toast.makeText(MainActivity.this, "FAILED TO SAVE TO DATABASE.MAKE SURE YOUR INTERNET IS CONNECTED AND TRY AGAIN.", Toast.LENGTH_LONG).show();
                                                             ProfileDialog.dismiss();
+                                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                                ImageNotyHelper.cancelUploadDataNotification();
+                                                            }
+                                                            else
+                                                            {
+                                                                ImageNotyManager.cancel(503);
+                                                            }
                                                         }
 
                                                     }
@@ -1611,6 +1696,13 @@ public class MainActivity extends AppCompatActivity {
                                         ProfileDialog.setCancelable(true);
                                         Toast.makeText(MainActivity.this, "FAILED TO UPLOAD THUMBNAIL", Toast.LENGTH_LONG).show();
                                         ProfileDialog.dismiss();
+                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                            ImageNotyHelper.cancelUploadDataNotification();
+                                        }
+                                        else
+                                        {
+                                            ImageNotyManager.cancel(503);
+                                        }
                                     }
 
                                 }
@@ -1621,6 +1713,13 @@ public class MainActivity extends AppCompatActivity {
                             ProfileDialog.setCancelable(true);
                             Toast.makeText(MainActivity.this, "FAILED TO UPLOAD", Toast.LENGTH_LONG).show();
                             ProfileDialog.dismiss();
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                ImageNotyHelper.cancelUploadDataNotification();
+                            }
+                            else
+                            {
+                                ImageNotyManager.cancel(503);
+                            }
                         }
                     }
 
@@ -1636,7 +1735,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void UploadCOverPhoto(Uri imageUri) {
-
+        StartUpload("Updating Album Cover Image","Please wait until album cover image is updated.");
         AlbumCoverEditDialog.setCancelable(false);
         AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
         if (!TextUtils.isEmpty(PostKeyForEdit) && imageUri != null) {
@@ -1671,12 +1770,27 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this, "Successfully changed the Cover-Photo.", Toast.LENGTH_LONG).show();
                                     AlbumCoverEditDialog.dismiss();
                                     AlbumCoverEditDialog.show();
+
+                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                        ImageNotyHelper.cancelUploadDataNotification();
+                                    }
+                                    else
+                                    {
+                                        ImageNotyManager.cancel(503);
+                                    }
                                 } else {
                                     AlbumCoverEditDialog.setCancelable(true);
                                     AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
                                     AlbumCoverEditDialog.dismiss();
 
+                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                        ImageNotyHelper.cancelUploadDataNotification();
+                                    }
+                                    else
+                                    {
+                                        ImageNotyManager.cancel(503);
+                                    }
                                 }
                             }
                         });
@@ -1685,6 +1799,13 @@ public class MainActivity extends AppCompatActivity {
                         AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
                         AlbumCoverEditDialog.dismiss();
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            ImageNotyHelper.cancelUploadDataNotification();
+                        }
+                        else
+                        {
+                            ImageNotyManager.cancel(503);
+                        }
 
                     }
 
@@ -1695,6 +1816,13 @@ public class MainActivity extends AppCompatActivity {
                     AlbumCoverEditDialog.setCancelable(true);
                     AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        ImageNotyHelper.cancelUploadDataNotification();
+                    }
+                    else
+                    {
+                        ImageNotyManager.cancel(503);
+                    }
                 }
             });
 
@@ -1702,6 +1830,13 @@ public class MainActivity extends AppCompatActivity {
             AlbumCoverEditDialog.setCancelable(true);
             AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                ImageNotyHelper.cancelUploadDataNotification();
+            }
+            else
+            {
+                ImageNotyManager.cancel(503);
+            }
         }
 
 

@@ -238,7 +238,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
         SubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SubmitButton.setEnabled(false);
                 PostingStarts();
             }
         });
@@ -441,9 +440,9 @@ public class CreateCloudAlbum extends AppCompatActivity {
     private void PostingStarts() {
         final String TitleValue = CommunityAlbumTitle.getText().toString().trim();
         final String DescriptionValue = CommunityAlbumDescription.getText().toString().trim();
-        if (!TextUtils.isEmpty(TitleValue) && !(TextUtils.isEmpty(EventType)) &&(!TextUtils.isEmpty(DescriptionValue) &&
+        if (!TextUtils.isEmpty(TitleValue) && !(TextUtils.isEmpty(EventType)&&
                 (!TextUtils.isEmpty(AlbumTime)))) {
-
+            SubmitButton.setEnabled(false);
             if(ImageUri==null)
             {
                 Toast.makeText(CreateCloudAlbum.this,"Cover photo can be added later.",Toast.LENGTH_LONG).show();
