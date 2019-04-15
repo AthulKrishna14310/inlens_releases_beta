@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser      firebaseUser;
     private TextView          ForgotPassword;
     private RelativeLayout RootForLoginActivity;
-    private ImageButton ShowPasswordBtn;
+    private ImageButton ShowPasswordBtn,ShowPasswordBtnVisON;
     private Boolean PASSWORD_SHOWN = false;
 
     @Override
@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
         RootForLoginActivity = findViewById(R.id.root_for_login_activity);
         ShowPasswordBtn = findViewById(R.id.login_show_password);
+        ShowPasswordBtnVisON = findViewById(R.id.login_show_password_vis_on);
 
         EmailField=(EditText)findViewById(R.id.EmailEditText);
         PassWordField=(EditText)findViewById(R.id.PasswordField);
@@ -109,13 +110,28 @@ public class LoginActivity extends AppCompatActivity {
                     {
                         PASSWORD_SHOWN = true;
                         PassWordField.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        ShowPasswordBtn.setVisibility(View.GONE);
+                        ShowPasswordBtnVisON.setVisibility(View.VISIBLE);
                     }
-                    else
+
+                }
+
+            }
+        });
+
+        ShowPasswordBtnVisON.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!TextUtils.isEmpty(PassWordField.getText()))
+                {
+
+                    if(PASSWORD_SHOWN)
                     {
                         PASSWORD_SHOWN = false;
                         PassWordField.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
-
+                        ShowPasswordBtn.setVisibility(View.VISIBLE);
+                        ShowPasswordBtnVisON.setVisibility(View.GONE);
                     }
                 }
 

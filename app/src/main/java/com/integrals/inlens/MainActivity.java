@@ -1188,13 +1188,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                             break;
                             case R.id.invite:
-                                try{
-                                    QRCodeDialog.show();
-                                }
-                                catch (Exception e)
-                                {
-                                    Snackbar.make(RootForMainActivity,"Failed to initialize QR code",Snackbar.LENGTH_SHORT).show();
-                                }
+                                final Intent SharingIntent = new Intent(Intent.ACTION_SEND);
+                                SharingIntent.setType("text/plain");
+                                SharingIntent.putExtra(Intent.EXTRA_TEXT,"InLens \n\n"+"Store all memories with unlimited storage and without quality compromise. Haven't got inLens? Get it now."+"\nhttps://play.google.com/store/apps/details?id=com.integrals.inlens");
+                                startActivity(SharingIntent);
                         }
                     }
                 }).show();

@@ -52,7 +52,7 @@ public class RegisterUser extends AppCompatActivity {
     private RelativeLayout RootForRegisterActivity;
 
     private Boolean SHOW_PASSWORD = false, SHOW_PASSWORD_CONFIRM = false;
-    private ImageButton ShowPasswordBtn , ShowPasswordConfirmBtn;
+    private ImageButton ShowPasswordBtn,ShowPasswordBtnVisON , ShowPasswordConfirmBtn,ShowPasswordConfirmBtnVisON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,9 @@ public class RegisterUser extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ShowPasswordBtn = findViewById(R.id.reg_show_password);
+        ShowPasswordBtnVisON = findViewById(R.id.reg_show_password_vis_on);
         ShowPasswordConfirmBtn = findViewById(R.id.reg_confirm_show_password);
+        ShowPasswordConfirmBtnVisON = findViewById(R.id.reg_confirm_show_password_vis_on);
 
         RootForRegisterActivity = findViewById(R.id.root_for_register_activity);
         mAuth = FirebaseAuth.getInstance();
@@ -87,12 +89,24 @@ public class RegisterUser extends AppCompatActivity {
                     {
                         SHOW_PASSWORD_CONFIRM=true;
                         ReTypePassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        ShowPasswordConfirmBtn.setVisibility(View.GONE);
+                        ShowPasswordConfirmBtnVisON.setVisibility(View.VISIBLE);
                     }
-                    else
-                    {
-                        SHOW_PASSWORD_CONFIRM = false;
-                        ReTypePassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    }
+
+                }
+            }
+        });
+
+        ShowPasswordConfirmBtnVisON.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(SHOW_PASSWORD_CONFIRM && !TextUtils.isEmpty(ReTypePassword.getText()))
+                {
+                    SHOW_PASSWORD_CONFIRM = false;
+                    ReTypePassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    ShowPasswordConfirmBtn.setVisibility(View.VISIBLE);
+                    ShowPasswordConfirmBtnVisON.setVisibility(View.GONE);
                 }
             }
         });
@@ -106,15 +120,24 @@ public class RegisterUser extends AppCompatActivity {
                     {
                         SHOW_PASSWORD=true;
                         mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-
-                    }
-                    else
-                    {
-                        SHOW_PASSWORD = false;
-                        mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
+                        ShowPasswordBtn.setVisibility(View.GONE);
+                        ShowPasswordBtnVisON.setVisibility(View.VISIBLE);
                     }
                 }
+            }
+        });
+        ShowPasswordBtnVisON.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(SHOW_PASSWORD && !TextUtils.isEmpty(mPassword.getText()))
+                {
+                    SHOW_PASSWORD = false;
+                    mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    ShowPasswordBtn.setVisibility(View.VISIBLE);
+                    ShowPasswordBtnVisON.setVisibility(View.GONE);
+                }
+
             }
         });
 

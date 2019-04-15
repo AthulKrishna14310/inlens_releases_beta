@@ -80,6 +80,16 @@
             android:layout_gravity="center"
             android:background="@android:color/transparent"/>
 
+        <ImageButton
+            android:id="@+id/reg_show_password_vis_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_visibility_on"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"/>
+
     </LinearLayout>
 
 
@@ -117,6 +127,16 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_visibility_off"
             android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"/>
+
+        <ImageButton
+            android:id="@+id/reg_confirm_show_password_vis_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_visibility_on"
+            android:layout_weight="1"
+            android:visibility="gone"
             android:layout_gravity="center"
             android:background="@android:color/transparent"/>
 
