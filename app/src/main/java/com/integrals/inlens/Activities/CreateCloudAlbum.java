@@ -446,128 +446,225 @@ public class CreateCloudAlbum extends AppCompatActivity {
             if(ImageUri==null)
             {
                 Toast.makeText(CreateCloudAlbum.this,"Cover photo can be added later.",Toast.LENGTH_LONG).show();
-                ImageUri= Uri.parse("android.resource://" + getPackageName() + "/drawable/image_avatar");
-            }
-            StorageReference
-                    FilePath = PostStorageReference
-                    .child("CommunityCoverPhoto")
-                    .child(ImageUri.getLastPathSegment());
-            FilePath
-                    .putFile(ImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-                            final Uri DownloadUri = taskSnapshot.getDownloadUrl();
-                            String pushid = CommunityDatabaseReference.push().getKey();
-                            final DatabaseReference CommunityPost = CommunityDatabaseReference.child(pushid);
-                            final DatabaseReference NewPost = PostDatabaseReference.child(pushid);
-                            InUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                String pushid = CommunityDatabaseReference.push().getKey();
+                final DatabaseReference CommunityPost = CommunityDatabaseReference.child(pushid);
+                final DatabaseReference NewPost = PostDatabaseReference.child(pushid);
+                final Uri DownloadUri = Uri.parse("default");
+                InUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        CommunityPost.child("AlbumTitle").setValue(TitleValue);
+                        CommunityPost.child("AlbumDescription").setValue(DescriptionValue);
+                        CommunityPost.child("AlbumCoverImage").setValue((DownloadUri).toString());
+                        CommunityPost.child("User_ID").setValue(InUser.getUid());
+                        CommunityPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
+                        CommunityPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
+                        CommunityPost.child("ActiveIndex").setValue("T");
+                        CommunityPost.child("AlbumExpiry").setValue(AlbumTime);
+                        CommunityPost.child("AlbumType").setValue(EventType);
+                        CommunityPost.child("CreatedTimestamp").setValue(ServerValue.TIMESTAMP);
+                        PostKey = CommunityPost.getKey().trim();
+
+                        NewPost.child("AlbumTitle").setValue(TitleValue);
+                        NewPost.child("AlbumDescription").setValue(DescriptionValue);
+                        NewPost.child("AlbumCoverImage").setValue((DownloadUri).toString());
+                        NewPost.child("User_ID").setValue(InUser.getUid());
+                        NewPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
+                        NewPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
+                        NewPost.child("CommunityID").setValue(PostKey);
+                        NewPost.child("CreatedTimestamp").setValue(ServerValue.TIMESTAMP);
+                        NewPost.child("AlbumType").setValue(EventType);
+
+                        InProgressDialog.setMessage("Saving new data....");
+                        CurrentDatabase currentDatabase= new CurrentDatabase(getApplicationContext(),"",null,1);
+                        currentDatabase.InsertUploadValues(PostKey,0,1,0,AlbumTime,1,1,"CUREE");
+                        currentDatabase.close();
+                        InProgressDialog.setMessage("Finishing....");
+                        if (PhotographerCreated == false) {
+                            photographerReference = FirebaseDatabase.getInstance()
+                                    .getReference()
+                                    .child("Communities")
+                                    .child(PostKey)
+                                    .child("CommunityPhotographer");
+
+                            DatabaseReference databaseReference = photographerReference.push();
+                            databaseReference.child("Photographer_UID").setValue(UserID);
+                            databaseReference.child("Name").setValue(dataSnapshot.child("Name").getValue());
+                            databaseReference.child("Profile_picture").setValue(dataSnapshot.child("Profile_picture").getValue());
+                            databaseReference.child("Email_ID").setValue(dataSnapshot.child("Email").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    CommunityPost.child("AlbumTitle").setValue(TitleValue);
-                                    CommunityPost.child("AlbumDescription").setValue(DescriptionValue);
-                                    CommunityPost.child("AlbumCoverImage").setValue((DownloadUri).toString());
-                                    CommunityPost.child("User_ID").setValue(InUser.getUid());
-                                    CommunityPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
-                                    CommunityPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
-                                    CommunityPost.child("ActiveIndex").setValue("T");
-                                    CommunityPost.child("AlbumExpiry").setValue(AlbumTime);
-                                    CommunityPost.child("AlbumType").setValue(EventType);
-                                    CommunityPost.child("CreatedTimestamp").setValue(ServerValue.TIMESTAMP);
-                                    PostKey = CommunityPost.getKey().trim();
+                                public void onComplete(@NonNull Task<Void> task) {
 
-                                    NewPost.child("AlbumTitle").setValue(TitleValue);
-                                    NewPost.child("AlbumDescription").setValue(DescriptionValue);
-                                    NewPost.child("AlbumCoverImage").setValue((DownloadUri).toString());
-                                    NewPost.child("User_ID").setValue(InUser.getUid());
-                                    NewPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
-                                    NewPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
-                                    NewPost.child("CommunityID").setValue(PostKey);
-                                    NewPost.child("CreatedTimestamp").setValue(ServerValue.TIMESTAMP);
-                                    NewPost.child("AlbumType").setValue(EventType);
+                                    if(task.isSuccessful()){
+                                        if(task.isComplete()){
+                                            if(!CloudAlbumDone) {
+                                                InProgressDialog.dismiss();
+                                                UploadProgressTextView.setText("Cloud Album Created.");
+                                                UploadProgress.setVisibility(View.INVISIBLE);
+                                                SubmitButton.setVisibility(View.VISIBLE);
+                                                CloudAlbumDone=true;
+                                                StartServices();
+                                                SharedPreferences AlbumClickDetails = getSharedPreferences("LastClickedAlbum",MODE_PRIVATE);
+                                                SharedPreferences.Editor  AlbumEditor = AlbumClickDetails.edit();
+                                                AlbumEditor.putInt("last_clicked_position",0);
+                                                AlbumEditor.apply();
+                                                startActivity(new Intent(CreateCloudAlbum.this,MainActivity.class).putExtra("QRCodeVisible",true));
+                                                overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
+                                                finish();
 
-                                    InProgressDialog.setMessage("Saving new data....");
-                                    CurrentDatabase currentDatabase= new CurrentDatabase(getApplicationContext(),"",null,1);
-                                    currentDatabase.InsertUploadValues(PostKey,0,1,0,AlbumTime,1,1,"CUREE");
-                                    currentDatabase.close();
-                                    InProgressDialog.setMessage("Finishing....");
-                                    if (PhotographerCreated == false) {
-                                        photographerReference = FirebaseDatabase.getInstance()
-                                                .getReference()
-                                                .child("Communities")
-                                                .child(PostKey)
-                                                .child("CommunityPhotographer");
+                                            }
 
-                                        DatabaseReference databaseReference = photographerReference.push();
-                                        databaseReference.child("Photographer_UID").setValue(UserID);
-                                        databaseReference.child("Name").setValue(dataSnapshot.child("Name").getValue());
-                                        databaseReference.child("Profile_picture").setValue(dataSnapshot.child("Profile_picture").getValue());
-                                        databaseReference.child("Email_ID").setValue(dataSnapshot.child("Email").getValue());
-                                        CreateSituation();
-                                        PhotographerCreated = true;
+                                        }
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                    Toast.makeText(getApplicationContext(),"Error Detected",Toast.LENGTH_SHORT).show();
+                                    SubmitButton.setEnabled(true);
+
+                                }
+                            });
+                            CreateSituation();
+                            PhotographerCreated = true;
+
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(CreateCloudAlbum.this, "Sorry database error ...please try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+            else
+            {
+
+                StorageReference
+                        FilePath = PostStorageReference
+                        .child("CommunityCoverPhoto")
+                        .child(ImageUri.getLastPathSegment());
+                FilePath
+                        .putFile(ImageUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                                final Uri DownloadUri = taskSnapshot.getDownloadUrl();
+                                String pushid = CommunityDatabaseReference.push().getKey();
+                                final DatabaseReference CommunityPost = CommunityDatabaseReference.child(pushid);
+                                final DatabaseReference NewPost = PostDatabaseReference.child(pushid);
+                                InUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        CommunityPost.child("AlbumTitle").setValue(TitleValue);
+                                        CommunityPost.child("AlbumDescription").setValue(DescriptionValue);
+                                        CommunityPost.child("AlbumCoverImage").setValue((DownloadUri).toString());
+                                        CommunityPost.child("User_ID").setValue(InUser.getUid());
+                                        CommunityPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
+                                        CommunityPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
+                                        CommunityPost.child("ActiveIndex").setValue("T");
+                                        CommunityPost.child("AlbumExpiry").setValue(AlbumTime);
+                                        CommunityPost.child("AlbumType").setValue(EventType);
+                                        CommunityPost.child("CreatedTimestamp").setValue(ServerValue.TIMESTAMP);
+                                        PostKey = CommunityPost.getKey().trim();
+
+                                        NewPost.child("AlbumTitle").setValue(TitleValue);
+                                        NewPost.child("AlbumDescription").setValue(DescriptionValue);
+                                        NewPost.child("AlbumCoverImage").setValue((DownloadUri).toString());
+                                        NewPost.child("User_ID").setValue(InUser.getUid());
+                                        NewPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
+                                        NewPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
+                                        NewPost.child("CommunityID").setValue(PostKey);
+                                        NewPost.child("CreatedTimestamp").setValue(ServerValue.TIMESTAMP);
+                                        NewPost.child("AlbumType").setValue(EventType);
+
+                                        InProgressDialog.setMessage("Saving new data....");
+                                        CurrentDatabase currentDatabase= new CurrentDatabase(getApplicationContext(),"",null,1);
+                                        currentDatabase.InsertUploadValues(PostKey,0,1,0,AlbumTime,1,1,"CUREE");
+                                        currentDatabase.close();
+                                        InProgressDialog.setMessage("Finishing....");
+                                        if (PhotographerCreated == false) {
+                                            photographerReference = FirebaseDatabase.getInstance()
+                                                    .getReference()
+                                                    .child("Communities")
+                                                    .child(PostKey)
+                                                    .child("CommunityPhotographer");
+
+                                            DatabaseReference databaseReference = photographerReference.push();
+                                            databaseReference.child("Photographer_UID").setValue(UserID);
+                                            databaseReference.child("Name").setValue(dataSnapshot.child("Name").getValue());
+                                            databaseReference.child("Profile_picture").setValue(dataSnapshot.child("Profile_picture").getValue());
+                                            databaseReference.child("Email_ID").setValue(dataSnapshot.child("Email").getValue());
+                                            CreateSituation();
+                                            PhotographerCreated = true;
+
+                                        }
+
+
 
                                     }
 
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Toast.makeText(CreateCloudAlbum.this, "Sorry database error ...please try again", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                                     @Override
+                                                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                                         OngoingTask = true;
+                                                         UploadProgressTextView.setVisibility(View.VISIBLE);
+                                                         SubmitButton.setVisibility(View.INVISIBLE);
+                                                         UploadProgress.setVisibility(View.VISIBLE);
+                                                         double progress =
+                                                                 (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                                                         .getTotalByteCount());
+                                                         String UploadIndex = "Creating new Cloud-Album, "+ (int) progress + "%" + " completed.";
+                                                         UploadProgressTextView.setText(UploadIndex);
 
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    Toast.makeText(CreateCloudAlbum.this, "Sorry database error ...please try again", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                                 @Override
-                                                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                                     OngoingTask = true;
-                                                     UploadProgressTextView.setVisibility(View.VISIBLE);
-                                                     SubmitButton.setVisibility(View.INVISIBLE);
-                                                     UploadProgress.setVisibility(View.VISIBLE);
-                                                     double progress =
-                                                             (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                                                     .getTotalByteCount());
-                                                     String UploadIndex = "Creating new Cloud-Album, "+ (int) progress + "%" + " completed.";
-                                                     UploadProgressTextView.setText(UploadIndex);
-
+                                                     }
                                                  }
-                                             }
-            ).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if(task.isSuccessful()){
-                        if(task.isComplete()){
-                            if(!CloudAlbumDone) {
-                                InProgressDialog.dismiss();
-                                UploadProgressTextView.setText("Cloud Album Created.");
-                                UploadProgress.setVisibility(View.INVISIBLE);
-                                SubmitButton.setVisibility(View.VISIBLE);
-                                CloudAlbumDone=true;
-                                StartServices();
-                                SharedPreferences AlbumClickDetails = getSharedPreferences("LastClickedAlbum",MODE_PRIVATE);
-                                SharedPreferences.Editor  AlbumEditor = AlbumClickDetails.edit();
-                                AlbumEditor.putInt("last_clicked_position",0);
-                                AlbumEditor.apply();
-                                startActivity(new Intent(CreateCloudAlbum.this,MainActivity.class).putExtra("QRCodeVisible",true));
-                                overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
-                                finish();
+                ).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if(task.isSuccessful()){
+                            if(task.isComplete()){
+                                if(!CloudAlbumDone) {
+                                    InProgressDialog.dismiss();
+                                    UploadProgressTextView.setText("Cloud Album Created.");
+                                    UploadProgress.setVisibility(View.INVISIBLE);
+                                    SubmitButton.setVisibility(View.VISIBLE);
+                                    CloudAlbumDone=true;
+                                    StartServices();
+                                    SharedPreferences AlbumClickDetails = getSharedPreferences("LastClickedAlbum",MODE_PRIVATE);
+                                    SharedPreferences.Editor  AlbumEditor = AlbumClickDetails.edit();
+                                    AlbumEditor.putInt("last_clicked_position",0);
+                                    AlbumEditor.apply();
+                                    startActivity(new Intent(CreateCloudAlbum.this,MainActivity.class).putExtra("QRCodeVisible",true));
+                                    overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
+                                    finish();
+
+                                }
 
                             }
-
                         }
                     }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
-                    Toast.makeText(getApplicationContext(),"Error Detected",Toast.LENGTH_SHORT).show();
-                    SubmitButton.setEnabled(true);
-                }
-            });
+                        Toast.makeText(getApplicationContext(),"Error Detected",Toast.LENGTH_SHORT).show();
+                        SubmitButton.setEnabled(true);
+                    }
+                });
 
-
+            }
 
 
         }

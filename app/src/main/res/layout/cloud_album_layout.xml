@@ -100,6 +100,7 @@
                     app:stackFromEnd="true">
 
                 </android.support.v7.widget.RecyclerView>
+
             </RelativeLayout>
 
             <TextView

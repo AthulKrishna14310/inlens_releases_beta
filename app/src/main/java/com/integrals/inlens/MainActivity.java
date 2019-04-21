@@ -286,7 +286,12 @@ public class MainActivity extends AppCompatActivity {
                     AlbumCoverEditDialogInit();
                     ParticipantsBottomSheetDialogInit();
                     DetailsDialogInit();
-                    CheckIfUserImageExist(CurrentUser);
+                    if(SHOW_TOUR)
+                    {
+                        //Only check if userimage is uploaded once
+                        CheckIfUserImageExist(CurrentUser);
+
+                    }
                 }
             }
 
@@ -330,6 +335,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void CheckIfUserImageExist(String currentUser) {
+
+        ProfileUserEmail = ProfileDialog.findViewById(R.id.custom_profile_dialog_useremail);
+        ProfileUserEmail.setText("No Profile Image detected. Let your friends identify you.");
 
         FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).addValueEventListener(new ValueEventListener() {
             @Override
