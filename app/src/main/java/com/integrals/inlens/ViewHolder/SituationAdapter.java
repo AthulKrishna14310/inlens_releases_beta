@@ -54,7 +54,6 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
     DatabaseReference databaseReference;
     String CommunityID;
     Activity CloudAlbum;
-    List MembersList = new ArrayList();
     Dialog Renamesituation;
     PhotoListHelper photoListHelper;
     DatabaseReference databaseReferencePhotoList;
@@ -63,7 +62,6 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
     private ImageButton mBottomSheetDialogCloseBtn;
     private TextView mBottomSheetDialogTitle;
     private ProgressBar mBottomSheetDialogProgressbar;
-    List<String> ImageList = new ArrayList<>();
 
 
     public SituationAdapter(Context context,
@@ -90,7 +88,6 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         this.mBottomSheetDialogRecyclerView = mBottomSheetDialogRecyclerView;
         this.mBottomSheetDialogProgressbar = mBottomSheetDialogProgressbar;
         this.mBottomSheetDialogTitle = mBottomSheetDialogTitle;
-        ImageList = imageList;
 
     }
 
@@ -173,7 +170,6 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         databaseReferencePhotoList.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ImageList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     if (snapshot.hasChildren()) {
@@ -223,7 +219,6 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
     }
 
     private void StoreImage(String imageThumb, ViewFlipper cloudAlbumLayout_ImageView) {
-        ImageList.add(imageThumb);
         LoadImage(imageThumb,cloudAlbumLayout_ImageView);
 
     }
@@ -231,6 +226,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
     private void LoadImage(String img, ViewFlipper cloudAlbumLayout_ImageView) {
 
         ImageView imageView = new ImageView(context);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Picasso.get().load(img).into(imageView);
         cloudAlbumLayout_ImageView.addView(imageView);
 
