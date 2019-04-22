@@ -60,10 +60,14 @@
 
 
 
-            <ImageView
+            <ViewFlipper
                 android:id="@+id/cloud_album_layout_imageview"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/image_avatar"
+                android:flipInterval="3000"
+                android:autoStart="true"
                 android:layout_below="@id/cloud_album_layout_linear_layout"/>
 
 

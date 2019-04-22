@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -180,13 +181,13 @@ public class GridImageAdapter extends
     public class GridImageViewHolder extends RecyclerView.ViewHolder{
         public ImageView imageView;
         public TextView  textView;
-        public Button    OptionButton;
+        public ImageButton OptionButton;
         public ProgressBar CardLoadingPBar;
         public GridImageViewHolder(View itemView) {
             super(itemView);
             textView=(TextView)itemView.findViewById(R.id.UploadedByUserName);
             imageView=(ImageView)itemView.findViewById(R.id.PhotoViewPhotoViewCard);
-            OptionButton=(Button)itemView.findViewById(R.id.OptionsButton);
+            OptionButton=itemView.findViewById(R.id.OptionsButton);
             CardLoadingPBar = itemView.findViewById(R.id.cardloadingpbar);
 
         }

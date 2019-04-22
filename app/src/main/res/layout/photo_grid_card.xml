@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="150dp"
-    android:layout_height="140dp"
+    android:layout_height="160dp"
     android:layout_centerInParent="true"
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
@@ -28,7 +28,8 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:background="#ffffff"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:layout_below="@id/photo_grid_card_linear_layout"/>
 
         <ProgressBar
             android:id="@+id/cardloadingpbar"
@@ -37,52 +38,37 @@
             android:layout_centerInParent="true"
             android:indeterminate="true" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#3E3D63"
+            android:id="@+id/photo_grid_card_linear_layout">
 
             <TextView
                 android:id="@+id/UploadedByUserName"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="20dp"
                 android:background="@color/colorPrimary"
                 android:text="Created by user"
+                android:layout_gravity="center"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
-                android:textSize="10sp" />
-        </RelativeLayout>
+                android:textSize="10sp"
+                android:maxLength="25"
+                android:layout_weight="1"/>
 
-        <RelativeLayout
-            android:id="@+id/OptionLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:background="#66000000">
 
-            <Button
+            <ImageButton
                 android:id="@+id/OptionsButton"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="false"
-                android:background="@drawable/menu_round" />
+                android:src="@drawable/ic_more_vert_black_18dp"
+                android:background="@drawable/white_stroke"/>
 
-            <TextView
-                android:id="@+id/DateTextPhotoCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="3dp"
-                android:layout_marginBottom="3dp"
-                android:text="Date"
-                android:textColor="@android:color/white"
-                android:textSize="10sp"
-                android:visibility="gone" />
-        </RelativeLayout>
+        </LinearLayout>
+
     </RelativeLayout>
 
 

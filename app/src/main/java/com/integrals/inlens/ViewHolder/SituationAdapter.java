@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -22,9 +21,9 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.cocosw.bottomsheet.BottomSheet;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,9 +33,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.integrals.inlens.Models.Blog;
-import com.ramotion.cardslider.CardSliderLayoutManager;
-import com.ramotion.cardslider.CardSnapHelper;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -47,6 +43,7 @@ import java.util.List;
 import com.integrals.inlens.Helper.PhotoListHelper;
 import com.integrals.inlens.R;
 import com.integrals.inlens.Models.SituationModel;
+import com.squareup.picasso.Picasso;
 
 
 public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.SituationViewHolder> {
@@ -66,13 +63,8 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
     private ImageButton mBottomSheetDialogCloseBtn;
     private TextView mBottomSheetDialogTitle;
     private ProgressBar mBottomSheetDialogProgressbar;
-    private List<Blog>          BlogList,OrgBlogList;
-    private List<String>        BlogListID;
-    private String              TimeEnd,TimeStart,GlobalID;
-    private Boolean             LastPost;
-    private String              PhotoThumb;
-    private String              BlogTitle,ImageThumb,BlogDescription,Location;
-    private String              TimeTaken,UserName,User_ID,WeatherDetails,PostedByProfilePic,OriginalImageName;
+    List<String> ImageList = new ArrayList<>();
+
 
     public SituationAdapter(Context context,
                             List<SituationModel> situation,
@@ -85,7 +77,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
                             RecyclerView mBottomSheetDialogRecyclerView,
                             ImageButton mBottomSheetDialogCloseBtn,
                             TextView mBottomSheetDialogTitle,
-                            ProgressBar mBottomSheetDialogProgressbar) {
+                            ProgressBar mBottomSheetDialogProgressbar, List<String> imageList) {
         this.context = context;
         Situation = situation;
         this.SIdList = SIdList;
@@ -98,7 +90,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         this.mBottomSheetDialogRecyclerView = mBottomSheetDialogRecyclerView;
         this.mBottomSheetDialogProgressbar = mBottomSheetDialogProgressbar;
         this.mBottomSheetDialogTitle = mBottomSheetDialogTitle;
-        OrgBlogList = new ArrayList<>();
+        ImageList = imageList;
 
     }
 
@@ -178,7 +170,72 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         });
 
 
+        databaseReferencePhotoList.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ImageList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
+                    if (snapshot.hasChildren()) {
+                        try {
+                            if (CheckIntervel(snapshot.child("TimeTaken").getValue().toString(), Situation.get(position).getSituationTime(),Situation.get(position+1).getSituationTime(),false)) {
+
+                                if (snapshot.hasChild("ImageThumb")) {
+                                    String imageThumb = snapshot.child("ImageThumb").getValue().toString();
+                                    StoreImage(imageThumb,holder.CloudAlbumLayout_ImageView);
+
+                                }
+
+                            }
+                        }
+                        catch (IndexOutOfBoundsException e)
+                        {
+                            if (CheckIntervel(snapshot.child("TimeTaken").getValue().toString(), Situation.get(position).getSituationTime(),Situation.get(position).getSituationTime(),true)) {
+
+                                if (snapshot.hasChild("ImageThumb")) {
+                                    String imageThumb = snapshot.child("ImageThumb").getValue().toString();
+                                    StoreImage(imageThumb,holder.CloudAlbumLayout_ImageView);
+                                }
+
+                            }
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+    }
+
+    private void StoreImage(String imageThumb, ViewFlipper cloudAlbumLayout_ImageView) {
+        ImageList.add(imageThumb);
+        LoadImage(imageThumb,cloudAlbumLayout_ImageView);
+
+    }
+
+    private void LoadImage(String img, ViewFlipper cloudAlbumLayout_ImageView) {
+
+        ImageView imageView = new ImageView(context);
+        Picasso.get().load(img).into(imageView);
+        cloudAlbumLayout_ImageView.addView(imageView);
+
+        cloudAlbumLayout_ImageView.setInAnimation(context,android.R.anim.slide_in_left);
+        cloudAlbumLayout_ImageView.setOutAnimation(context,android.R.anim.slide_out_right);
 
     }
 
@@ -326,8 +383,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
 
         TextView Name, Time, Title;
         ImageButton EditButton;
-        RelativeLayout relativeLayout;
-        ImageView CloudAlbumLayout_ImageView;
+        ViewFlipper CloudAlbumLayout_ImageView;
 
         public SituationViewHolder(View itemView) {
             super(itemView);
@@ -335,12 +391,11 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
             EditButton =  itemView.findViewById(R.id.EditSituationCard);
             Time = itemView.findViewById(R.id.SituationTimeCL);
             Title = itemView.findViewById(R.id.SituationNametextViewCloud_Layout);
-            relativeLayout=itemView.findViewById(R.id.RelativeExtraTouch);
             CloudAlbumLayout_ImageView = itemView.findViewById(R.id.cloud_album_layout_imageview);
         }
     }
 
-    private boolean CheckIntervel(String timeTaken, String timeStart, String timeEnd) {
+    private boolean CheckIntervel(String timeTaken, String timeStart, String timeEnd, boolean LastPost) {
         Boolean Result=false;
         try{
             SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
@@ -366,121 +421,5 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         }
 
         return Result;
-    }
-
-    public List<Blog> GetBlogItems(String timeStart,
-                                String timeEnd,
-                                String globalID,
-                                Boolean lastPost) {
-        BlogList=new ArrayList<>();
-        BlogListID=new ArrayList<>();
-        TimeStart=timeStart;
-        TimeEnd=timeEnd;
-        CommunityID=globalID;
-        LastPost=lastPost;
-        try {
-
-            databaseReferencePhotoList.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    BlogList.clear();
-                    BlogListID.clear();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-
-                        if (snapshot.hasChildren()) {
-                            try {
-
-
-                                if (CheckIntervel(snapshot.child("TimeTaken").getValue().toString(), TimeStart, TimeEnd)) {
-                                    String BlogListIDString = snapshot.getKey();
-                                    if (snapshot.hasChild("Image")) {
-                                        String photoThumb = snapshot.child("Image").getValue().toString();
-                                        PhotoThumb = photoThumb;
-                                    }
-
-                                    if (snapshot.hasChild("BlogTitle")) {
-                                        String blogTitle = snapshot.child("BlogTitle").getValue().toString();
-                                        BlogTitle = blogTitle;
-                                    }
-
-                                    if (snapshot.hasChild("Location")) {
-                                        String location = snapshot.child("Location").getValue().toString();
-                                        Location = location;
-                                    }
-
-                                    if (snapshot.hasChild("TimeTaken")) {
-                                        String timeTaken = snapshot.child("TimeTaken").getValue().toString();
-                                        TimeTaken = timeTaken;
-                                    }
-
-                                    if (snapshot.hasChild("OriginalImageName")) {
-                                        String originalImageName = snapshot.child("OriginalImageName").getValue().toString();
-                                        OriginalImageName = originalImageName;
-                                    }
-                                    if (snapshot.hasChild("ImageThumb")) {
-                                        String imageThumb = snapshot.child("ImageThumb").getValue().toString();
-                                        ImageThumb = imageThumb;
-                                    }
-
-
-                                    if (snapshot.hasChild("WeatherDetails")) {
-                                        String weatherDetails = snapshot.child("WeatherDetails").getValue().toString();
-                                        WeatherDetails = weatherDetails;
-                                    }
-
-
-                                    if (snapshot.hasChild("UserName")) {
-                                        String userName = snapshot.child("UserName").getValue().toString();
-                                        UserName = userName;
-                                    }
-
-
-                                    if (snapshot.hasChild("User_ID")) {
-                                        String user_id = snapshot.child("User_ID").getValue().toString();
-                                        User_ID = user_id;
-                                    }
-
-                                    if (snapshot.hasChild("PostedByProfilePic")) {
-                                        String postedByProfilePic = snapshot.child("PostedByProfilePic").getValue().toString();
-                                        PostedByProfilePic = postedByProfilePic;
-                                    }
-
-                                    if (!BlogListID.contains(BlogListIDString)) {
-                                        BlogListID.add(BlogListIDString);
-                                        Blog model = new Blog("", PhotoThumb, ImageThumb,
-                                                "", BlogTitle, Location, TimeTaken,
-                                                UserName, User_ID,
-                                                WeatherDetails,
-                                                PostedByProfilePic,
-                                                OriginalImageName);
-                                        BlogList.add(model);
-                                    }
-                                }
-                                else
-                                {
-                                }
-                            }catch (NullPointerException e){
-                                e.printStackTrace();
-                            }
-                        }
-
-
-                    }
-
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
-
-        return BlogList;
-
     }
 }

@@ -84,6 +84,7 @@ public class CloudAlbum extends AppCompatActivity {
     private Boolean                 LastPost;
     private DatabaseReference      databaseReferencePhotoList=null;
     private Dialog                 createNewSituation , Renamesituation;
+    List<String> ImageList= new ArrayList<>();
 
     private String   Name;
     private Button SwipeControl;
@@ -678,7 +679,7 @@ public class CloudAlbum extends AppCompatActivity {
                  mBottomSheetDialogRecyclerView,
                  mBottomSheetDialogCloseBtn,
                  mBottomSheetDialogTitle,
-                 mBottomSheetDialogProgressbar
+                 mBottomSheetDialogProgressbar,ImageList
 );
 
                     recyclerView.setAdapter(adapter);
