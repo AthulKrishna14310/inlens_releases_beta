@@ -152,34 +152,41 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
                     GetBlogItems(Situation.get(position).getSituationTime(),Situation.get(position).getSituationTime(),CommunityID,false);
 
                 }
-                try {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position + 1).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            false);
+                if(BlogList.size()>0)
+                {
+                    try {
+                        photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
+                        photoListHelper.DisplayBottomSheet(
+                                mBottomSheetDialog,
+                                mBottomSheetDialogRecyclerView,
+                                mBottomSheetDialogCloseBtn,
+                                mBottomSheetDialogTitle,
+                                mBottomSheetDialogProgressbar,
+                                Situation.get(position).getSituationTime(),
+                                Situation.get(position + 1).getSituationTime(),
+                                CommunityID,
+                                Situation.get(position).getTitle(),
+                                false);
 
-                } catch (IndexOutOfBoundsException e) {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            true);
+                    } catch (IndexOutOfBoundsException e) {
+                        photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
+                        photoListHelper.DisplayBottomSheet(
+                                mBottomSheetDialog,
+                                mBottomSheetDialogRecyclerView,
+                                mBottomSheetDialogCloseBtn,
+                                mBottomSheetDialogTitle,
+                                mBottomSheetDialogProgressbar,
+                                Situation.get(position).getSituationTime(),
+                                Situation.get(position).getSituationTime(),
+                                CommunityID,
+                                Situation.get(position).getTitle(),
+                                true);
 
+                    }
+                }
+                else
+                {
+                    Toast.makeText(context,"Images not yet uploaded.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
