@@ -66,7 +66,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
     private ImageButton mBottomSheetDialogCloseBtn;
     private TextView mBottomSheetDialogTitle;
     private ProgressBar mBottomSheetDialogProgressbar;
-    private List<Blog>          BlogList;
+    private List<Blog>          BlogList,OrgBlogList;
     private List<String>        BlogListID;
     private String              TimeEnd,TimeStart,GlobalID;
     private Boolean             LastPost;
@@ -98,6 +98,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         this.mBottomSheetDialogRecyclerView = mBottomSheetDialogRecyclerView;
         this.mBottomSheetDialogProgressbar = mBottomSheetDialogProgressbar;
         this.mBottomSheetDialogTitle = mBottomSheetDialogTitle;
+        OrgBlogList = new ArrayList<>();
 
     }
 
@@ -139,21 +140,10 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         });
 
 
-        holder.CloudAlbumLayout_ImageView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                try{
-                    GetBlogItems(Situation.get(position).getSituationTime(),Situation.get(position + 1).getSituationTime(),CommunityID,false);
-
-                    }
-                catch (IndexOutOfBoundsException e)
-                {
-                    GetBlogItems(Situation.get(position).getSituationTime(),Situation.get(position).getSituationTime(),CommunityID,false);
-
-                }
-                if(BlogList.size()>0)
-                {
                     try {
                         photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
                         photoListHelper.DisplayBottomSheet(
@@ -183,11 +173,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
                                 true);
 
                     }
-                }
-                else
-                {
-                    Toast.makeText(context,"Images not yet uploaded.",Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
 
@@ -382,7 +368,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         return Result;
     }
 
-    public void GetBlogItems(String timeStart,
+    public List<Blog> GetBlogItems(String timeStart,
                                 String timeEnd,
                                 String globalID,
                                 Boolean lastPost) {
@@ -494,7 +480,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
             e.printStackTrace();
         }
 
-
+        return BlogList;
 
     }
 }
