@@ -234,8 +234,8 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         Picasso.get().load(img).into(imageView);
         cloudAlbumLayout_ImageView.addView(imageView);
 
-        cloudAlbumLayout_ImageView.setInAnimation(context,android.R.anim.slide_in_left);
-        cloudAlbumLayout_ImageView.setOutAnimation(context,android.R.anim.slide_out_right);
+        cloudAlbumLayout_ImageView.setInAnimation(context,R.anim.cloud_album_fade_in);
+        cloudAlbumLayout_ImageView.setOutAnimation(context,R.anim.cloud_album_fade_out);
 
     }
 
