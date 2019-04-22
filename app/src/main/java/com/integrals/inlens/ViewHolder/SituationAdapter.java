@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,11 +30,17 @@ import com.cocosw.bottomsheet.BottomSheet;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.integrals.inlens.Models.Blog;
 import com.ramotion.cardslider.CardSliderLayoutManager;
 import com.ramotion.cardslider.CardSnapHelper;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +66,13 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
     private ImageButton mBottomSheetDialogCloseBtn;
     private TextView mBottomSheetDialogTitle;
     private ProgressBar mBottomSheetDialogProgressbar;
-
-    long lastclicktime =0;
+    private List<Blog>          BlogList;
+    private List<String>        BlogListID;
+    private String              TimeEnd,TimeStart,GlobalID;
+    private Boolean             LastPost;
+    private String              PhotoThumb;
+    private String              BlogTitle,ImageThumb,BlogDescription,Location;
+    private String              TimeTaken,UserName,User_ID,WeatherDetails,PostedByProfilePic,OriginalImageName;
 
     public SituationAdapter(Context context,
                             List<SituationModel> situation,
@@ -118,233 +130,6 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
 
 
         holder.Title.setText(String.format("%s", Situation.get(position).getTitle()));
-        holder.SituationLogo.setText(String.format("%s", Situation.get(position).getTitle().charAt(0)));
-        holder.recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position + 1).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            false);
-
-                } catch (IndexOutOfBoundsException e) {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            true);
-
-                }
-
-
-
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                long clicktime = System.currentTimeMillis();
-                if(clicktime-lastclicktime>=300)
-                {
-                    try {
-                        photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                        photoListHelper.DisplayBottomSheet(
-                                mBottomSheetDialog,
-                                mBottomSheetDialogRecyclerView,
-                                mBottomSheetDialogCloseBtn,
-                                mBottomSheetDialogTitle,
-                                mBottomSheetDialogProgressbar,
-                                Situation.get(position).getSituationTime(),
-                                Situation.get(position + 1).getSituationTime(),
-                                CommunityID,
-                                Situation.get(position).getTitle(),
-                                false);
-
-                    } catch (IndexOutOfBoundsException e) {
-                        photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                        photoListHelper.DisplayBottomSheet(
-                                mBottomSheetDialog,
-                                mBottomSheetDialogRecyclerView,
-                                mBottomSheetDialogCloseBtn,
-                                mBottomSheetDialogTitle,
-                                mBottomSheetDialogProgressbar,
-                                Situation.get(position).getSituationTime(),
-                                Situation.get(position).getSituationTime(),
-                                CommunityID,
-                                Situation.get(position).getTitle(),
-                                true);
-
-                    }
-                }
-
-                lastclicktime = clicktime;
-
-                try {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position + 1).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            false);
-
-                } catch (IndexOutOfBoundsException e) {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            true);
-
-                }
-
-
-            }
-        });
-        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position + 1).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            false);
-
-                } catch (IndexOutOfBoundsException e) {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            true);
-
-                }
-
-
-            }
-        });
-        holder.SituationLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position + 1).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            false);
-
-                } catch (IndexOutOfBoundsException e) {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            true);
-
-                }
-
-
-            }
-        });
-        holder.ExpandButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position + 1).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            false);
-
-                } catch (IndexOutOfBoundsException e) {
-                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-                    photoListHelper.DisplayBottomSheet(
-                            mBottomSheetDialog,
-                            mBottomSheetDialogRecyclerView,
-                            mBottomSheetDialogCloseBtn,
-                            mBottomSheetDialogTitle,
-                            mBottomSheetDialogProgressbar,
-                            Situation.get(position).getSituationTime(),
-                            Situation.get(position).getSituationTime(),
-                            CommunityID,
-                            Situation.get(position).getTitle(),
-                            true);
-
-                }
-
-
-            }
-        });
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                ShowDialog(position);
-                return false;
-            }
-        });
 
         holder.EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -354,26 +139,52 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         });
 
 
-        try {
-            photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-            photoListHelper.SetRecyclerView(Situation.get(position).getSituationTime(),
-                    Situation.get(position + 1).getSituationTime(),
-                    CommunityID,
-                    false,
-                    Situation.get(position).getTitle(), true,
-                    holder.recyclerView);
+        holder.CloudAlbumLayout_ImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        } catch (IndexOutOfBoundsException e) {
-            photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
-            photoListHelper.SetRecyclerView(Situation.get(position).getSituationTime(),
-                    Situation.get(position).getSituationTime(),
-                    CommunityID,
-                    true,
-                    Situation.get(position).getTitle(), true,
-                    holder.recyclerView);
+                try{
+                    GetBlogItems(Situation.get(position).getSituationTime(),Situation.get(position + 1).getSituationTime(),CommunityID,false);
+
+                    }
+                catch (IndexOutOfBoundsException e)
+                {
+                    GetBlogItems(Situation.get(position).getSituationTime(),Situation.get(position).getSituationTime(),CommunityID,false);
+
+                }
+                try {
+                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
+                    photoListHelper.DisplayBottomSheet(
+                            mBottomSheetDialog,
+                            mBottomSheetDialogRecyclerView,
+                            mBottomSheetDialogCloseBtn,
+                            mBottomSheetDialogTitle,
+                            mBottomSheetDialogProgressbar,
+                            Situation.get(position).getSituationTime(),
+                            Situation.get(position + 1).getSituationTime(),
+                            CommunityID,
+                            Situation.get(position).getTitle(),
+                            false);
+
+                } catch (IndexOutOfBoundsException e) {
+                    photoListHelper = new PhotoListHelper(context, CloudAlbum, databaseReferencePhotoList);
+                    photoListHelper.DisplayBottomSheet(
+                            mBottomSheetDialog,
+                            mBottomSheetDialogRecyclerView,
+                            mBottomSheetDialogCloseBtn,
+                            mBottomSheetDialogTitle,
+                            mBottomSheetDialogProgressbar,
+                            Situation.get(position).getSituationTime(),
+                            Situation.get(position).getSituationTime(),
+                            CommunityID,
+                            Situation.get(position).getTitle(),
+                            true);
+
+                }
+            }
+        });
 
 
-        }
 
 
     }
@@ -520,26 +331,163 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
 
     public class SituationViewHolder extends RecyclerView.ViewHolder {
 
-        TextView Name, Count, Time, Title, SituationLogo;
-        Button Join, View;
-        ImageButton SituationEditBtn;
-        public Button EditButton;
-        public Button ExpandButton;
-        public RelativeLayout relativeLayout;
-        public RecyclerView recyclerView;
+        TextView Name, Time, Title;
+        ImageButton EditButton;
+        RelativeLayout relativeLayout;
+        ImageView CloudAlbumLayout_ImageView;
 
         public SituationViewHolder(View itemView) {
             super(itemView);
             Name = itemView.findViewById(R.id.createdby);
-            EditButton = (Button) itemView.findViewById(R.id.EditSituationCard);
+            EditButton =  itemView.findViewById(R.id.EditSituationCard);
             Time = itemView.findViewById(R.id.SituationTimeCL);
             Title = itemView.findViewById(R.id.SituationNametextViewCloud_Layout);
             relativeLayout=itemView.findViewById(R.id.RelativeExtraTouch);
-            SituationLogo = itemView.findViewById(R.id.SituationLogoCL);
-            ExpandButton = itemView.findViewById(R.id.ExpandPhotoListCL);
-            recyclerView = itemView.findViewById(R.id.PhotoListRecyclerViewCL);
-            CardSliderLayoutManager cardSliderLayoutManager = new CardSliderLayoutManager(context);
-            recyclerView.setLayoutManager(cardSliderLayoutManager);
+            CloudAlbumLayout_ImageView = itemView.findViewById(R.id.cloud_album_layout_imageview);
         }
+    }
+
+    private boolean CheckIntervel(String timeTaken, String timeStart, String timeEnd) {
+        Boolean Result=false;
+        try{
+            SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
+            java.util.Date dt_1 = objSDF.parse(timeTaken);
+            java.util.Date dt_2 = objSDF.parse(timeStart);
+            java.util.Date dt_3=  objSDF.parse(timeEnd);
+            if(LastPost==false) {
+                if (dt_1.after(dt_2) && (dt_1.before(dt_3))) {
+                    Result = true;
+                }
+            }
+            else
+            {
+                if(dt_1.after(dt_2)){
+                    Result=true;
+                }
+            }
+
+        }
+        catch (ParseException e){
+            Toast.makeText(context,"Parse Exception",Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+        return Result;
+    }
+
+    public void GetBlogItems(String timeStart,
+                                String timeEnd,
+                                String globalID,
+                                Boolean lastPost) {
+        BlogList=new ArrayList<>();
+        BlogListID=new ArrayList<>();
+        TimeStart=timeStart;
+        TimeEnd=timeEnd;
+        CommunityID=globalID;
+        LastPost=lastPost;
+        try {
+
+            databaseReferencePhotoList.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    BlogList.clear();
+                    BlogListID.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+
+                        if (snapshot.hasChildren()) {
+                            try {
+
+
+                                if (CheckIntervel(snapshot.child("TimeTaken").getValue().toString(), TimeStart, TimeEnd)) {
+                                    String BlogListIDString = snapshot.getKey();
+                                    if (snapshot.hasChild("Image")) {
+                                        String photoThumb = snapshot.child("Image").getValue().toString();
+                                        PhotoThumb = photoThumb;
+                                    }
+
+                                    if (snapshot.hasChild("BlogTitle")) {
+                                        String blogTitle = snapshot.child("BlogTitle").getValue().toString();
+                                        BlogTitle = blogTitle;
+                                    }
+
+                                    if (snapshot.hasChild("Location")) {
+                                        String location = snapshot.child("Location").getValue().toString();
+                                        Location = location;
+                                    }
+
+                                    if (snapshot.hasChild("TimeTaken")) {
+                                        String timeTaken = snapshot.child("TimeTaken").getValue().toString();
+                                        TimeTaken = timeTaken;
+                                    }
+
+                                    if (snapshot.hasChild("OriginalImageName")) {
+                                        String originalImageName = snapshot.child("OriginalImageName").getValue().toString();
+                                        OriginalImageName = originalImageName;
+                                    }
+                                    if (snapshot.hasChild("ImageThumb")) {
+                                        String imageThumb = snapshot.child("ImageThumb").getValue().toString();
+                                        ImageThumb = imageThumb;
+                                    }
+
+
+                                    if (snapshot.hasChild("WeatherDetails")) {
+                                        String weatherDetails = snapshot.child("WeatherDetails").getValue().toString();
+                                        WeatherDetails = weatherDetails;
+                                    }
+
+
+                                    if (snapshot.hasChild("UserName")) {
+                                        String userName = snapshot.child("UserName").getValue().toString();
+                                        UserName = userName;
+                                    }
+
+
+                                    if (snapshot.hasChild("User_ID")) {
+                                        String user_id = snapshot.child("User_ID").getValue().toString();
+                                        User_ID = user_id;
+                                    }
+
+                                    if (snapshot.hasChild("PostedByProfilePic")) {
+                                        String postedByProfilePic = snapshot.child("PostedByProfilePic").getValue().toString();
+                                        PostedByProfilePic = postedByProfilePic;
+                                    }
+
+                                    if (!BlogListID.contains(BlogListIDString)) {
+                                        BlogListID.add(BlogListIDString);
+                                        Blog model = new Blog("", PhotoThumb, ImageThumb,
+                                                "", BlogTitle, Location, TimeTaken,
+                                                UserName, User_ID,
+                                                WeatherDetails,
+                                                PostedByProfilePic,
+                                                OriginalImageName);
+                                        BlogList.add(model);
+                                    }
+                                }
+                                else
+                                {
+                                }
+                            }catch (NullPointerException e){
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+
+
     }
 }

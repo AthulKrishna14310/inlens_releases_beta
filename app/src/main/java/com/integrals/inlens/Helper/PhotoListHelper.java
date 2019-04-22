@@ -61,6 +61,8 @@ public class PhotoListHelper {
 
     }
 
+
+
     public void SetRecyclerView(String timeStart,
                                  String timeEnd,
                                  String globalID,

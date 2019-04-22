@@ -118,7 +118,6 @@ public class CloudAlbum extends AppCompatActivity {
 
     private RelativeLayout DimBackground;
     private FloatingActionButton MainCloudFab , CreateSitFab , DeleteAlbumFab , InviteAlbumFab;
-    private TextView CreateSitView , DeleteAlbumView , InviteAlbumView;
     private Animation FabOpen, FabClose, FabRotateForward, FabRotateBackward;
     private Boolean IsFabOpen = false;
     ///////////////////////////////////////////////////////////////////////////////////////////////////|
@@ -363,9 +362,7 @@ public class CloudAlbum extends AppCompatActivity {
         InviteAlbumFab = findViewById(R.id.cloudalbum_invite_fab_btn);
         CreateSitFab = findViewById(R.id.cloudalbum_new_situation_fab_btn);
 
-        DeleteAlbumView = findViewById(R.id.cloudalbum_delete_textview);
-        InviteAlbumView = findViewById(R.id.cloudalbum_invite_txtview);
-        CreateSitView = findViewById(R.id.cloudalbum_new_situation_textview);
+
 
         MainCloudFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -452,24 +449,11 @@ public class CloudAlbum extends AppCompatActivity {
             CreateSitFab.setAnimation(FabClose);
             CreateSitFab.getAnimation().start();
 
-            DeleteAlbumView.clearAnimation();
-            DeleteAlbumView.setAnimation(FabClose);
-            DeleteAlbumView.getAnimation().start();
 
-            InviteAlbumView.clearAnimation();
-            InviteAlbumView.setAnimation(FabClose);
-            InviteAlbumView.getAnimation().start();
-
-            CreateSitView.clearAnimation();
-            CreateSitView.setAnimation(FabClose);
-            CreateSitView.getAnimation().start();
 
             DeleteAlbumFab.setVisibility(View.INVISIBLE);
             InviteAlbumFab.setVisibility(View.INVISIBLE);
             CreateSitFab.setVisibility(View.INVISIBLE);
-            DeleteAlbumView.setVisibility(View.INVISIBLE);
-            InviteAlbumView.setVisibility(View.INVISIBLE);
-            CreateSitView.setVisibility(View.INVISIBLE);
 
             MainCloudFab.clearAnimation();
             MainCloudFab.setAnimation(FabRotateBackward);
@@ -490,24 +474,9 @@ public class CloudAlbum extends AppCompatActivity {
             CreateSitFab.setAnimation(FabOpen);
             CreateSitFab.getAnimation().start();
 
-            DeleteAlbumView.clearAnimation();
-            DeleteAlbumView.setAnimation(FabOpen);
-            DeleteAlbumView.getAnimation().start();
-
-            InviteAlbumView.clearAnimation();
-            InviteAlbumView.setAnimation(FabOpen);
-            InviteAlbumView.getAnimation().start();
-
-            CreateSitView.clearAnimation();
-            CreateSitView.setAnimation(FabOpen);
-            CreateSitView.getAnimation().start();
-
             DeleteAlbumFab.setVisibility(View.VISIBLE);
             InviteAlbumFab.setVisibility(View.VISIBLE);
             CreateSitFab.setVisibility(View.VISIBLE);
-            DeleteAlbumView.setVisibility(View.VISIBLE);
-            InviteAlbumView.setVisibility(View.VISIBLE);
-            CreateSitView.setVisibility(View.VISIBLE);
 
             MainCloudFab.clearAnimation();
             MainCloudFab.setAnimation(FabRotateForward);
