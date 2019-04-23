@@ -54,7 +54,7 @@
                     android:layout_height="25dp"
                     android:layout_alignParentEnd="true"
                     android:layout_margin="2dp"
-                    android:background="@drawable/ic_more_vert" />
+                    android:background="@drawable/ic_playlist_play" />
 
             </LinearLayout>
 
