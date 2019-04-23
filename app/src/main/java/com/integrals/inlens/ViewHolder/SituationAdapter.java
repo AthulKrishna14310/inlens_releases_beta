@@ -37,12 +37,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.integrals.inlens.Helper.PhotoListHelper;
 import com.integrals.inlens.R;
 import com.integrals.inlens.Models.SituationModel;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 
@@ -178,8 +178,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
 
                                 if (snapshot.hasChild("ImageThumb")) {
                                     String imageThumb = snapshot.child("ImageThumb").getValue().toString();
-                                    StoreImage(imageThumb,holder.CloudAlbumLayout_ImageView);
-
+                                    StoreImage(imageThumb,holder.CloudAlbumLayout_ImageView, holder.CloudAlbumPBar);
                                 }
 
                             }
@@ -190,7 +189,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
 
                                 if (snapshot.hasChild("ImageThumb")) {
                                     String imageThumb = snapshot.child("ImageThumb").getValue().toString();
-                                    StoreImage(imageThumb,holder.CloudAlbumLayout_ImageView);
+                                    StoreImage(imageThumb,holder.CloudAlbumLayout_ImageView,holder.CloudAlbumPBar);
                                 }
 
                             }
@@ -198,6 +197,8 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
                         catch (NullPointerException e){
                             e.printStackTrace();
                         }
+
+
 
                     }
 
@@ -214,20 +215,29 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
 
 
 
+    }
 
+    private void StoreImage(String imageThumb, ViewFlipper cloudAlbumLayout_ImageView, ProgressBar cloudAlbumPBar) {
+        LoadImage(imageThumb,cloudAlbumLayout_ImageView,cloudAlbumPBar);
 
     }
 
-    private void StoreImage(String imageThumb, ViewFlipper cloudAlbumLayout_ImageView) {
-        LoadImage(imageThumb,cloudAlbumLayout_ImageView);
-
-    }
-
-    private void LoadImage(String img, ViewFlipper cloudAlbumLayout_ImageView) {
+    private void LoadImage(String img, ViewFlipper cloudAlbumLayout_ImageView, final ProgressBar cloudAlbumPBar) {
 
         ImageView imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Picasso.get().load(img).into(imageView);
+        Picasso.get().load(img).into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                cloudAlbumPBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                cloudAlbumPBar.setVisibility(View.GONE);
+
+            }
+        });
         cloudAlbumLayout_ImageView.addView(imageView);
 
         cloudAlbumLayout_ImageView.setInAnimation(context,R.anim.cloud_album_fade_in);
@@ -380,6 +390,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
         TextView Name, Time, Title;
         ImageButton EditButton;
         ViewFlipper CloudAlbumLayout_ImageView;
+        ProgressBar CloudAlbumPBar;
 
         public SituationViewHolder(View itemView) {
             super(itemView);
@@ -388,6 +399,7 @@ public class SituationAdapter extends RecyclerView.Adapter<SituationAdapter.Situ
             Time = itemView.findViewById(R.id.SituationTimeCL);
             Title = itemView.findViewById(R.id.SituationNametextViewCloud_Layout);
             CloudAlbumLayout_ImageView = itemView.findViewById(R.id.cloud_album_layout_imageview);
+            CloudAlbumPBar = itemView.findViewById(R.id.cloud_album_layout_progressbar);
         }
     }
 

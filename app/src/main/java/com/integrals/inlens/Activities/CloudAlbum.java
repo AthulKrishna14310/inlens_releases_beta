@@ -1,4 +1,5 @@
 package com.integrals.inlens.Activities;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -37,6 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.cocosw.bottomsheet.BottomSheet;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -54,11 +56,13 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.Helper.PhotoListHelper;
 import com.integrals.inlens.MainActivity;
@@ -67,41 +71,41 @@ import com.integrals.inlens.R;
 import com.integrals.inlens.ViewHolder.SituationAdapter;
 
 public class CloudAlbum extends AppCompatActivity {
-    private RecyclerView            recyclerView;
-    private DatabaseReference       databaseReference;
-    private String                  CommunityIDLocal;
-    private String                  CommunityID;
-    private Calendar                calendar;
-    private SituationAdapter        adapter;
-    private String                  sowner,stime,stitle,sKey,sTime;
-    private List<SituationModel>    SituationList;
-    private List<String>            SituationIDList;
-    private DatabaseReference       db,ComNotyRef,deleteDatabaseReference;
-    private String                  Album;
-    private Button                  NewSituation;
-    private String                  ReturnName="Oops";
-    private String                  TimeEnd,TimeStart,GlobalID;
-    private Boolean                 LastPost;
-    private DatabaseReference      databaseReferencePhotoList=null;
-    private Dialog                 createNewSituation , Renamesituation;
-    List<String> ImageList= new ArrayList<>();
+    private RecyclerView recyclerView;
+    private DatabaseReference databaseReference;
+    private String CommunityIDLocal;
+    private String CommunityID;
+    private Calendar calendar;
+    private SituationAdapter adapter;
+    private String sowner, stime, stitle, sKey, sTime;
+    private List<SituationModel> SituationList;
+    private List<String> SituationIDList;
+    private DatabaseReference db, ComNotyRef, deleteDatabaseReference;
+    private String Album;
+    private Button NewSituation;
+    private String ReturnName = "Oops";
+    private String TimeEnd, TimeStart, GlobalID;
+    private Boolean LastPost;
+    private DatabaseReference databaseReferencePhotoList = null;
+    private Dialog createNewSituation, Renamesituation;
+    List<String> ImageList = new ArrayList<>();
 
-    private String   Name;
+    private String Name;
     private Button SwipeControl;
-    private Boolean SwipeUp=false;
-    private String TestCommunityID=null;
+    private Boolean SwipeUp = false;
+    private String TestCommunityID = null;
     private Activity activity;
     private String LocalID;
     private String CurrentUser;
     private EditText SitEditName;
     private Activity cloudalbumcontext;
 
-//////QR CODE DIALOG///////////////////////////////////////////////////////////////////////////////|
-    private   String PhotographerID;
+    //////QR CODE DIALOG///////////////////////////////////////////////////////////////////////////////|
+    private String PhotographerID;
     ImageView QRCodeImageView;
     ActionBar actionBar;
-    private String Default="No current community";
-    private String QRCommunityID="1122333311101";
+    private String Default = "No current community";
+    private String QRCommunityID = "1122333311101";
     private TextView textView;
     private Button InviteLinkButton;
     private Dialog QRCodeDialog;
@@ -118,36 +122,36 @@ public class CloudAlbum extends AppCompatActivity {
     private RelativeLayout RootForCloudAlbum;
 
     private RelativeLayout DimBackground;
-    private FloatingActionButton MainCloudFab , CreateSitFab , DeleteAlbumFab , InviteAlbumFab;
+    private FloatingActionButton MainCloudFab, CreateSitFab, DeleteAlbumFab, InviteAlbumFab;
     private Animation FabOpen, FabClose, FabRotateForward, FabRotateBackward;
     private Boolean IsFabOpen = false;
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////|
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_cloud_album);
-        actionBar=getSupportActionBar();
+        actionBar = getSupportActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FabAnimationAndButtonsInit();
+
         QRCodeInit();
         RootForCloudAlbum = findViewById(R.id.root_for_cloud_album);
 
-        if(!IsConnectedToNet())
-        {
-            Snackbar.make(RootForCloudAlbum,"Unable to connect to internet.",Snackbar.LENGTH_SHORT).show();
+        if (!IsConnectedToNet()) {
+            Snackbar.make(RootForCloudAlbum, "Unable to connect to internet.", Snackbar.LENGTH_SHORT).show();
         }
 
         cloudalbumcontext = this;
-        activity=this;
-        CommunityIDLocal=getIntent().getStringExtra("PostKeyLocal::");
-        SwipeControl=(Button)findViewById(R.id.SwipeControl);
+        activity = this;
+        CommunityIDLocal = getIntent().getStringExtra("PostKeyLocal::");
+        SwipeControl = (Button) findViewById(R.id.SwipeControl);
         String AlbumName = getIntent().getStringExtra("AlbumName");
         CommunityID = getIntent().getStringExtra("GlobalID::");
-        LocalID=getIntent().getStringExtra("LocalID::");
-        CurrentUser=getIntent().getStringExtra("UserID::");
-        recyclerView = (RecyclerView)findViewById(R.id.SituationRecyclerView);
-        deleteDatabaseReference=FirebaseDatabase
+        LocalID = getIntent().getStringExtra("LocalID::");
+        CurrentUser = getIntent().getStringExtra("UserID::");
+        recyclerView = (RecyclerView) findViewById(R.id.SituationRecyclerView);
+        deleteDatabaseReference = FirebaseDatabase
                 .getInstance()
                 .getReference()
                 .child("Users")
@@ -155,30 +159,26 @@ public class CloudAlbum extends AppCompatActivity {
                 .child("Communities").child(LocalID);
 
         final GridLayoutManager gridLayoutManager = new
-                GridLayoutManager(getApplicationContext(),1,
-                LinearLayoutManager.VERTICAL,false);
+                GridLayoutManager(getApplicationContext(), 2,
+                LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
         Album = AlbumName;
         SituationList = new ArrayList<>();
         SituationIDList = new ArrayList<>();
-        TimeEnd="2100-8-6T13-22-45";
-        TimeStart="2000-8-6T13-22-45";
-        Name="Album Photos";
-        LastPost=false;
+        TimeEnd = "2100-8-6T13-22-45";
+        TimeStart = "2000-8-6T13-22-45";
+        Name = "Album Photos";
+        LastPost = false;
         db = FirebaseDatabase.getInstance().getReference().child("Users");
         SharedPreferences sPreferences = getSharedPreferences("ComIDPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = sPreferences.edit();
-        if(!TextUtils.isEmpty(CommunityID) && !TextUtils.isEmpty(Album))
-        {
-            editor.putString("GlobalID::",CommunityID);
-            editor.putString("Album",AlbumName);
+        if (!TextUtils.isEmpty(CommunityID) && !TextUtils.isEmpty(Album)) {
+            editor.putString("GlobalID::", CommunityID);
+            editor.putString("Album", AlbumName);
             editor.commit();
-        }
-
-        else
-        {
-            CommunityID = sPreferences.getString("GlobalID::","");
-            AlbumName = sPreferences.getString("Album","");
+        } else {
+            CommunityID = sPreferences.getString("GlobalID::", "");
+            AlbumName = sPreferences.getString("Album", "");
         }
 
         getSupportActionBar().setTitle(AlbumName);
@@ -189,11 +189,11 @@ public class CloudAlbum extends AppCompatActivity {
         ComNotyRef = FirebaseDatabase.getInstance().getReference().child("Communities")
                 .child(CommunityID).child("CommunityPhotographer");
 
-
+        FabAnimationAndButtonsInit();
 
 
         ///////////Create New Situation////////////////////////////////////////////////////////////
-        createNewSituation = new Dialog(CloudAlbum.this,android.R.style.Theme_Light_NoTitleBar);
+        createNewSituation = new Dialog(CloudAlbum.this, android.R.style.Theme_Light_NoTitleBar);
         createNewSituation.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         createNewSituation.setContentView(R.layout.create_new_situation_layout);
         createNewSituation.setCancelable(false);
@@ -209,36 +209,35 @@ public class CloudAlbum extends AppCompatActivity {
 
         SitEditName = createNewSituation.findViewById(R.id.situation_name);
         SitEditName.requestFocus();
-        Button Done ,Cancel;
-        Done =   createNewSituation.findViewById(R.id.done_btn);
+        Button Done, Cancel;
+        Done = createNewSituation.findViewById(R.id.done_btn);
         Cancel = createNewSituation.findViewById(R.id.cancel_btn);
         Done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(!TextUtils.isEmpty(SitEditName.getText().toString()))
-                {   calendar=Calendar.getInstance();
-                    String SituationTimeIntervel=calendar.get(Calendar.YEAR)+ "-"
-                            +calendar.get(Calendar.MONTH)+"-"
-                            +calendar.get(Calendar.DAY_OF_MONTH)+"T"
-                            +calendar.get(Calendar.HOUR_OF_DAY)+"-"
-                            +calendar.get(Calendar.MINUTE)+"-"
-                            +calendar.get(Calendar.SECOND);
+                if (!TextUtils.isEmpty(SitEditName.getText().toString())) {
+                    calendar = Calendar.getInstance();
+                    String SituationTimeIntervel = calendar.get(Calendar.YEAR) + "-"
+                            + calendar.get(Calendar.MONTH) + "-"
+                            + calendar.get(Calendar.DAY_OF_MONTH) + "T"
+                            + calendar.get(Calendar.HOUR_OF_DAY) + "-"
+                            + calendar.get(Calendar.MINUTE) + "-"
+                            + calendar.get(Calendar.SECOND);
 
 
                     Map situationmap = new HashMap();
-                    situationmap.put("name",SitEditName.getText().toString().trim());
+                    situationmap.put("name", SitEditName.getText().toString().trim());
                     situationmap.put("time", ServerValue.TIMESTAMP);
                     situationmap.put("owner", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    final String push_id =databaseReference.push().getKey();
-
+                    final String push_id = databaseReference.push().getKey();
 
 
                     // Added by  For Implementation of Situation Upload
-                    situationmap.put("SituationKey",push_id);
-                    situationmap.put("SituationTime",SituationTimeIntervel);
+                    situationmap.put("SituationKey", push_id);
+                    situationmap.put("SituationTime", SituationTimeIntervel);
                     final Map member = new HashMap();
-                    member.put("memid",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    member.put("memid", FirebaseAuth.getInstance().getCurrentUser().getUid());
                     final DatabaseReference dref = FirebaseDatabase.getInstance().getReference().child("ComNoty");
                     ComNotyRef.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -247,14 +246,13 @@ public class CloudAlbum extends AppCompatActivity {
                             // Situation Notification function by elson jose
 
                             Map notymap = new HashMap();
-                            notymap.put("name",SitEditName.getText().toString().trim());
-                            notymap.put("ownername",GetUserName(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+                            notymap.put("name", SitEditName.getText().toString().trim());
+                            notymap.put("ownername", GetUserName(FirebaseAuth.getInstance().getCurrentUser().getUid()));
 
 
-                            for(DataSnapshot snapshot : dataSnapshot.getChildren())
-                            {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 String id = snapshot.child("Photographer_UID").getValue().toString();
-                                if(!id.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                                if (!id.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
                                     dref.child(id).push().setValue(notymap);
                             }
 
@@ -271,10 +269,9 @@ public class CloudAlbum extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
 
-                            if(task.isSuccessful())
-                            {
+                            if (task.isSuccessful()) {
                                 databaseReference.child(push_id).child("members").push().setValue(member);
-                                Toast.makeText(CloudAlbum.this,"New Situation Created : "+SitEditName.getText().toString(),Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CloudAlbum.this, "New Situation Created : " + SitEditName.getText().toString(), Toast.LENGTH_SHORT).show();
 
                             }
                         }
@@ -282,19 +279,17 @@ public class CloudAlbum extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 
-                            if(e.toString().contains("FirebaseNetworkException"))
-                                Toast.makeText(CloudAlbum.this,"Not Connected to Internet.",Toast.LENGTH_SHORT).show();
+                            if (e.toString().contains("FirebaseNetworkException"))
+                                Toast.makeText(CloudAlbum.this, "Not Connected to Internet.", Toast.LENGTH_SHORT).show();
                             else
-                                Toast.makeText(CloudAlbum.this,"Unable to create new Situation.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CloudAlbum.this, "Unable to create new Situation.", Toast.LENGTH_SHORT).show();
 
 
                         }
                     });
                     createNewSituation.dismiss();
-                }
-                else
-                {
-                    Toast.makeText(CloudAlbum.this,"No name given",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(CloudAlbum.this, "No name given", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -308,13 +303,16 @@ public class CloudAlbum extends AppCompatActivity {
         });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-        CurrentDatabase currentDatabase=new CurrentDatabase(getApplicationContext(),
-                "",null,1);
-        TestCommunityID=currentDatabase.GetLiveCommunityID();
+        CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(),
+                "", null, 1);
+        TestCommunityID = currentDatabase.GetLiveCommunityID();
         currentDatabase.close();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-        databaseReferencePhotoList=FirebaseDatabase.getInstance().getReference().child("Communities")
-        .child(CommunityID).child("BlogPosts");
+        databaseReferencePhotoList = FirebaseDatabase.getInstance().getReference().child("Communities")
+                .child(CommunityID).child("BlogPosts");
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////Implementing Bottom Recycler View Dialog//////////////////////////////////////
@@ -364,40 +362,38 @@ public class CloudAlbum extends AppCompatActivity {
         CreateSitFab = findViewById(R.id.cloudalbum_new_situation_fab_btn);
 
 
-
-        MainCloudFab.setOnClickListener(new View.OnClickListener() {
+        FirebaseDatabase.getInstance().getReference().child("Communities")
+                .child(CommunityID).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                SharedPreferences sharedPreferences = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-                if(sharedPreferences.getBoolean("UsingCommunity::", false)) {
-                    if((TestCommunityID).contentEquals(getIntent().getExtras().getString("GlobalID::")))
-                    {
-                        AnimateFab();
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(),"Album Expired.",Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else
+                if(dataSnapshot.hasChild("CreatedTimestamp"))
                 {
-                    Toast.makeText(getApplicationContext(),"Album Expired.",Toast.LENGTH_SHORT).show();
+                    long CreatedTimestamp = Long.parseLong(dataSnapshot.child("CreatedTimestamp").getValue().toString());
+                    if(CreatedTimestamp<System.currentTimeMillis())
+                    {
+                        MainCloudFab.setVisibility(View.GONE);
+
+                    }
                 }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
 
+
+
         DeleteAlbumFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(IsConnectedToNet())
-                {
+                if (IsConnectedToNet()) {
                     DeleteCurrentAlbum();
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Umable to connec to Internet.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Umable to connec to Internet.", Toast.LENGTH_SHORT).show();
                 }
 
                 AnimateFab();
@@ -415,15 +411,12 @@ public class CloudAlbum extends AppCompatActivity {
         CreateSitFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(IsConnectedToNet())
-                {
+                if (IsConnectedToNet()) {
                     createNewSituation.show();
                     int countdef = SituationIDList.size() + 1;
                     SitEditName.setText(String.format("New Situation %s", String.valueOf(countdef)));
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Unable to connect to Internet.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Unable to connect to Internet.", Toast.LENGTH_SHORT).show();
 
                 }
                 AnimateFab();
@@ -449,7 +442,6 @@ public class CloudAlbum extends AppCompatActivity {
             CreateSitFab.clearAnimation();
             CreateSitFab.setAnimation(FabClose);
             CreateSitFab.getAnimation().start();
-
 
 
             DeleteAlbumFab.setVisibility(View.INVISIBLE);
@@ -493,7 +485,7 @@ public class CloudAlbum extends AppCompatActivity {
 
     private void QRCodeInit() {
 
-        QRCodeDialog = new Dialog(this,android.R.style.Theme_Light_NoTitleBar);
+        QRCodeDialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar);
         QRCodeDialog.setCancelable(true);
         QRCodeDialog.setCanceledOnTouchOutside(true);
         QRCodeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -509,12 +501,12 @@ public class CloudAlbum extends AppCompatActivity {
         QRCodewindow.setDimAmount(0.75f);
         QRCodewindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-        CurrentDatabase currentDatabase=new CurrentDatabase(getApplicationContext(),"",null,1);
-        QRCommunityID=currentDatabase.GetLiveCommunityID();
+        CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
+        QRCommunityID = currentDatabase.GetLiveCommunityID();
         currentDatabase.close();
 
-        InviteLinkButton= QRCodeDialog.findViewById(R.id.InviteLinkButton);
-        PhotographerID=QRCommunityID;
+        InviteLinkButton = QRCodeDialog.findViewById(R.id.InviteLinkButton);
+        PhotographerID = QRCommunityID;
 
         ImageButton QRCodeCloseBtn = QRCodeDialog.findViewById(R.id.QR_dialog_closebtn);
         QRCodeCloseBtn.setOnClickListener(new View.OnClickListener() {
@@ -525,23 +517,23 @@ public class CloudAlbum extends AppCompatActivity {
 
             }
         });
-        textView= QRCodeDialog.findViewById(R.id.textViewAlbumQR);
-        QRCodeImageView= QRCodeDialog.findViewById(R.id.QR_Display);
+        textView = QRCodeDialog.findViewById(R.id.textViewAlbumQR);
+        QRCodeImageView = QRCodeDialog.findViewById(R.id.QR_Display);
 
-        MultiFormatWriter multiFormatWriter=new MultiFormatWriter();
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            BitMatrix bitMatrix=multiFormatWriter.encode(PhotographerID, BarcodeFormat.QR_CODE,200,200);
-            BarcodeEncoder barcodeEncoder=new BarcodeEncoder();
-            Bitmap bitmap=barcodeEncoder.createBitmap(bitMatrix);
+            BitMatrix bitMatrix = multiFormatWriter.encode(PhotographerID, BarcodeFormat.QR_CODE, 200, 200);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
             QRCodeImageView.setImageBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             actionBar.setTitle("No current album");
             QRCodeImageView.setVisibility(View.INVISIBLE);
             textView.setText("You must be in an album to generate QR code");
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             actionBar.setTitle("No current album");
             QRCodeImageView.setVisibility(View.INVISIBLE);
             textView.setText("You must be in an album to generate QR code");
@@ -552,18 +544,17 @@ public class CloudAlbum extends AppCompatActivity {
             public void onClick(View v) {
                 final Intent SharingIntent = new Intent(Intent.ACTION_SEND);
                 SharingIntent.setType("text/plain");
-                String CommunityPostKey=QRCommunityID;
+                String CommunityPostKey = QRCommunityID;
 
-                SharingIntent.putExtra(Intent.EXTRA_TEXT,"InLens Cloud-Album Invite Link \n\n"+ GenarateDeepLinkForInvite(CommunityPostKey));
+                SharingIntent.putExtra(Intent.EXTRA_TEXT, "InLens Cloud-Album Invite Link \n\n" + GenarateDeepLinkForInvite(CommunityPostKey));
                 startActivity(SharingIntent);
 
             }
         });
     }
 
-    private static String GenarateDeepLinkForInvite(String CommunityID)
-    {
-        return "https://inlens.page.link/?link=https://integrals.inlens.in/comid="+CommunityID+"/&apn=com.integrals.inlens";
+    private static String GenarateDeepLinkForInvite(String CommunityID) {
+        return "https://inlens.page.link/?link=https://integrals.inlens.in/comid=" + CommunityID + "/&apn=com.integrals.inlens";
     }
 
     private String GetUserName(String uid) {
@@ -605,9 +596,6 @@ public class CloudAlbum extends AppCompatActivity {
         super.onStart();
 
 
-
-
-
 /////////////////////////////////////////////Creating Situation View///////////////////////////////|
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -615,41 +603,33 @@ public class CloudAlbum extends AppCompatActivity {
 
                 SituationIDList.clear();
                 SituationList.clear();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
 
-
-                    if(snapshot.hasChildren())
-                    {
+                    if (snapshot.hasChildren()) {
                         String SituationId = snapshot.getKey();
 
 
-                        if(snapshot.hasChild("owner"))
-                        {
+                        if (snapshot.hasChild("owner")) {
                             String ownerid = snapshot.child("owner").getValue().toString();
                             sowner = ownerid;
                         }
 
-                        if(snapshot.hasChild("time"))
-                        {
+                        if (snapshot.hasChild("time")) {
                             String time = snapshot.child("time").getValue().toString();
                             stime = time;
                         }
 
-                        if(snapshot.hasChild("name"))
-                        {
+                        if (snapshot.hasChild("name")) {
                             String title = snapshot.child("name").getValue().toString();
                             stitle = title;
 
-                            if(snapshot.hasChild("SituationKey"))
-                            {
+                            if (snapshot.hasChild("SituationKey")) {
                                 String SituationKey = snapshot.child("SituationKey").getValue().toString();
                                 sKey = SituationKey;
 
                             }
-                            if(snapshot.hasChild("SituationTime"))
-                            {
+                            if (snapshot.hasChild("SituationTime")) {
                                 String SituationTime = snapshot.child("SituationTime").getValue().toString();
                                 sTime = SituationTime;
 
@@ -657,10 +637,9 @@ public class CloudAlbum extends AppCompatActivity {
 
                         }
 
-                        if(!SituationIDList.contains(SituationId))
-                        {
+                        if (!SituationIDList.contains(SituationId)) {
                             SituationIDList.add(SituationId);
-                            SituationModel model = new SituationModel(sowner,stime,stitle,sKey,sTime);
+                            SituationModel model = new SituationModel(sowner, stime, stitle, sKey, sTime);
                             SituationList.add(model);
                         }
 
@@ -669,22 +648,22 @@ public class CloudAlbum extends AppCompatActivity {
 
                 }
 
-                    adapter = new SituationAdapter(getApplicationContext(),
-                            SituationList,
-                            SituationIDList,
-                            databaseReference,
-                            databaseReferencePhotoList,
-                            CommunityID,cloudalbumcontext,
-                 mBottomSheetDialog,
-                 mBottomSheetDialogRecyclerView,
-                 mBottomSheetDialogCloseBtn,
-                 mBottomSheetDialogTitle,
-                 mBottomSheetDialogProgressbar,ImageList
-);
+                adapter = new SituationAdapter(getApplicationContext(),
+                        SituationList,
+                        SituationIDList,
+                        databaseReference,
+                        databaseReferencePhotoList,
+                        CommunityID, cloudalbumcontext,
+                        mBottomSheetDialog,
+                        mBottomSheetDialogRecyclerView,
+                        mBottomSheetDialogCloseBtn,
+                        mBottomSheetDialogTitle,
+                        mBottomSheetDialogProgressbar, ImageList
+                );
 
-                    recyclerView.setAdapter(adapter);
+                recyclerView.setAdapter(adapter);
 
-                }
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -693,20 +672,13 @@ public class CloudAlbum extends AppCompatActivity {
         });
 
 
-
-
-        }
+    }
 
 
 ////////////////////////////Situation View Implemented/////////////////////////////////////////////|
 
 
-
-
-
-
-
-    private void DeleteCurrentAlbum(){/*
+    private void DeleteCurrentAlbum() {/*
                 deleteDatabaseReference.removeValue().addOnSuccessListener(
                         new OnSuccessListener<Void>() {
                             @Override
@@ -724,7 +696,7 @@ public class CloudAlbum extends AppCompatActivity {
                     }
                 });
     */
-        Toast.makeText(getApplicationContext(),"This feature to be available soon",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "This feature to be available soon", Toast.LENGTH_SHORT).show();
 
     }
 

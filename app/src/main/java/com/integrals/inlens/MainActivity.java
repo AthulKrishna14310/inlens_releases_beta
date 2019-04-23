@@ -48,11 +48,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -1009,14 +1011,17 @@ public class MainActivity extends AppCompatActivity {
 
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             SEARCH_IN_PROGRESS = true;
-            View SearchActionbarView = LayoutInflater.from(getSupportActionBar().getThemedContext()).inflate(R.layout.search_layout, null);
+
+            final View SearchActionbarView = LayoutInflater.from(getSupportActionBar().getThemedContext()).inflate(R.layout.search_layout, null);
+            SearchActionbarView.setAnimation(AnimationUtils.loadAnimation(this,R.anim.cloud_album_fade_in));
             android.support.v7.app.ActionBar.LayoutParams params = new android.support.v7.app.ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             getSupportActionBar().setCustomView(SearchActionbarView, params);
 
             ImageButton SearchBack = SearchActionbarView.findViewById(R.id.search_back_btn);
             final EditText SearchEditText = SearchActionbarView.findViewById(R.id.search_edittext);
             SearchEditText.requestFocus();
-
+            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 
             SearchBack.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1024,9 +1029,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                     onStart();
+                    SearchActionbarView.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloud_album_fade_out));
                     getSupportActionBar().setDisplayShowCustomEnabled(false);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(),0);
                     MainMenu.setGroupVisible(0, true);
                     MainMenu.setGroupVisible(1, true);
+                    NoAlbumTextView.setVisibility(View.GONE);
+
                 }
             });
 
@@ -1046,6 +1055,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (!TextUtils.isEmpty(editable.toString())) {
                         MemoryRecyclerView.setVisibility(View.VISIBLE);
+                        NoAlbumTextView.setVisibility(View.GONE);
                         ShowSearchResults(editable.toString());
                     } else {
                         SearchedAlbums.clear();
@@ -1296,7 +1306,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (SearchedAlbums.size() == 0) {
-                    Toast.makeText(getApplicationContext(), "No albums found.", Toast.LENGTH_SHORT).show();
+                    NoAlbumTextView.setVisibility(View.VISIBLE);
                 }
 
                 Collections.reverse(SearchedAlbums);

@@ -4,6 +4,7 @@
     android:layout_height="50dp"
     android:background="@drawable/curved_corners"
     android:backgroundTint="#ffffff"
+    android:id="@+id/search_bar"
     >
 
     <ImageButton
