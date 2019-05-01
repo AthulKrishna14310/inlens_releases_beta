@@ -21,6 +21,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +59,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -367,10 +370,14 @@ public class CloudAlbum extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.hasChild("CreatedTimestamp"))
+                if(dataSnapshot.hasChild("AlbumExpiry"))
                 {
-                    long CreatedTimestamp = Long.parseLong(dataSnapshot.child("CreatedTimestamp").getValue().toString());
-                    if(CreatedTimestamp<System.currentTimeMillis())
+                    String CreatedTimestamp = dataSnapshot.child("AlbumExpiry").getValue().toString();
+                    long time = System.currentTimeMillis();
+                    Date date = new Date(time);
+                    String dateformat = DateFormat.format("dd-MM-yyyy", date).toString();
+                    int result = dateformat.compareTo(CreatedTimestamp);
+                    if(result >= 0)
                     {
                         MainCloudFab.setVisibility(View.GONE);
 
@@ -386,6 +393,23 @@ public class CloudAlbum extends AppCompatActivity {
         });
 
 
+        MainCloudFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(IsFabOpen)
+                {
+                    AnimateFab();
+                    IsFabOpen = false;
+                }
+                else
+                {
+                    AnimateFab();
+                    IsFabOpen = true;
+                }
+
+            }
+        });
 
         DeleteAlbumFab.setOnClickListener(new View.OnClickListener() {
             @Override
