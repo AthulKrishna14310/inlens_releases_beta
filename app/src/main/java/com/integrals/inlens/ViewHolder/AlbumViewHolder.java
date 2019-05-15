@@ -49,6 +49,7 @@ import com.integrals.inlens.R;
     public Dialog UserDialog;
     public ImageButton ParticipantsAlbum,AlbumCoverEditBtn,DetailsAlbumn;
     public LinearLayout AlbumContainer;
+    public ProgressBar MainAlbumProgressbar;
 
     public AlbumViewHolder(View ItemView) {
         super(ItemView);
@@ -57,12 +58,16 @@ import com.integrals.inlens.R;
         ParticipantsAlbum = view.findViewById(R.id.album_participants_btn);
         DetailsAlbumn = view.findViewById(R.id.album_details_btn);
         AlbumContainer = view.findViewById(R.id.album_card_button_container);
+        MainAlbumProgressbar = view.findViewById(R.id.main_album_progressbar);
         }
 
 
 
     public void SetAlbumCover(Context context,String Uri){
-         ImageView imageView=(ImageView)view.findViewById(R.id.CloudAlbumCover);
+
+        MainAlbumProgressbar.setVisibility(View.VISIBLE);
+
+        ImageView imageView=(ImageView)view.findViewById(R.id.CloudAlbumCover);
         RequestOptions requestOptions=new RequestOptions()
                 .placeholder(R.drawable.image_avatar)
                 .fitCenter();
@@ -71,6 +76,19 @@ import com.integrals.inlens.R;
                 .load(Uri)
                 .thumbnail(0.1f)
                 .apply(requestOptions)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        MainAlbumProgressbar.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        MainAlbumProgressbar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
                 .into(imageView);
     }
     public void SetTitle(String Text){

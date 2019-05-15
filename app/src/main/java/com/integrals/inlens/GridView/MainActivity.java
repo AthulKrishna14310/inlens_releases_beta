@@ -348,17 +348,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     private boolean isImageSelected(int[] positionArray, int position) {
         Boolean result = false;
         for (int i = 0; i < Total; i++) {

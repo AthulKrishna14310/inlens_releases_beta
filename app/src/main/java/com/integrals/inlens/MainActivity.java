@@ -230,6 +230,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private JobSchedulerHelper jobSchedulerHelper;
+    private ImageButton MainMenuButton , MainSearchButton , MainBackButton;
+    private EditText MainSearchEdittext;
+    private RelativeLayout MainActionbar , MainSearchView;
+
+
     public MainActivity() {
     }
 
@@ -237,13 +242,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setElevation(25);
 
         ImageNotyHelper=new NotificationHelper(getBaseContext());
 
         NoAlbumTextView = findViewById(R.id.nocloudalbumtextview);
         MainDimBackground = findViewById(R.id.main_dim_background);
         MainDimBackground.setVisibility(View.GONE);
+        MainMenuButton = findViewById(R.id.mainactivity_actionbar_menubutton);
+        MainSearchButton = findViewById(R.id.mainactivity_actionbar_searchbutton);
+        MainActionbar = findViewById(R.id.mainactivity_actionbar_relativelayout);
+        MainSearchView = findViewById(R.id.mainactivity_searchview_relativelayout);
+        MainBackButton = findViewById(R.id.mainactivity_searchview_backbutton);
+        MainSearchEdittext = findViewById(R.id.mainactivity_searchview_edittext);
 
         SHOW_TOUR = getIntent().getBooleanExtra("ShowTour",false);
         QRCodeVisible = getIntent().getBooleanExtra("QRCodeVisible", false);
@@ -334,6 +344,242 @@ public class MainActivity extends AppCompatActivity {
 
         jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
 
+
+        MainMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsConnectedToNet())
+                {
+                    new BottomSheet.Builder(MainActivity.this).title(" Options").sheet(R.menu.main_menu).listener(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case R.id.upload_activity:
+                                    //startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
+                                    startService(getApplicationContext(),new Intent(getApplicationContext(),UploadService.class));
+                                    break;
+                                case R.id.profile_pic:
+                                    DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                    DbRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            if (dataSnapshot.hasChild("Name")) {
+                                                String dbname = dataSnapshot.child("Name").getValue().toString();
+                                                ProfileuserName.setText(dbname);
+
+                                            } else {
+                                                ProfileuserName.setText("-NA-");
+                                            }
+                                            if (dataSnapshot.hasChild("Profile_picture")) {
+                                                String image = dataSnapshot.child("Profile_picture").getValue().toString();
+                                                if (image.equals("default")) {
+                                                    Toast.makeText(getApplicationContext(),"No profile picture detected.",Toast.LENGTH_SHORT).show();
+                                                    Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
+                                                    progressBar.setVisibility(View.GONE);
+                                                }
+                                                else if (!TextUtils.isEmpty(image) && !image.equals("default")) {
+                                                    progressBar.setVisibility(View.VISIBLE);
+                                                    AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
+                                                    Picasso.get().load(image).into(UserImage, new Callback() {
+                                                        @Override
+                                                        public void onSuccess() {
+
+                                                            progressBar.setVisibility(View.GONE);
+
+                                                        }
+
+                                                        @Override
+                                                        public void onError(Exception e) {
+                                                            Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
+                                                            progressBar.setVisibility(View.GONE);
+
+                                                        }
+                                                    });
+
+                                                /*
+                                                Toast.makeText(getApplicationContext(),image,Toast.LENGTH_SHORT).show();
+                                                RequestOptions requestOptions = new RequestOptions()
+                                                        .fitCenter().placeholder(R.drawable.ic_account_200dp);
+
+                                                Glide.with(MainActivity.this)
+                                                        .load(image)
+                                                        .apply(requestOptions)
+                                                        .listener(new RequestListener<Drawable>() {
+                                                            @Override
+                                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                                progressBar.setVisibility(View.GONE);
+                                                                Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
+                                                                return true;
+                                                            }
+
+                                                            @Override
+                                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                                progressBar.setVisibility(View.GONE);
+                                                                return true;
+                                                            }
+                                                        })
+                                                        .into(UserImage);
+                                                 */
+
+                                                }  else {
+                                                    Toast.makeText(getApplicationContext(),"Loading failed.",Toast.LENGTH_SHORT).show();
+                                                    Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
+                                                    progressBar.setVisibility(View.GONE);
+                                                }
+                                            } else {
+                                                Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
+                                            }
+                                            if (dataSnapshot.hasChild("Email")) {
+
+                                                String dbemail = dataSnapshot.child("Email").getValue().toString();
+                                                ProfileUserEmail.setText(String.format("Email : %s", dbemail));
+                                            } else {
+                                                ProfileUserEmail.setText("Email : -NA-");
+                                            }
+
+                                            ProfileDialog.show();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                    break;
+                                case R.id.working_tour:
+                                {
+                                    startActivity(new Intent(MainActivity.this, WorkingIntroActivity.class).putExtra("ShowTour","no"));
+                                    overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
+                                    finish();
+                                    break;
+                                }
+                                case R.id.quit_cloud_album:
+                                    SharedPreferences sharedPreferences3 = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
+                                    if (sharedPreferences3.getBoolean("UsingCommunity::", false) == true) {
+                                        CurrentDatabase currentDatabase1 = new CurrentDatabase(getApplicationContext(), "", null, 1);
+                                        if (currentDatabase1.GetUploadingTargetColumn() >= currentDatabase1.GetUploadingTotal()) {
+                                            QuitCloudAlbum(0);
+                                        } else {
+                                            QuitCloudAlbum(1);
+                                        }
+
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "No Active Cloud-Album to quit.", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    break;
+
+
+                                case R.id.restart_service: {
+                                    SharedPreferences sharedPreferencesS = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
+                                    if (sharedPreferencesS.getBoolean("UsingCommunity::", false)) {
+                                        startService(getApplicationContext(), new Intent(getApplicationContext(), RecentImageService.class));
+                                    }
+
+                                }
+                                break;
+                                case R.id.create_issues: {
+                                    startActivity(new Intent(MainActivity.this, IssueActivity.class));
+                                    overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
+                                    finish();
+                                }
+                                break;
+                                case R.id.invite:
+                                    final Intent SharingIntent = new Intent(Intent.ACTION_SEND);
+                                    SharingIntent.setType("text/plain");
+                                    SharingIntent.putExtra(Intent.EXTRA_TEXT,"InLens \n\n"+"Store all memories with unlimited storage and without quality compromise. Haven't got inLens? Get it now."+"\nhttps://play.google.com/store/apps/details?id=com.integrals.inlens");
+                                    startActivity(SharingIntent);
+                            }
+                        }
+                    }).show();
+                }
+                else
+                {
+                    Snackbar.make(RootForMainActivity, "Unable to connect to internet. Try again.", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        MainSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SEARCH_IN_PROGRESS = true;
+
+                MainActionbar.clearAnimation();
+                MainActionbar.setAnimation(AnimationUtils.loadAnimation(MainActivity.this,R.anim.fade_out));
+                MainActionbar.getAnimation().start();
+                MainActionbar.setVisibility(View.GONE);
+
+                MainSearchView.clearAnimation();
+                MainSearchView.setAnimation(AnimationUtils.loadAnimation(MainActivity.this,R.anim.fade_in));
+                MainSearchView.getAnimation().start();
+                MainSearchView.setVisibility(View.VISIBLE);
+
+                MainSearchEdittext.requestFocus();
+                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
+                MainSearchEdittext.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                        if (!TextUtils.isEmpty(editable.toString())) {
+                            MemoryRecyclerView.setVisibility(View.VISIBLE);
+                            NoAlbumTextView.setVisibility(View.GONE);
+                            ShowSearchResults(editable.toString());
+                        } else {
+                            SearchedAlbums.clear();
+                            MemoryRecyclerView.removeAllViews();
+                            ShowAllAlbums();
+                        }
+
+                    }
+                });
+
+            }
+        });
+
+
+        MainBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SEARCH_IN_PROGRESS = false;
+                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null && !imm.isAcceptingText()) {
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+                MainSearchEdittext.setText("");
+
+                MainSearchView.clearAnimation();
+                MainSearchView.setAnimation(AnimationUtils.loadAnimation(MainActivity.this,R.anim.fade_out));
+                MainSearchView.getAnimation().start();
+                MainSearchView.setVisibility(View.GONE);
+
+                MainActionbar.clearAnimation();
+                MainActionbar.setAnimation(AnimationUtils.loadAnimation(MainActivity.this,R.anim.fade_in));
+                MainActionbar.getAnimation().start();
+                MainActionbar.setVisibility(View.VISIBLE);
+                ShowAllAlbums();
+
+            }
+        });
+
+        ShowAllAlbums();
+
     }
 
     private void CheckIfUserImageExist(String currentUser) {
@@ -402,7 +648,7 @@ public class MainActivity extends AppCompatActivity {
                                                         AnimateFab();
 
                                                         TapTargetView.showFor(MainActivity.this,
-                                                                TapTarget.forView(findViewById(0), "Search", "Click here perform a search on albums.")
+                                                                TapTarget.forView(findViewById(R.id.mainactivity_actionbar_searchbutton), "Search", "Click here perform a search on albums.")
                                                                         .tintTarget(false)
                                                                         .cancelable(false)
                                                                         .outerCircleColor(R.color.colorPrimaryDark)
@@ -414,7 +660,7 @@ public class MainActivity extends AppCompatActivity {
                                                                         super.onTargetClick(view);
 
                                                                         TapTargetView.showFor(MainActivity.this,
-                                                                                TapTarget.forView(findViewById(1), "More Options", "Click here get more options.")
+                                                                                TapTarget.forView(findViewById(R.id.mainactivity_actionbar_menubutton), "More Options", "Click here get more options.")
                                                                                         .tintTarget(false)
                                                                                         .cancelable(false)
                                                                                         .targetCircleColor(R.color.black)
@@ -874,12 +1120,6 @@ public class MainActivity extends AppCompatActivity {
                 .go();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        ShowAllAlbums();
-    }
-
     private void DisplayAllParticipantsAsBottomSheet(String postKeyForEdit, DatabaseReference getParticipantDatabaseReference) {
 
         ParticpantsBottomSheetDialog.show();
@@ -986,242 +1226,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MainMenu = menu;
-
-        menu.add(0, 1, 1, "Menu")
-                .setIcon(R.drawable.menu_icon)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.add(0, 0, 0, "Search")
-                .setIcon(R.drawable.ic_search)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-
-        if (item.getItemId() == 0) {
-            MainMenu.setGroupVisible(0, false);
-            MainMenu.setGroupVisible(1, false);
-
-            getSupportActionBar().setDisplayShowCustomEnabled(true);
-            SEARCH_IN_PROGRESS = true;
-
-            final View SearchActionbarView = LayoutInflater.from(getSupportActionBar().getThemedContext()).inflate(R.layout.search_layout, null);
-            SearchActionbarView.setAnimation(AnimationUtils.loadAnimation(this,R.anim.cloud_album_fade_in));
-            android.support.v7.app.ActionBar.LayoutParams params = new android.support.v7.app.ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            getSupportActionBar().setCustomView(SearchActionbarView, params);
-
-            ImageButton SearchBack = SearchActionbarView.findViewById(R.id.search_back_btn);
-            final EditText SearchEditText = SearchActionbarView.findViewById(R.id.search_edittext);
-            SearchEditText.requestFocus();
-            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
-
-            SearchBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-
-                    onStart();
-                    SearchActionbarView.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloud_album_fade_out));
-                    getSupportActionBar().setDisplayShowCustomEnabled(false);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(),0);
-                    MainMenu.setGroupVisible(0, true);
-                    MainMenu.setGroupVisible(1, true);
-                    NoAlbumTextView.setVisibility(View.GONE);
-
-                }
-            });
-
-            SearchEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                    if (!TextUtils.isEmpty(editable.toString())) {
-                        MemoryRecyclerView.setVisibility(View.VISIBLE);
-                        NoAlbumTextView.setVisibility(View.GONE);
-                        ShowSearchResults(editable.toString());
-                    } else {
-                        SearchedAlbums.clear();
-                        MemoryRecyclerView.removeAllViews();
-                        onStart();
-                    }
-
-                }
-            });
-
-        } else if (item.getItemId() == 1) {
-
-            if (IsConnectedToNet()) {
-                new BottomSheet.Builder(this).title(" Options").sheet(R.menu.main_menu).listener(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case R.id.upload_activity:
-                                //startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
-                                startService(getApplicationContext(),new Intent(getApplicationContext(),UploadService.class));
-                                break;
-                            case R.id.profile_pic:
-                                DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                DbRef.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                        if (dataSnapshot.hasChild("Name")) {
-                                            String dbname = dataSnapshot.child("Name").getValue().toString();
-                                            ProfileuserName.setText(dbname);
-
-                                        } else {
-                                            ProfileuserName.setText("-NA-");
-                                        }
-                                        if (dataSnapshot.hasChild("Profile_picture")) {
-                                            String image = dataSnapshot.child("Profile_picture").getValue().toString();
-                                            if (image.equals("default")) {
-                                                Toast.makeText(getApplicationContext(),"No profile picture detected.",Toast.LENGTH_SHORT).show();
-                                                Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
-                                                progressBar.setVisibility(View.GONE);
-                                            }
-                                            else if (!TextUtils.isEmpty(image) && !image.equals("default")) {
-                                                progressBar.setVisibility(View.VISIBLE);
-                                                AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
-                                                Picasso.get().load(image).into(UserImage, new Callback() {
-                                                    @Override
-                                                    public void onSuccess() {
-
-                                                        progressBar.setVisibility(View.GONE);
-
-                                                    }
-
-                                                    @Override
-                                                    public void onError(Exception e) {
-                                                        Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
-                                                        progressBar.setVisibility(View.GONE);
-
-                                                    }
-                                                });
-
-                                                /*
-                                                Toast.makeText(getApplicationContext(),image,Toast.LENGTH_SHORT).show();
-                                                RequestOptions requestOptions = new RequestOptions()
-                                                        .fitCenter().placeholder(R.drawable.ic_account_200dp);
-
-                                                Glide.with(MainActivity.this)
-                                                        .load(image)
-                                                        .apply(requestOptions)
-                                                        .listener(new RequestListener<Drawable>() {
-                                                            @Override
-                                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                                progressBar.setVisibility(View.GONE);
-                                                                Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
-                                                                return true;
-                                                            }
-
-                                                            @Override
-                                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                                progressBar.setVisibility(View.GONE);
-                                                                return true;
-                                                            }
-                                                        })
-                                                        .into(UserImage);
-                                                 */
-
-                                            }  else {
-                                                Toast.makeText(getApplicationContext(),"Loading failed.",Toast.LENGTH_SHORT).show();
-                                                Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
-                                                progressBar.setVisibility(View.GONE);
-                                            }
-                                        } else {
-                                            Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
-                                        }
-                                        if (dataSnapshot.hasChild("Email")) {
-
-                                            String dbemail = dataSnapshot.child("Email").getValue().toString();
-                                            ProfileUserEmail.setText(String.format("Email : %s", dbemail));
-                                        } else {
-                                            ProfileUserEmail.setText("Email : -NA-");
-                                        }
-
-                                        ProfileDialog.show();
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-
-                                break;
-                            case R.id.working_tour:
-                            {
-                                startActivity(new Intent(MainActivity.this, WorkingIntroActivity.class).putExtra("ShowTour","no"));
-                                overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
-                                finish();
-                                break;
-                            }
-                            case R.id.quit_cloud_album:
-                                SharedPreferences sharedPreferences3 = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-                                if (sharedPreferences3.getBoolean("UsingCommunity::", false) == true) {
-                                    CurrentDatabase currentDatabase1 = new CurrentDatabase(getApplicationContext(), "", null, 1);
-                                    if (currentDatabase1.GetUploadingTargetColumn() >= currentDatabase1.GetUploadingTotal()) {
-                                        QuitCloudAlbum(0);
-                                    } else {
-                                        QuitCloudAlbum(1);
-                                    }
-
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "No Active Cloud-Album to quit.", Toast.LENGTH_SHORT).show();
-                                }
-
-                                break;
-
-
-                            case R.id.restart_service: {
-                                SharedPreferences sharedPreferencesS = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-                                if (sharedPreferencesS.getBoolean("UsingCommunity::", false)) {
-                                    startService(getApplicationContext(), new Intent(getApplicationContext(), RecentImageService.class));
-                                }
-
-                            }
-                            break;
-                            case R.id.create_issues: {
-                                startActivity(new Intent(MainActivity.this, IssueActivity.class));
-                                overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
-                                finish();
-                            }
-                            break;
-                            case R.id.invite:
-                                final Intent SharingIntent = new Intent(Intent.ACTION_SEND);
-                                SharingIntent.setType("text/plain");
-                                SharingIntent.putExtra(Intent.EXTRA_TEXT,"InLens \n\n"+"Store all memories with unlimited storage and without quality compromise. Haven't got inLens? Get it now."+"\nhttps://play.google.com/store/apps/details?id=com.integrals.inlens");
-                                startActivity(SharingIntent);
-                        }
-                    }
-                }).show();
-            } else {
-                Snackbar.make(RootForMainActivity, "Unable to connect to internet. Try again.", Snackbar.LENGTH_SHORT).show();
-            }
-
-        }
-
-
-        return true;
-    }
 
     private void ShowAllAlbums() {
         MainLoadingProgressBar.setVisibility(View.VISIBLE);
@@ -1869,11 +1873,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if (SEARCH_IN_PROGRESS) {
-            MainMenu.setGroupVisible(0, true);
-            MainMenu.setGroupVisible(1, true);
             SEARCH_IN_PROGRESS = false;
-            getSupportActionBar().setDisplayShowCustomEnabled(false);
-            onStart();
+            ShowAllAlbums();
+
         } else {
             super.onBackPressed();
         }
@@ -2047,7 +2049,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     CloseFabs();
-                    getSupportActionBar().setDisplayShowCustomEnabled(false);
 
                     final String PostKey = AlbumKeyIDs.get(position);
                     if (!TextUtils.isEmpty(PostKey)) {
