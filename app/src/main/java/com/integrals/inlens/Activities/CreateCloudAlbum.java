@@ -109,11 +109,12 @@ public class CreateCloudAlbum extends AppCompatActivity {
     private String EventType = "";
     private String CheckTimeTaken="";
     private JobSchedulerHelper                 jobSchedulerHelper;
+    private ImageButton CreateCloudAlbumBackButton;
+    private Boolean EventTypeSet = false ,AlbumDateSet = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_cloud_album);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         EventDialogInit();
         jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
@@ -126,6 +127,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                 .child(InUser.getUid());
         UserID = InUser.getUid();
 
+        CreateCloudAlbumBackButton = findViewById(R.id.create_cloud_album_backbutton);
         EventPicker = findViewById(R.id.EventTypeText);
         DisplayButton = (ImageButton) findViewById(R.id.DisplayImage);
         UploadProgressTextView = (TextView) findViewById(R.id.UploadProgressTextView);
@@ -178,11 +180,11 @@ public class CreateCloudAlbum extends AppCompatActivity {
                     if(!checkNumberOfDays(CheckTimeTaken,AlbumTime)){
                         DateofCompletion.setText("Album Active until " + AlbumTime + " midnight");
                         DateofCompletion.setTextSize(12);
-
+                        AlbumDateSet = true;
                         }else {
                         AlbumTime = "";
                         Toast.makeText(getApplicationContext(),"Album creation valid only for 5 days",Toast.LENGTH_SHORT).show();
-                               }
+                    }
 
                 }
                 else
@@ -190,7 +192,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                      if(!checkNumberOfDays(CheckTimeTaken,AlbumTime)){
                          DateofCompletion.setText("Album Active until " + AlbumTime + " midnight");
                          DateofCompletion.setTextSize(12);
-
+                            AlbumDateSet = true;
                      }else {
                          AlbumTime = "";
                          Toast.makeText(getApplicationContext(),"Album creation valid only for 5 days",Toast.LENGTH_LONG).show();
@@ -238,7 +240,16 @@ public class CreateCloudAlbum extends AppCompatActivity {
         SubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostingStarts();
+                if(EventTypeSet && AlbumDateSet)
+                {
+                    PostingStarts();
+
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "Please fill up all the provided fields and add album cover photo ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -247,6 +258,17 @@ public class CreateCloudAlbum extends AppCompatActivity {
             public void onClick(View view) {
 
                 EventDialog.show();
+
+            }
+        });
+
+        CreateCloudAlbumBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(CreateCloudAlbum.this,MainActivity.class).putExtra("QRCodeVisible",false));
+                overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
+                finish();
 
             }
         });
@@ -317,6 +339,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                 if(!TextUtils.isEmpty(EventType))
                 {
                     EventTypeDone.setVisibility(View.VISIBLE);
+                    EventTypeSet = true;
                 }
                 else
                 {
@@ -337,6 +360,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                 if(!TextUtils.isEmpty(EventType))
                 {
                     EventTypeDone.setVisibility(View.VISIBLE);
+                    EventTypeSet = true;
                 }
                 else
                 {
@@ -357,6 +381,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                 if(!TextUtils.isEmpty(EventType))
                 {
                     EventTypeDone.setVisibility(View.VISIBLE);
+                    EventTypeSet = true;
                 }
                 else
                 {
@@ -377,6 +402,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                 if(!TextUtils.isEmpty(EventType))
                 {
                     EventTypeDone.setVisibility(View.VISIBLE);
+                    EventTypeSet = true;
                 }
                 else
                 {
@@ -397,6 +423,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                 if(!TextUtils.isEmpty(EventType))
                 {
                     EventTypeDone.setVisibility(View.VISIBLE);
+                    EventTypeSet = true;
                 }
                 else
                 {
@@ -417,6 +444,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                 if(!TextUtils.isEmpty(EventType))
                 {
                     EventTypeDone.setVisibility(View.VISIBLE);
+                    EventTypeSet = true;
                 }
                 else
                 {
@@ -437,11 +465,13 @@ public class CreateCloudAlbum extends AppCompatActivity {
         btn4.setBackgroundResource(R.drawable.radiobutton_unpressed);
         btn5.setBackgroundResource(R.drawable.radiobutton_unpressed);
     }
+
+
     private void PostingStarts() {
+
         final String TitleValue = CommunityAlbumTitle.getText().toString().trim();
         final String DescriptionValue = CommunityAlbumDescription.getText().toString().trim();
-        if (!TextUtils.isEmpty(TitleValue) && !(TextUtils.isEmpty(EventType)&&
-                (!TextUtils.isEmpty(AlbumTime)))) {
+        if (!TextUtils.isEmpty(TitleValue) && !(TextUtils.isEmpty(EventType)&& EventTypeSet && AlbumDateSet && (!TextUtils.isEmpty(AlbumTime)))) {
             SubmitButton.setEnabled(false);
             if(ImageUri==null)
             {
@@ -671,8 +701,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
         else
         {
             Toast.makeText(getApplicationContext(),
-                    "Please fill up all the provided fields " +
-                            "and add album cover photo ", Toast.LENGTH_SHORT).show();
+                    "Please fill up all the provided fields and add album cover photo ", Toast.LENGTH_SHORT).show();
         }
     }
 

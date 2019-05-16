@@ -29,7 +29,7 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
             android:text="Username"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
             android:fontFamily="sans-serif"
             android:text="UserEmail"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
     </RelativeLayout>

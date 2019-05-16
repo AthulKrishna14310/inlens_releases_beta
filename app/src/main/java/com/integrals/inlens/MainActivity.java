@@ -98,6 +98,7 @@ import com.integrals.inlens.ServiceImplementation.Service.UploadService;
 import com.integrals.inlens.UI.Extras.Tour;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -212,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton MainFab, CreateAlbumFab, ScanQrFab;
     private Animation FabOpen, FabClose, FabRotateForward, FabRotateBackward, AlbumCardOpen, AlbumCardClose;
     private boolean isOpen = false;
-    private TextView MainCreateAlbumTxtview, MainScanQrTxtview;
     private ImageButton MainDimBackground;
 
     //for details Dialog
@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
                                                 else if (!TextUtils.isEmpty(image) && !image.equals("default")) {
                                                     progressBar.setVisibility(View.VISIBLE);
                                                     AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
-                                                    Picasso.get().load(image).into(UserImage, new Callback() {
+                                                    Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE).into(UserImage, new Callback() {
                                                         @Override
                                                         public void onSuccess() {
 
@@ -574,6 +574,19 @@ public class MainActivity extends AppCompatActivity {
                 MainActionbar.getAnimation().start();
                 MainActionbar.setVisibility(View.VISIBLE);
                 ShowAllAlbums();
+
+            }
+        });
+
+        MainDimBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(isOpen)
+                {
+                    CloseFabs();
+                    isOpen = false;
+                }
 
             }
         });
@@ -1013,18 +1026,8 @@ public class MainActivity extends AppCompatActivity {
             CreateAlbumFab.setAnimation(FabClose);
             CreateAlbumFab.getAnimation().start();
 
-            MainScanQrTxtview.clearAnimation();
-            MainScanQrTxtview.setAnimation(FabClose);
-            MainScanQrTxtview.getAnimation().start();
-
-            MainCreateAlbumTxtview.clearAnimation();
-            MainCreateAlbumTxtview.setAnimation(FabClose);
-            MainCreateAlbumTxtview.getAnimation().start();
-
             CreateAlbumFab.setVisibility(View.INVISIBLE);
             ScanQrFab.setVisibility(View.INVISIBLE);
-            MainCreateAlbumTxtview.setVisibility(View.INVISIBLE);
-            MainScanQrTxtview.setVisibility(View.INVISIBLE);
 
             MainFab.clearAnimation();
             MainFab.setAnimation(FabRotateBackward);
@@ -1874,7 +1877,13 @@ public class MainActivity extends AppCompatActivity {
             SEARCH_IN_PROGRESS = false;
             ShowAllAlbums();
 
-        } else {
+        }
+        else if (isOpen)
+        {
+            CloseFabs();
+            isOpen = false;
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -2105,7 +2114,7 @@ public class MainActivity extends AppCompatActivity {
                                     {
 
                                         AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
-                                        Picasso.get().load(Image).into(AlbumCoverEditUserImage, new Callback() {
+                                        Picasso.get().load(Image).networkPolicy(NetworkPolicy.OFFLINE).into(AlbumCoverEditUserImage, new Callback() {
                                             @Override
                                             public void onSuccess() {
 

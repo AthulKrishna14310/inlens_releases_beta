@@ -71,7 +71,8 @@
             android:launchMode="singleInstance" />
         <activity
             android:name=".Activities.CreateCloudAlbum"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/CalenderTheme"/>
 
         <service android:name=".Services.RecentImageService" />
 
@@ -92,7 +93,8 @@
         <activity
             android:name=".Activities.CloudAlbum"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme"/>
         <activity
             android:name=".Activities.QRCodeGenerator"
             android:screenOrientation="portrait" />

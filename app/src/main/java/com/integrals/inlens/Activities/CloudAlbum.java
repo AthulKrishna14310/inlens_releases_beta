@@ -3,7 +3,6 @@ package com.integrals.inlens.Activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,21 +10,17 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.text.format.DateUtils;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -41,10 +36,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cocosw.bottomsheet.BottomSheet;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +50,11 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.integrals.inlens.Helper.CurrentDatabase;
+import com.integrals.inlens.Helper.PhotoListHelper;
+import com.integrals.inlens.Models.SituationModel;
+import com.integrals.inlens.R;
+import com.integrals.inlens.ViewHolder.SituationAdapter;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.sql.Date;
@@ -65,13 +63,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.integrals.inlens.Helper.CurrentDatabase;
-import com.integrals.inlens.Helper.PhotoListHelper;
-import com.integrals.inlens.MainActivity;
-import com.integrals.inlens.Models.SituationModel;
-import com.integrals.inlens.R;
-import com.integrals.inlens.ViewHolder.SituationAdapter;
 
 public class CloudAlbum extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -106,7 +97,6 @@ public class CloudAlbum extends AppCompatActivity {
     //////QR CODE DIALOG///////////////////////////////////////////////////////////////////////////////|
     private String PhotographerID;
     ImageView QRCodeImageView;
-    ActionBar actionBar;
     private String Default = "No current community";
     private String QRCommunityID = "1122333311101";
     private TextView textView;
@@ -129,13 +119,14 @@ public class CloudAlbum extends AppCompatActivity {
     private Animation FabOpen, FabClose, FabRotateForward, FabRotateBackward;
     private Boolean IsFabOpen = false;
 
+    private ImageButton CloudAlbumBackButton;
+    private TextView CloudAlbumTitle;
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////|
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_cloud_album);
-        actionBar = getSupportActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         QRCodeInit();
@@ -145,11 +136,16 @@ public class CloudAlbum extends AppCompatActivity {
             Snackbar.make(RootForCloudAlbum, "Unable to connect to internet.", Snackbar.LENGTH_SHORT).show();
         }
 
+        CloudAlbumTitle = findViewById(R.id.cloudalbum_tooolbar_title);
+        CloudAlbumBackButton = findViewById(R.id.cloudalbum_tooolbar_backbutton);
+
+
         cloudalbumcontext = this;
         activity = this;
         CommunityIDLocal = getIntent().getStringExtra("PostKeyLocal::");
         SwipeControl = (Button) findViewById(R.id.SwipeControl);
         String AlbumName = getIntent().getStringExtra("AlbumName");
+        CloudAlbumTitle.setText(AlbumName);
         CommunityID = getIntent().getStringExtra("GlobalID::");
         LocalID = getIntent().getStringExtra("LocalID::");
         CurrentUser = getIntent().getStringExtra("UserID::");
@@ -182,9 +178,9 @@ public class CloudAlbum extends AppCompatActivity {
         } else {
             CommunityID = sPreferences.getString("GlobalID::", "");
             AlbumName = sPreferences.getString("Album", "");
+
         }
 
-        getSupportActionBar().setTitle(AlbumName);
 
         //////////////////////////////////////////////////////////////////////////////////////////
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Communities")
@@ -347,6 +343,13 @@ public class CloudAlbum extends AppCompatActivity {
         });
 
         mBottomSheetDialogProgressbar = mBottomSheetDialog.findViewById(R.id.particpants_bottomsheet_progressbar);
+
+        CloudAlbumBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     }
@@ -554,11 +557,9 @@ public class CloudAlbum extends AppCompatActivity {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            actionBar.setTitle("No current album");
             QRCodeImageView.setVisibility(View.INVISIBLE);
             textView.setText("You must be in an album to generate QR code");
         } catch (NullPointerException e) {
-            actionBar.setTitle("No current album");
             QRCodeImageView.setVisibility(View.INVISIBLE);
             textView.setText("You must be in an album to generate QR code");
 
@@ -612,7 +613,9 @@ public class CloudAlbum extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         super.onBackPressed();
+
     }
 
     @Override

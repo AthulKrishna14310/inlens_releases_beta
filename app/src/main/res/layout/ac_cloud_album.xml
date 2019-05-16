@@ -9,9 +9,44 @@
     tools:context=".Activities.CloudAlbum"
     android:id="@+id/root_for_cloud_album">
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/cloudalbum_tooolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cardCornerRadius="0dp"
+        android:elevation="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/cloudalbum_tooolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Album Name"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"
+                android:textColor="@color/colorAccent"
+                />
+
+            <ImageButton
+                android:id="@+id/cloudalbum_tooolbar_backbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back"
+                android:background="@android:color/transparent"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/cloudalbum_tooolbar"
         android:background="@android:color/white">
 
         <TextView
