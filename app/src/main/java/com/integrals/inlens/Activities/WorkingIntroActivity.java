@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ViewFlipper;
 
 import com.integrals.inlens.Fragments.IntroSlide1Fragment;
 import com.integrals.inlens.Fragments.IntroSlide2Fragment;
@@ -17,33 +20,25 @@ import com.integrals.inlens.Fragments.IntroSlide3Fragment;
 import com.integrals.inlens.Fragments.IntroSlide4Fragment;
 import com.integrals.inlens.MainActivity;
 import com.integrals.inlens.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 public class WorkingIntroActivity extends AppCompatActivity {
 
-    private IntroAdapter introAdapter;
-    private ViewPager IntroViewPager;
-    private int i = 1;
+    private ViewFlipper TourViewFlipper;
     private Boolean SHOW_TOUR = true;
     private String StringShowTour;
+    private ImageButton CloseTourImageButton;
+    private int Images[] = {R.drawable.intro_slide_1,R.drawable.intro_slide_2,R.drawable.intro_slide_3,R.drawable.intro_slide_4};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_working_intro);
 
         getSupportActionBar().hide();
-        introAdapter = new IntroAdapter(getSupportFragmentManager());
-        IntroViewPager = findViewById(R.id.initialviewpager);
-        IntroViewPager.setAdapter(introAdapter);
-
-        findViewById(R.id.initial_next_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(i<4)
-                IntroViewPager.setCurrentItem(i++);
-
-            }
-        });
+        TourViewFlipper = findViewById(R.id.tour_viewflipper);
+        CloseTourImageButton = findViewById(R.id.close_tour_imagebutton);
 
         StringShowTour = getIntent().getStringExtra("ShowTour");
         if(StringShowTour.equals("no"))
@@ -54,7 +49,8 @@ public class WorkingIntroActivity extends AppCompatActivity {
         {
             SHOW_TOUR=true;
         }
-        findViewById(R.id.initial_skip_btn).setOnClickListener(new View.OnClickListener() {
+
+        CloseTourImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -65,42 +61,18 @@ public class WorkingIntroActivity extends AppCompatActivity {
             }
         });
 
+        for(int i=0; i< Images.length;i++)
+        {
+            ImageView imageView = new ImageView(getApplicationContext());
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Picasso.get().load(Images[i]).into(imageView);
+            TourViewFlipper.addView(imageView);
 
-    }
-
-    private class IntroAdapter extends FragmentPagerAdapter {
-
-        public IntroAdapter(FragmentManager fm) {
-            super(fm);
+            TourViewFlipper.setInAnimation(getApplicationContext(),R.anim.cloud_album_fade_in);
+            TourViewFlipper.setOutAnimation(getApplicationContext(),R.anim.cloud_album_fade_out);
         }
 
-        @Override
-        public Fragment getItem(int position) {
 
-            switch (position) {
-                case 0:
-                    IntroSlide1Fragment slide1Fragment = new IntroSlide1Fragment();
-                    return slide1Fragment;
-                case 1:
-                    IntroSlide2Fragment slide2Fragment = new IntroSlide2Fragment();
-                    return slide2Fragment;
-                case 2:
-                    IntroSlide3Fragment slide3Fragment = new IntroSlide3Fragment();
-                    return slide3Fragment;
-                case 3:
-                    IntroSlide4Fragment slide4Fragment = new IntroSlide4Fragment();
-                    return slide4Fragment;
-                default:
-                    IntroSlide4Fragment defaultFragment = new IntroSlide4Fragment();
-                    return defaultFragment;
-            }
-
-        }
-
-        @Override
-        public int getCount() {
-            return 4;
-        }
     }
 
     @Override

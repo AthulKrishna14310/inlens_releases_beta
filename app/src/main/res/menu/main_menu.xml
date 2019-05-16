@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-   <item android:id="@+id/upload_activity" android:title="Inlens Gallery" android:icon="@drawable/ic_cloud_upload"/>
-    <item android:id="@+id/profile_pic" android:title="User Profile" android:icon="@drawable/ic_profile_pic"/>
-    <item android:id="@+id/restart_service" android:title="Restart scanning for Recent-Image" android:icon="@drawable/ic_refresh_black"/>
-    <item android:id="@+id/quit_cloud_album" android:title="Quit Current Cloud-Album" android:icon="@drawable/ic_close_album"/>
-    <item android:id="@+id/create_issues" android:title="Report Issue" android:icon="@drawable/ic_info_final_"/>
-    <item android:id="@+id/working_tour" android:title="App About" android:icon="@drawable/ic_app_working_tour"/>
-    <item android:id="@+id/invite" android:title="Invite Friends" android:icon="@drawable/ic_card_giftcard_30dp"/>
+
+
+ <item android:id="@+id/profile_pic"
+     android:title="User Profile"
+     android:icon="@drawable/ic_account_main_menu"/>
+
+
+ <item android:id="@+id/upload_activity"
+     android:title="Inlens Gallery"
+     android:icon="@drawable/ic_photo_library_main_menu"/>
+
+ <item android:id="@+id/invite"
+     android:title="Invite Friends"
+     android:icon="@drawable/ic_card_giftcard_main_menu"/>
+
+ <item android:id="@+id/working_tour"
+     android:title="App About"
+     android:icon="@drawable/ic_app_working_tour_main_menu"/>
+
+ <item android:id="@+id/restart_service"
+     android:title="Restart scanning for Recent-Image"
+     android:icon="@drawable/ic_refresh_main_menu"/>
+
+ <item android:id="@+id/quit_cloud_album"
+     android:title="Quit Current Cloud-Album"
+     android:icon="@drawable/ic_launch_main_menu"/>
+
+ <item android:id="@+id/create_issues"
+     android:title="Report Issue"
+     android:icon="@drawable/ic_info_final_main_menu"/>
+
+
 
 </menu>

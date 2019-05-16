@@ -87,7 +87,7 @@
                     android:layout_height="30dp"
                     android:layout_marginEnd="20dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_info_final_"
+                    android:src="@drawable/ic_info_final_main_menu"
                     android:visibility="invisible" />
 
                 <ImageButton
@@ -96,7 +96,7 @@
                     android:layout_height="30dp"
                     android:layout_marginEnd="20dp"
                     android:background="@android:color/transparent"
-                    android:src="    @drawable/ic_participants_album_final"
+                    android:src="@drawable/ic_participants_album_final"
                     android:visibility="invisible" />
 
                 <ImageButton

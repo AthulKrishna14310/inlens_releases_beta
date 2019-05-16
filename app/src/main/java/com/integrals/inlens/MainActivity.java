@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
     private Animation FabOpen, FabClose, FabRotateForward, FabRotateBackward, AlbumCardOpen, AlbumCardClose;
     private boolean isOpen = false;
     private TextView MainCreateAlbumTxtview, MainScanQrTxtview;
-    private RelativeLayout MainDimBackground;
+    private ImageButton MainDimBackground;
 
     //for details Dialog
     private TextView AlbumTitle,
@@ -559,7 +559,7 @@ public class MainActivity extends AppCompatActivity {
 
                 SEARCH_IN_PROGRESS = false;
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null && !imm.isAcceptingText()) {
+                if (imm.isAcceptingText()) {
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
                 MainSearchEdittext.setText("");
@@ -961,8 +961,6 @@ public class MainActivity extends AppCompatActivity {
         MainFab = findViewById(R.id.main_fab_btn);
         ScanQrFab = findViewById(R.id.main_scan_qr_fab_btn);
         CreateAlbumFab = findViewById(R.id.main_create_album_fab_btn);
-        MainCreateAlbumTxtview = findViewById(R.id.main_create_album_fab_txtview);
-        MainScanQrTxtview = findViewById(R.id.main_scan_qr_fab_textview);
 
         MainFab.setOnClickListener(new View.OnClickListener() {
             @Override
