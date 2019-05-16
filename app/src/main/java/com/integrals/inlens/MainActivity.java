@@ -98,7 +98,6 @@ import com.integrals.inlens.ServiceImplementation.Service.UploadService;
 import com.integrals.inlens.UI.Extras.Tour;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -243,6 +242,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //User Authentication
+        InAuthentication = FirebaseAuth.getInstance();
+        ProgressRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        firebaseUser = InAuthentication.getCurrentUser();
+        try {
+            if (firebaseUser == null) {
+                startActivity(new Intent(MainActivity.this, IntroActivity.class));
+                finish();
+            } else {
+                if (!firebaseUser.isEmailVerified()) {
+
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+
+                }
+                else {
+                    CurrentUser = firebaseUser.getUid();
+                    QRCodeInit();
+                    PermissionsInit();
+                    FabAnimationAndButtonsInit();
+                    ProfileDialogInit();
+                    AlbumCoverEditDialogInit();
+                    ParticipantsBottomSheetDialogInit();
+                    DetailsDialogInit();
+                    if(SHOW_TOUR)
+                    {
+                        //Only check if userimage is uploaded once
+                        CheckIfUserImageExist(CurrentUser);
+
+                    }
+                    ShowAllAlbums();
+                }
+            }
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         ImageNotyHelper=new NotificationHelper(getBaseContext());
 
         NoAlbumTextView = findViewById(R.id.nocloudalbumtextview);
@@ -275,41 +312,7 @@ public class MainActivity extends AppCompatActivity {
         //Snackbar
         RootForMainActivity = findViewById(R.id.root_for_main_activity);
 
-        //User Authentication
-        InAuthentication = FirebaseAuth.getInstance();
-        ProgressRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        firebaseUser = InAuthentication.getCurrentUser();
-        try {
-            if (firebaseUser == null) {
-                startActivity(new Intent(MainActivity.this, IntroActivity.class));
-                finish();
-            } else {
-                if (!firebaseUser.isEmailVerified()) {
 
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-
-                } else {
-                    CurrentUser = firebaseUser.getUid();
-                    QRCodeInit();
-                    PermissionsInit();
-                    FabAnimationAndButtonsInit();
-                    ProfileDialogInit();
-                    AlbumCoverEditDialogInit();
-                    ParticipantsBottomSheetDialogInit();
-                    DetailsDialogInit();
-                    if(SHOW_TOUR)
-                    {
-                        //Only check if userimage is uploaded once
-                        CheckIfUserImageExist(CurrentUser);
-
-                    }
-                }
-            }
-
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
 
         participantDatabaseReference = FirebaseDatabase.getInstance().getReference();
         MemoryRecyclerView = (RecyclerView) findViewById(R.id.CloudAlbumRecyclerView);
@@ -381,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
                                                 else if (!TextUtils.isEmpty(image) && !image.equals("default")) {
                                                     progressBar.setVisibility(View.VISIBLE);
                                                     AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
-                                                    Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE).into(UserImage, new Callback() {
+                                                    Picasso.get().load(image).into(UserImage, new Callback() {
                                                         @Override
                                                         public void onSuccess() {
 
@@ -591,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ShowAllAlbums();
+
 
     }
 
@@ -1227,13 +1230,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        ShowAllAlbums();
+    }
 
     private void ShowAllAlbums() {
         MainLoadingProgressBar.setVisibility(View.VISIBLE);
         MemoryRecyclerView.setVisibility(View.GONE);
 
         InDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(CurrentUser).child("Communities");
-        InDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        InDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -1242,15 +1251,35 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String AlbumName = snapshot.child("AlbumTitle").getValue().toString();
-
+                    String AlbumCoverImage="default",PostedByProfilePic="default" ,AlbumDescription="default",User_ID="default",UserName="defaulr";
 
                     final String AlbumKey = snapshot.getKey();
-                    String AlbumCoverImage = snapshot.child("AlbumCoverImage").getValue().toString();
-                    String PostedByProfilePic = snapshot.child("PostedByProfilePic").getValue().toString();
-                    String AlbumDescription = snapshot.child("AlbumDescription").getValue().toString();
+                    if(snapshot.hasChild("AlbumCoverImage"))
+                    {
+                        AlbumCoverImage = snapshot.child("AlbumCoverImage").getValue().toString();
+
+                    }
+                    if(snapshot.hasChild("PostedByProfilePic"))
+                    {
+                        PostedByProfilePic = snapshot.child("PostedByProfilePic").getValue().toString();
+
+                    }
+                    if(snapshot.hasChild("AlbumDescription"))
+                    {
+                        AlbumDescription = snapshot.child("AlbumDescription").getValue().toString();
+
+                    }
+                    if(snapshot.hasChild("User_ID"))
+                    {
+                        User_ID = snapshot.child("User_ID").getValue().toString();
+
+                    }
+                    if(snapshot.hasChild("UserName"))
+                    {
+                        UserName = snapshot.child("UserName").getValue().toString();
+
+                    }
                     String DateandTime = "";
-                    String User_ID = snapshot.child("User_ID").getValue().toString();
-                    String UserName = snapshot.child("UserName").getValue().toString();
                     AlbumModel Album = new AlbumModel(AlbumCoverImage, AlbumDescription, AlbumName, PostedByProfilePic, DateandTime, UserName, User_ID);
                     SearchedAlbums.add(Album);
                     AlbumKeys.add(AlbumKey);
@@ -1878,7 +1907,7 @@ public class MainActivity extends AppCompatActivity {
             SEARCH_IN_PROGRESS = false;
             final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm.isAcceptingText()) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                imm.hideSoftInputFromInputMethod(MainSearchEdittext.getWindowToken(), 0);
             }
             MainSearchEdittext.setText("");
 
@@ -2130,7 +2159,7 @@ public class MainActivity extends AppCompatActivity {
                                     {
 
                                         AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
-                                        Picasso.get().load(Image).networkPolicy(NetworkPolicy.OFFLINE).into(AlbumCoverEditUserImage, new Callback() {
+                                        Picasso.get().load(Image).into(AlbumCoverEditUserImage, new Callback() {
                                             @Override
                                             public void onSuccess() {
 

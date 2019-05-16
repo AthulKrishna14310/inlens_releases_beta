@@ -35,7 +35,7 @@
             android:layout_centerHorizontal="true"
             android:maxLength="17"
             android:text="Participants"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:textSize="15sp" />
 
         <android.support.v7.widget.RecyclerView

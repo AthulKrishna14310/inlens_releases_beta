@@ -18,7 +18,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="70dp"
             android:text="InLens"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:textSize="30sp" />
 
 

@@ -17,13 +17,17 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="50dp"
         android:layout_marginRight="20dp"
-        android:hint="Type your name ">
+        android:hint="Type your name "
+        android:textColor="@color/colorAccent"
+        android:textColorHint="@color/colorAccent">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/NameField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -35,14 +39,18 @@
         android:layout_below="@+id/NameLayout"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorAccent"
+        android:textColorHint="@color/colorAccent">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/EmailField"
             android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type your Email " />
+            android:hint="Type your Email "
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"/>
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
@@ -53,6 +61,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_below="@+id/EmailLayout"
+        android:textColor="@color/colorAccent"
+        android:textColorHint="@color/colorAccent"
         >
 
         <android.support.design.widget.TextInputLayout
@@ -61,7 +71,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="Password"
-            android:layout_weight="20">
+            android:layout_weight="20"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/Password"
@@ -69,7 +81,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/EmailLayout"
                 android:layout_centerHorizontal="true"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -111,7 +125,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="Confirm Password"
-            android:layout_weight="20">
+            android:layout_weight="20"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/RePassword"
@@ -119,7 +135,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/EmailLayout"
                 android:layout_centerHorizontal="true"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -178,6 +196,6 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:text="I have Verified"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="13sp" />
 </RelativeLayout>

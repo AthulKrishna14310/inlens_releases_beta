@@ -3,6 +3,7 @@ package com.integrals.inlens.Activities;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ public class ResetPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
+
         ResetEmail=(EditText)findViewById(R.id.ResetEmailEditText);
         ResetButton=(Button)findViewById(R.id.PasswordResetButton);
         progressBar=(ProgressBar)findViewById(R.id.SendingProgress);
@@ -35,7 +37,7 @@ public class ResetPassword extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                  String Email=ResetEmail.getText().toString().trim();
-                 if(Email==null){
+                 if(TextUtils.isEmpty(Email)){
                      Toast.makeText(getApplicationContext(),"Please provide the registered E-mail above.",Toast.LENGTH_SHORT).show();
                     }else {
                      ResetEmail.setEnabled(false);

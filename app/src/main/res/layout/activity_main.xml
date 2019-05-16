@@ -14,7 +14,8 @@
         android:layout_height="50dp"
         android:elevation="20dp"
         app:cardCornerRadius="0dp"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        >
 
         <RelativeLayout
             android:id="@+id/mainactivity_actionbar_relativelayout"

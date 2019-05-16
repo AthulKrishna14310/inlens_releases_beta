@@ -69,7 +69,7 @@ import com.integrals.inlens.R;
 
         ImageView imageView=(ImageView)view.findViewById(R.id.CloudAlbumCover);
         RequestOptions requestOptions=new RequestOptions()
-                .placeholder(R.drawable.image_avatar)
+                .placeholder(R.drawable.image_avatar_background)
                 .fitCenter();
 
         Glide.with(context)
