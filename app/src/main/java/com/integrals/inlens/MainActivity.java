@@ -1874,7 +1874,23 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if (SEARCH_IN_PROGRESS) {
+
             SEARCH_IN_PROGRESS = false;
+            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm.isAcceptingText()) {
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            }
+            MainSearchEdittext.setText("");
+
+            MainSearchView.clearAnimation();
+            MainSearchView.setAnimation(AnimationUtils.loadAnimation(MainActivity.this,R.anim.fade_out));
+            MainSearchView.getAnimation().start();
+            MainSearchView.setVisibility(View.GONE);
+
+            MainActionbar.clearAnimation();
+            MainActionbar.setAnimation(AnimationUtils.loadAnimation(MainActivity.this,R.anim.fade_in));
+            MainActionbar.getAnimation().start();
+            MainActionbar.setVisibility(View.VISIBLE);
             ShowAllAlbums();
 
         }

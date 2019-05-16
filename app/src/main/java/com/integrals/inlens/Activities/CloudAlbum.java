@@ -1139,7 +1139,7 @@ public class CloudAlbum extends AppCompatActivity {
 
     }
 
-    public void DisplayBottomSheet(String timeStart, String timeEnd, String globalID, String Name, Boolean lastPost , final Activity cloudalbum) {
+    public void DisplayBottomSheet(String timeStart, String timeEnd, String globalID, final String Name, Boolean lastPost , final Activity cloudalbum) {
 
         BlogList=new ArrayList<>();
         BlogListID=new ArrayList<>();
@@ -1246,6 +1246,10 @@ public class CloudAlbum extends AppCompatActivity {
                     if(BlogListID.size()==0)
                     {
                         CloudBottomSheetTitle.setText("No images yet "+ new String(Character.toChars(0x1F605)) );
+                    }
+                    else
+                    {
+                        CloudBottomSheetTitle.setText(Name);
                     }
 
                     gridImageAdapter = new GridImageAdapter( CloudAlbum.this,BlogList,BlogListID,cloudalbum,databaseReferencePhotoList);

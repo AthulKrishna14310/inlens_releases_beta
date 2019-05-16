@@ -49,7 +49,7 @@
                 android:id="@+id/UploadedByUserName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@android:color/transparent"
                 android:text="Created by user"
                 android:layout_gravity="center"
                 android:textAlignment="center"
