@@ -101,7 +101,8 @@ public class NotificationHelper extends ContextWrapper {
                 NotificationManager notificationManager =
                         (NotificationManager)
                                 getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                Intent intent = new Intent(getApplicationContext(), com.integrals.inlens.GridView.MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(),
+                        com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

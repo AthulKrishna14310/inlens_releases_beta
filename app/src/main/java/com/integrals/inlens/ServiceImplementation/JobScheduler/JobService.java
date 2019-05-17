@@ -1,22 +1,29 @@
 package com.integrals.inlens.ServiceImplementation.JobScheduler;
 
+import android.annotation.SuppressLint;
 import android.app.job.JobParameters;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
+import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
+
 
 public class JobService extends android.app.job.JobService {
     private static final String TAG = "MyJob::";
-    boolean isWorking = false;
-    boolean jobCancelled = false;
-
+    private boolean isWorking = false;
+    private boolean jobCancelled = false;
+    private NotificationHelper notificationHelper;
+    private RecentImage        recentImage;
     @Override
     public void onCreate() {
         super.onCreate();
-
-        }
+        notificationHelper=new NotificationHelper(getBaseContext());
+        recentImage=new RecentImage(getApplicationContext());
+    }
 
     // Called by the Android system when it's time to run the job
+    @SuppressLint("StaticFieldLeak")
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         Log.d(TAG, "Job started!");
@@ -38,10 +45,9 @@ public class JobService extends android.app.job.JobService {
 
             @Override
             protected Object doInBackground(Object[] objects) {
-                for(int i=0;i<20;i++){
-                    Log.d("MyJob::","Ongoing::");
-                }
-                return null;
+                 String url=recentImage.recentImagePath();
+                 notificationHelper.notifyRecentImage(url);
+                 return null;
                 }
         }.execute("");
         return isWorking;

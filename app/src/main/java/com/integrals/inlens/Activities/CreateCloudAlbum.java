@@ -6,9 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -30,7 +27,6 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,12 +45,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.encoder.QRCode;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -63,7 +54,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -71,8 +61,6 @@ import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.Helper.JobSchedulerHelper;
 import com.integrals.inlens.MainActivity;
 import com.integrals.inlens.R;
-import com.integrals.inlens.Services.OreoService;
-import com.integrals.inlens.Services.RecentImageService;
 
 
 public class CreateCloudAlbum extends AppCompatActivity {
@@ -475,7 +463,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
             SubmitButton.setEnabled(false);
             if(ImageUri==null)
             {
-                Toast.makeText(CreateCloudAlbum.this,"Cover photo can be added later.",Toast.LENGTH_LONG).show();
                 String pushid = CommunityDatabaseReference.push().getKey();
                 final DatabaseReference CommunityPost = CommunityDatabaseReference.child(pushid);
                 final DatabaseReference NewPost = PostDatabaseReference.child(pushid);
@@ -741,23 +728,13 @@ public class CreateCloudAlbum extends AppCompatActivity {
         SharedPreferences.Editor editor1 = sharedPreferences1.edit();
         editor1.putBoolean("ThisOwner::", true);
         editor1.commit();
-        startService(getApplicationContext(),new Intent(CreateCloudAlbum.this, RecentImageService.class));
+
+        AlbumStartingServices albumStartingServices=
+                new AlbumStartingServices(getApplicationContext());
+        albumStartingServices.initiateJobServices();
 
     }
 
-    ///Do For all process
-    public void startService(Context context, Intent intent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent serviceIntent = new Intent(this, OreoService.class);
-            serviceIntent.putExtra("inputExtra", "Ongoing InLens Recent-Image service.");
-            ContextCompat.startForegroundService(this, serviceIntent);
-            }
-        else
-            {
-                jobSchedulerHelper.startJobScheduler();
-                context.startService(intent);
-            }
-    }
 
 
     @Override
