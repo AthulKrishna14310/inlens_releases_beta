@@ -24,6 +24,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
@@ -158,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
     private String PostKeyForEdit;
     private Activity activity;
     private Dialog ProfileDialog;
-    private Dialog AlbumCoverEditDialog, DetailsDialog;
     private static final int GALLERY_PICK = 1;
     private StorageReference mStorageRef;
     private ProgressBar progressBar;
@@ -166,10 +167,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton ChangeuserImage, CloseProfileDialog;
     private TextView ProfileuserName, ProfileUserEmail;
 
-    private ProgressBar AlbumCoverEditprogressBar;
-    private CircleImageView AlbumCoverEditUserImage;
-    private ImageButton AlbumCoverEditChangeuserImage, AlbumCoverEditCloseProfileDialog;
-    private TextView AlbumCoverEditProfileuserName, AlbumCoverEditProfileUserEmail;
+    private ProgressBar MainBottomSheetAlbumCoverEditprogressBar;
+    private CircleImageView MainBottomSheetAlbumCoverEditUserImage;
+    private ImageButton MainBottomSheetAlbumCoverEditChangeuserImage;
+    private TextView MainBottomSheetAlbumCoverEditDialogHeader;
     private static final int COVER_GALLERY_PICK = 78;
 
     // Static boolean for cover and profile
@@ -177,13 +178,11 @@ public class MainActivity extends AppCompatActivity {
     private static boolean COVER_CHANGE = false, PROFILE_CHANGE = false;
 
     //For All ParticipantsBottomSheet
-    private Dialog ParticpantsBottomSheetDialog, QRCodeDialog;
-    private RecyclerView ParticpantsBottomSheetDialogRecyclerView;
-    private ImageButton ParticpantsBottomSheetDialogCloseBtn;
-    private ProgressBar ParticpantsBottomSheetDialogProgressbar;
+    private Dialog  QRCodeDialog;
+    private RecyclerView MainBottomSheetParticpantsBottomSheetDialogRecyclerView;
 
     //For snackbar about Connectivity Info;
-    private RelativeLayout RootForMainActivity;
+    private CoordinatorLayout RootForMainActivity;
 
     //For Searching
     private static boolean SEARCH_IN_PROGRESS = false;
@@ -215,11 +214,12 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton MainDimBackground;
 
     //for details Dialog
-    private TextView AlbumTitle,
-            AlbumDesc, AlbumOwner,
-            AlbumType, AlbumStartTime,
-            AlbumEndTime, AlbumPostCount, AlbumMemberCount;
+    private TextView MainBottomSheetAlbumTitle,
+            MainBottomSheetAlbumDesc, MainBottomSheetAlbumOwner,
+            MainBottomSheetAlbumType, MainBottomSheetAlbumStartTime,
+            MainBottomSheetAlbumEndTime, MainBottomSheetAlbumPostCount, MainBottomSheetAlbumMemberCount;
     private int PostCount, MemberCount;
+
     private TextView NoAlbumTextView;
 
     private Boolean SHOW_TOUR;
@@ -232,6 +232,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton MainMenuButton , MainSearchButton , MainBackButton;
     private EditText MainSearchEdittext;
     private RelativeLayout MainActionbar , MainSearchView;
+    private BottomSheetBehavior MainCloudAlbumInfoBottomSheetBehavior;
+    private View MainCloudInfoBottomSheetView;
+    String MemberName="";
+    String MemberImage="";
 
 
     public MainActivity() {
@@ -291,6 +295,9 @@ public class MainActivity extends AppCompatActivity {
         MainSearchView = findViewById(R.id.mainactivity_searchview_relativelayout);
         MainBackButton = findViewById(R.id.mainactivity_searchview_backbutton);
         MainSearchEdittext = findViewById(R.id.mainactivity_searchview_edittext);
+
+        MainCloudInfoBottomSheetView = findViewById(R.id.main_bottomsheetview);
+        MainCloudAlbumInfoBottomSheetBehavior = BottomSheetBehavior.from(MainCloudInfoBottomSheetView);
 
         SHOW_TOUR = getIntent().getBooleanExtra("ShowTour",false);
         QRCodeVisible = getIntent().getBooleanExtra("QRCodeVisible", false);
@@ -383,7 +390,6 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                                 else if (!TextUtils.isEmpty(image) && !image.equals("default")) {
                                                     progressBar.setVisibility(View.VISIBLE);
-                                                    AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
                                                     Picasso.get().load(image).into(UserImage, new Callback() {
                                                         @Override
                                                         public void onSuccess() {
@@ -590,10 +596,37 @@ public class MainActivity extends AppCompatActivity {
                     CloseFabs();
                     isOpen = false;
                 }
+                if(MainCloudAlbumInfoBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED ||
+                MainCloudAlbumInfoBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                {
+                    MainCloudAlbumInfoBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
 
             }
         });
 
+
+        MainCloudAlbumInfoBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+               if(newState == BottomSheetBehavior.STATE_HIDDEN)
+               {
+                   MainDimBackground.setVisibility(View.GONE);
+               }
+               else
+               {
+                   MainDimBackground.setVisibility(View.VISIBLE);
+
+               }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+                MainDimBackground.setVisibility(View.VISIBLE);
+
+            }
+        });
 
 
     }
@@ -762,101 +795,36 @@ public class MainActivity extends AppCompatActivity {
 
     private void DetailsDialogInit() {
 
-        DetailsDialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar);
-        DetailsDialog.setCancelable(true);
-        DetailsDialog.setCanceledOnTouchOutside(true);
-        DetailsDialog.setContentView(R.layout.album_details_dialog_layout);
-        DetailsDialog.getWindow().getAttributes().windowAnimations = R.style.BottomUpSlideDialogAnimation;
+        MainBottomSheetAlbumTitle = findViewById(R.id.main_bottomsheet_details_dialog_albumtitle);
+        MainBottomSheetAlbumDesc = findViewById(R.id.main_bottomsheet_details_dialog_albumdesc);
+        MainBottomSheetAlbumOwner = findViewById(R.id.main_bottomsheet_details_dialog_albumowner);
+        MainBottomSheetAlbumType = findViewById(R.id.main_bottomsheet_details_dialog_albumtype);
 
-        Window DetailsDialogwindow = DetailsDialog.getWindow();
-        DetailsDialogwindow.setGravity(Gravity.BOTTOM);
-        DetailsDialogwindow.setLayout(GridLayout.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
-        DetailsDialogwindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        DetailsDialogwindow.setDimAmount(0.50f);
+        MainBottomSheetAlbumStartTime = findViewById(R.id.main_bottomsheet_details_dialog_albumstarttime);
+        MainBottomSheetAlbumEndTime = findViewById(R.id.main_bottomsheet_details_dialog_albumendtime);
 
-        ImageButton DetailsDialogCloseBtn = DetailsDialog.findViewById(R.id.details_dialog_close_btn);
-        DetailsDialogCloseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DetailsDialog.dismiss();
-            }
-        });
-
-        AlbumTitle = DetailsDialog.findViewById(R.id.details_dialog_albumtitle);
-        AlbumDesc = DetailsDialog.findViewById(R.id.details_dialog_albumdesc);
-        AlbumOwner = DetailsDialog.findViewById(R.id.details_dialog_albumowner);
-        AlbumType = DetailsDialog.findViewById(R.id.details_dialog_albumtype);
-
-        AlbumStartTime = DetailsDialog.findViewById(R.id.details_dialog_albumstarttime);
-        AlbumEndTime = DetailsDialog.findViewById(R.id.details_dialog_albumendtime);
-
-        AlbumPostCount = DetailsDialog.findViewById(R.id.details_dialog_albumpostcount);
-        AlbumMemberCount = DetailsDialog.findViewById(R.id.details_dialog_albumparticipantscount);
+        MainBottomSheetAlbumPostCount = findViewById(R.id.main_bottomsheet_details_dialog_albumpostcount);
+        MainBottomSheetAlbumMemberCount = findViewById(R.id.main_bottomsheet_details_dialog_albumparticipantscount);
 
     }
 
     private void ParticipantsBottomSheetDialogInit() {
-        ParticpantsBottomSheetDialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar);
-        ParticpantsBottomSheetDialog.setCancelable(true);
-        ParticpantsBottomSheetDialog.setCanceledOnTouchOutside(true);
-        ParticpantsBottomSheetDialog.setContentView(R.layout.participants_bottomsheet_layout);
-        ParticpantsBottomSheetDialog.getWindow().getAttributes().windowAnimations = R.style.BottomUpSlideDialogAnimation;
 
-        Window ParticpantsBottomSheetDialogwindow = ParticpantsBottomSheetDialog.getWindow();
-        ParticpantsBottomSheetDialogwindow.setGravity(Gravity.BOTTOM);
-        ParticpantsBottomSheetDialogwindow.setLayout(GridLayout.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
-        ParticpantsBottomSheetDialogwindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        ParticpantsBottomSheetDialogwindow.setDimAmount(0.50f);
-
-        ParticpantsBottomSheetDialogRecyclerView = ParticpantsBottomSheetDialog.findViewById(R.id.particpants_bottomsheet_recyclerview);
-        ParticpantsBottomSheetDialogRecyclerView.setHasFixedSize(true);
+        MainBottomSheetParticpantsBottomSheetDialogRecyclerView = findViewById(R.id.main_bottomsheet_particpants_bottomsheet_recyclerview);
+        MainBottomSheetParticpantsBottomSheetDialogRecyclerView.setHasFixedSize(true);
         GridLayoutManager Gridmanager = new GridLayoutManager(MainActivity.this, 3);
-        ParticpantsBottomSheetDialogRecyclerView.setLayoutManager(Gridmanager);
-
-
-        ParticpantsBottomSheetDialogCloseBtn = ParticpantsBottomSheetDialog.findViewById(R.id.particpants_bottomsheet_closebtn);
-        ParticpantsBottomSheetDialogCloseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ParticpantsBottomSheetDialog.dismiss();
-            }
-        });
-
-        ParticpantsBottomSheetDialogProgressbar = ParticpantsBottomSheetDialog.findViewById(R.id.particpants_bottomsheet_progressbar);
+        MainBottomSheetParticpantsBottomSheetDialogRecyclerView.setLayoutManager(Gridmanager);
 
     }
 
     private void AlbumCoverEditDialogInit() {
 
-        AlbumCoverEditDialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar);
-        AlbumCoverEditDialog.setCancelable(true);
-        AlbumCoverEditDialog.setCanceledOnTouchOutside(true);
-        AlbumCoverEditDialog.setContentView(R.layout.custom_profile_dialog);
-        AlbumCoverEditDialog.getWindow().getAttributes().windowAnimations = R.style.BottomUpSlideDialogAnimation;
+        MainBottomSheetAlbumCoverEditDialogHeader = findViewById(R.id.main_bottomsheet_custom_header_dialog_username);
+        MainBottomSheetAlbumCoverEditprogressBar = findViewById(R.id.main_bottomsheet_custom_cover_dialog_progressbar);
+        MainBottomSheetAlbumCoverEditUserImage = findViewById(R.id.main_bottomsheet_custom_cover_dialog_userprofilepic);
+        MainBottomSheetAlbumCoverEditChangeuserImage = findViewById(R.id.main_bottomsheet_custom_cover_dialog_profilechangebtn);
 
-        Window AlbumCoverEditwindow = AlbumCoverEditDialog.getWindow();
-        AlbumCoverEditwindow.setGravity(Gravity.BOTTOM);
-        AlbumCoverEditwindow.setLayout(GridLayout.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
-        AlbumCoverEditwindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        AlbumCoverEditwindow.setDimAmount(0.50f);
-
-        AlbumCoverEditprogressBar = AlbumCoverEditDialog.findViewById(R.id.custom_profile_dialog_progressbar);
-        AlbumCoverEditUserImage = AlbumCoverEditDialog.findViewById(R.id.custom_profile_dialog_userprofilepic);
-        AlbumCoverEditChangeuserImage = AlbumCoverEditDialog.findViewById(R.id.custom_profile_dialog_profilechangebtn);
-        AlbumCoverEditProfileUserEmail = AlbumCoverEditDialog.findViewById(R.id.custom_profile_dialog_useremail);
-        AlbumCoverEditProfileuserName = AlbumCoverEditDialog.findViewById(R.id.custom_profile_dialog_username);
-        AlbumCoverEditCloseProfileDialog = AlbumCoverEditDialog.findViewById(R.id.custom_profile_dialog_closebtn);
-
-        AlbumCoverEditCloseProfileDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlbumCoverEditDialog.dismiss();
-
-            }
-        });
-
-        AlbumCoverEditChangeuserImage.setOnClickListener(new View.OnClickListener() {
+        MainBottomSheetAlbumCoverEditChangeuserImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -1126,8 +1094,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void DisplayAllParticipantsAsBottomSheet(String postKeyForEdit, DatabaseReference getParticipantDatabaseReference) {
 
-        ParticpantsBottomSheetDialog.show();
-
         final Dialog BottomSheetUserDialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar);
         BottomSheetUserDialog.setCancelable(true);
         BottomSheetUserDialog.setCanceledOnTouchOutside(true);
@@ -1142,7 +1108,7 @@ public class MainActivity extends AppCompatActivity {
         BottomSheetUserDialogWindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         BottomSheetUserDialogWindow.setDimAmount(0.75f);
 
-        final ProgressBar progressBar = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_progressbar);
+        final ProgressBar bprogressBar = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_progressbar);
         final CircleImageView UserImage = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_userprofilepic);
         ImageButton ChangeuserImage = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_profilechangebtn);
         ChangeuserImage.setVisibility(View.GONE);
@@ -1158,74 +1124,52 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final List<String> MemberImageList = new ArrayList<>();
+        final List<String> MemberNamesList = new ArrayList<>();
 
-        final FirebaseRecyclerAdapter<Participants, ParticipantsViewHolder> BottomSheetRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Participants, ParticipantsViewHolder>(
-                        Participants.class,
-                        R.layout.member_card,
-                        ParticipantsViewHolder.class,
-                        getParticipantDatabaseReference.child("Communities").child(postKeyForEdit).child("CommunityPhotographer")
-                ) {
+        getParticipantDatabaseReference.child("Communities").child(postKeyForEdit).child("CommunityPhotographer").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    @Override
-                    public int getItemCount() {
-                        return super.getItemCount();
+                MemberImageList.clear();
+                MemberNamesList.clear();
+                MainBottomSheetParticpantsBottomSheetDialogRecyclerView.removeAllViews();
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren() )
+                {
+                    if(snapshot.hasChild("Profile_picture"))
+                    {
+                        MemberImage = snapshot.child("Profile_picture").getValue().toString();
+                    }
+                    else
+                    {
+                        MemberImage = "default";
+                    }
+                    if(snapshot.hasChild("Name"))
+                    {
+                        MemberName = snapshot.child("Name").getValue().toString();
+                    }
+                    else
+                    {
+                        MemberName = "-NA-";
                     }
 
-                    @Override
-                    protected void populateViewHolder(ParticipantsViewHolder viewHolder,
-                                                      final Participants model,
-                                                      int position) {
+                    MemberImageList.add(MemberImage);
+                    MemberNamesList.add(MemberName);
+                }
+
+                ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(MemberImageList,MemberNamesList);
+                MainBottomSheetParticpantsBottomSheetDialogRecyclerView.setAdapter(participantsAdapter);
 
 
-                        viewHolder.setProfile_picture(getApplicationContext(), model.getProfile_picture());
-                        viewHolder.setUserName(model.getName());
+            }
 
-                        viewHolder.InView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                                BottomSheetUserDialog.dismiss();
+            }
+        });
 
-                                ProfileUserEmail.setText(String.format("Email : %s", model.getEmail_ID()));
-
-                                if (!TextUtils.isEmpty(model.getProfile_picture())) {
-                                    RequestOptions requestOptions = new RequestOptions()
-                                            .fitCenter();
-
-                                    Glide.with(MainActivity.this)
-                                            .load(model.getProfile_picture())
-                                            .apply(requestOptions)
-                                            .listener(new RequestListener<Drawable>() {
-                                                @Override
-                                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                    return false;
-                                                }
-
-                                                @Override
-                                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                    return false;
-                                                }
-                                            })
-                                            .into(UserImage);
-                                } else {
-                                    Glide.with(MainActivity.this).load(R.drawable.ic_account_200dp).into(UserImage);
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                                ProfileuserName.setText(model.getName());
-                                BottomSheetUserDialog.show();
-
-
-                            }
-                        });
-
-                    }
-
-                };
-        ParticpantsBottomSheetDialogRecyclerView.setAdapter(BottomSheetRecyclerAdapter);
-        ParticpantsBottomSheetDialogProgressbar.setVisibility(View.GONE);
 
 
     }
@@ -1235,6 +1179,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         ShowAllAlbums();
+        MainCloudAlbumInfoBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
     private void ShowAllAlbums() {
@@ -1635,9 +1580,8 @@ public class MainActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri ImageUri = result.getUri();
-                AlbumCoverEditUserImage.setImageURI(ImageUri);
-                AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
-                AlbumCoverEditDialog.setCancelable(false);
+                MainBottomSheetAlbumCoverEditUserImage.setImageURI(ImageUri);
+                MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
                 UploadCOverPhoto(ImageUri);
             }
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && !COVER_CHANGE && PROFILE_CHANGE) {
@@ -1784,9 +1728,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void UploadCOverPhoto(Uri imageUri) {
+
         StartUpload("Updating Album Cover Image","Please wait until album cover image is updated.");
-        AlbumCoverEditDialog.setCancelable(false);
-        AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
+        MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
         if (!TextUtils.isEmpty(PostKeyForEdit) && imageUri != null) {
 
             StorageReference
@@ -1809,16 +1753,13 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    AlbumCoverEditDialog.setCancelable(true);
                                     FirebaseDatabase.getInstance().getReference()
                                             .child("Communities")
                                             .child(PostKeyForEdit)
                                             .child("AlbumCoverImage")
                                             .setValue(downloadUrl);
-                                    AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
+                                    MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(MainActivity.this, "Successfully changed the Cover-Photo.", Toast.LENGTH_LONG).show();
-                                    AlbumCoverEditDialog.dismiss();
-                                    AlbumCoverEditDialog.show();
 
                                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                                         ImageNotyHelper.cancelUploadDataNotification();
@@ -1828,10 +1769,8 @@ public class MainActivity extends AppCompatActivity {
                                         ImageNotyManager.cancel(503);
                                     }
                                 } else {
-                                    AlbumCoverEditDialog.setCancelable(true);
-                                    AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
+                                    MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
-                                    AlbumCoverEditDialog.dismiss();
 
                                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                                         ImageNotyHelper.cancelUploadDataNotification();
@@ -1844,10 +1783,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        AlbumCoverEditDialog.setCancelable(true);
-                        AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
+                        MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
-                        AlbumCoverEditDialog.dismiss();
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                             ImageNotyHelper.cancelUploadDataNotification();
                         }
@@ -1862,8 +1799,7 @@ public class MainActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    AlbumCoverEditDialog.setCancelable(true);
-                    AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
+                    MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                         ImageNotyHelper.cancelUploadDataNotification();
@@ -1876,8 +1812,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
         } else {
-            AlbumCoverEditDialog.setCancelable(true);
-            AlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
+            MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 ImageNotyHelper.cancelUploadDataNotification();
@@ -1923,6 +1858,10 @@ public class MainActivity extends AppCompatActivity {
             ShowAllAlbums();
 
         }
+        else if(MainCloudAlbumInfoBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED || MainCloudAlbumInfoBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+        {
+            MainCloudAlbumInfoBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
         else if (isOpen)
         {
             CloseFabs();
@@ -1967,17 +1906,7 @@ public class MainActivity extends AppCompatActivity {
                 holder.DetailsAlbumn.setAnimation(AlbumCardClose);
                 holder.DetailsAlbumn.getAnimation().start();
 
-                holder.AlbumCoverEditBtn.clearAnimation();
-                holder.AlbumCoverEditBtn.setAnimation(AlbumCardClose);
-                holder.AlbumCoverEditBtn.getAnimation().start();
-
-                holder.ParticipantsAlbum.clearAnimation();
-                holder.ParticipantsAlbum.setAnimation(AlbumCardClose);
-                holder.ParticipantsAlbum.getAnimation().start();
-
                 holder.DetailsAlbumn.setVisibility(View.INVISIBLE);
-                holder.AlbumCoverEditBtn.setVisibility(View.INVISIBLE);
-                holder.ParticipantsAlbum.setVisibility(View.INVISIBLE);
 
             } else {
 
@@ -1986,17 +1915,8 @@ public class MainActivity extends AppCompatActivity {
                 holder.DetailsAlbumn.setAnimation(AlbumCardOpen);
                 holder.DetailsAlbumn.getAnimation().start();
 
-                holder.AlbumCoverEditBtn.clearAnimation();
-                holder.AlbumCoverEditBtn.setAnimation(AlbumCardOpen);
-                holder.AlbumCoverEditBtn.getAnimation().start();
-
-                holder.ParticipantsAlbum.clearAnimation();
-                holder.ParticipantsAlbum.setAnimation(AlbumCardOpen);
-                holder.ParticipantsAlbum.getAnimation().start();
 
                 holder.DetailsAlbumn.setVisibility(View.VISIBLE);
-                holder.AlbumCoverEditBtn.setVisibility(View.VISIBLE);
-                holder.ParticipantsAlbum.setVisibility(View.VISIBLE);
 
             }
 
@@ -2005,11 +1925,15 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
+
                     CloseFabs();
 
-                    AlbumTitle.setText(String.format("Album Title : %s", AlbumList.get(position).getAlbumTitle()));
-                    AlbumDesc.setText(String.format("Album About : %s", AlbumList.get(position).getAlbumDescription()));
-                    AlbumOwner.setText("Created By : " + AlbumList.get(position).getUserName());
+                    DisplayAllParticipantsAsBottomSheet(AlbumKeyIDs.get(position), FirebaseDatabase.getInstance().getReference());
+
+
+                    MainBottomSheetAlbumTitle.setText(String.format("Album Title : %s", AlbumList.get(position).getAlbumTitle()));
+                    MainBottomSheetAlbumDesc.setText(String.format("Album About : %s", AlbumList.get(position).getAlbumDescription()));
+                    MainBottomSheetAlbumOwner.setText("Created By : " + AlbumList.get(position).getUserName());
 
 
                     CommunityRef.child(AlbumKeyIDs.get(position)).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -2031,30 +1955,30 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
 
-                            AlbumMemberCount.setText(String.format("Total Members : %d", MemberCount));
-                            AlbumPostCount.setText(String.format("Total Situations : %d", PostCount));
+                            MainBottomSheetAlbumMemberCount.setText(String.format("Total Members : %d", MemberCount));
+                            MainBottomSheetAlbumPostCount.setText(String.format("Total Situations : %d", PostCount));
 
                             if (dataSnapshot.hasChild("ActiveIndex")) {
                                 if (dataSnapshot.child("ActiveIndex").getValue().toString().equals("T")) {
                                     if (dataSnapshot.hasChild("AlbumExpiry")) {
                                         String DateEnd = "Event expires on : " + dataSnapshot.child("AlbumExpiry").getValue().toString() + " @ 11:59 PM";
-                                        AlbumEndTime.setText(DateEnd);
+                                        MainBottomSheetAlbumEndTime.setText(DateEnd);
                                     } else {
                                         String DateEnd = "Data not available";
-                                        AlbumEndTime.setText(String.format("Album End Time : %s", DateEnd));
+                                        MainBottomSheetAlbumEndTime.setText(String.format("Album End Time : %s", DateEnd));
                                     }
                                 } else {
                                     if (dataSnapshot.hasChild("AlbumExpiry")) {
                                         String DateEnd = "Event expired on :" + dataSnapshot.child("AlbumExpiry").getValue().toString() + " @ 11:59 PM";
-                                        AlbumEndTime.setText(DateEnd);
+                                        MainBottomSheetAlbumEndTime.setText(DateEnd);
                                     } else {
                                         String DateEnd = "Data not available";
-                                        AlbumEndTime.setText(String.format("Album End Time : %s", DateEnd));
+                                        MainBottomSheetAlbumEndTime.setText(String.format("Album End Time : %s", DateEnd));
                                     }
                                 }
                             } else {
                                 String DateEnd = "Data not available";
-                                AlbumEndTime.setText(String.format("Album End Time : %s", DateEnd));
+                                MainBottomSheetAlbumEndTime.setText(String.format("Album End Time : %s", DateEnd));
                             }
 
 
@@ -2066,21 +1990,21 @@ public class MainActivity extends AppCompatActivity {
                                 Date date = new Date(time);
                                 String dateformat = DateFormat.format("dd-MM-yyyy", date).toString();
                                 String DateandTime = "Event started on : " + dateformat + " @ " + timesubstring;
-                                AlbumStartTime.setText(DateandTime);
+                                MainBottomSheetAlbumStartTime.setText(DateandTime);
                             } else if (dataSnapshot.hasChild("Time")) {
                                 String DateandTime = dataSnapshot.child("Time").getValue().toString();
-                                AlbumStartTime.setText(DateandTime);
+                                MainBottomSheetAlbumStartTime.setText(DateandTime);
                             } else {
                                 String DateEnd = "Data not available";
-                                AlbumEndTime.setText(String.format("Album Start Time : %s", DateEnd));
+                                MainBottomSheetAlbumEndTime.setText(String.format("Album Start Time : %s", DateEnd));
                             }
 
                             if (dataSnapshot.hasChild("AlbumType")) {
                                 String EventType = dataSnapshot.child("AlbumType").getValue().toString();
-                                AlbumType.setText("Event Type : " + EventType);
+                                MainBottomSheetAlbumType.setText("Event Type : " + EventType);
                             } else {
                                 String EventType = "Data not available";
-                                AlbumType.setText("Event Type : " + EventType);
+                                MainBottomSheetAlbumType.setText("Event Type : " + EventType);
                             }
                         }
 
@@ -2090,50 +2014,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    DetailsDialog.show();
-
-                }
-            });
-
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    CloseFabs();
-
-                    final String PostKey = AlbumKeyIDs.get(position);
-                    if (!TextUtils.isEmpty(PostKey)) {
-                        try {
-
-                            SharedPreferences.Editor AlbumEditor = AlbumClickDetails.edit();
-                            AlbumEditor.putInt("last_clicked_position", position);
-                            AlbumEditor.apply();
-
-                            startActivity(new Intent(MainActivity.this, CloudAlbum.class)
-                                    .putExtra("AlbumName", AlbumList.get(position).getAlbumTitle())
-                                    .putExtra("GlobalID::", PostKey)
-                                    .putExtra("LocalID::", PostKey)
-                                    .putExtra("UserID::", CurrentUser));
-
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                }
-            });
-
-            holder.AlbumCoverEditBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    CloseFabs();
-                    AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
-                    AlbumCoverEditProfileuserName.setText(AlbumList.get(position).getAlbumTitle());
-                    AlbumCoverEditProfileUserEmail.setTextSize(13);
-                    AlbumCoverEditProfileUserEmail.setText(String.format("Change Cover for the album \" %s \"", AlbumList.get(position).getAlbumTitle()));
+                    MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
+                    MainBottomSheetAlbumCoverEditDialogHeader.setText(AlbumList.get(position).getAlbumTitle());
 
                     PostKeyForEdit = AlbumKeyIDs.get(position);
                     FirebaseDatabase.getInstance().getReference().child("Communities")
@@ -2151,26 +2033,26 @@ public class MainActivity extends AppCompatActivity {
                                         Glide.with(getApplicationContext())
                                                 .load(R.drawable.image_avatar)
                                                 .thumbnail(0.1f)
-                                                .into(AlbumCoverEditUserImage);
-                                        AlbumCoverEditprogressBar.setVisibility(View.GONE);
+                                                .into(MainBottomSheetAlbumCoverEditUserImage);
+                                        MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.GONE);
 
                                     }
                                     else if(!TextUtils.isEmpty(Image) && !Image.equals("default"))
                                     {
 
-                                        AlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
-                                        Picasso.get().load(Image).into(AlbumCoverEditUserImage, new Callback() {
+                                        MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
+                                        Picasso.get().load(Image).into(MainBottomSheetAlbumCoverEditUserImage, new Callback() {
                                             @Override
                                             public void onSuccess() {
 
-                                                AlbumCoverEditprogressBar.setVisibility(View.GONE);
+                                                MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.GONE);
 
                                             }
 
                                             @Override
                                             public void onError(Exception e) {
                                                 Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
-                                                AlbumCoverEditprogressBar.setVisibility(View.GONE);
+                                                MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.GONE);
 
                                             }
                                         });
@@ -2211,8 +2093,8 @@ public class MainActivity extends AppCompatActivity {
                                         Glide.with(getApplicationContext())
                                                 .load(R.drawable.image_avatar)
                                                 .thumbnail(0.1f)
-                                                .into(AlbumCoverEditUserImage);
-                                        AlbumCoverEditprogressBar.setVisibility(View.GONE);
+                                                .into(MainBottomSheetAlbumCoverEditUserImage);
+                                        MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.GONE);
                                         Toast.makeText(getApplicationContext(),"Loading failed.",Toast.LENGTH_SHORT).show();
 
                                     }
@@ -2225,25 +2107,43 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
                             });
-                    AlbumCoverEditDialog.show();
 
+
+                    MainCloudAlbumInfoBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
                 }
             });
 
-            // more participants
 
-            holder.ParticipantsAlbum.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
 
                     CloseFabs();
-                    ParticpantsBottomSheetDialogProgressbar.setVisibility(View.VISIBLE);
-                    PostKeyForEdit = AlbumKeyIDs.get(position);
-                    DisplayAllParticipantsAsBottomSheet(PostKeyForEdit, FirebaseDatabase.getInstance().getReference());
+
+                    final String PostKey = AlbumKeyIDs.get(position);
+                    if (!TextUtils.isEmpty(PostKey)) {
+                        try {
+
+                            SharedPreferences.Editor AlbumEditor = AlbumClickDetails.edit();
+                            AlbumEditor.putInt("last_clicked_position", position);
+                            AlbumEditor.apply();
+
+                            startActivity(new Intent(MainActivity.this, CloudAlbum.class)
+                                    .putExtra("AlbumName", AlbumList.get(position).getAlbumTitle())
+                                    .putExtra("GlobalID::", PostKey)
+                                    .putExtra("LocalID::", PostKey)
+                                    .putExtra("UserID::", CurrentUser));
+
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
 
                 }
             });
+
 
             MainLoadingProgressBar.setVisibility(View.INVISIBLE);
             MemoryRecyclerView.setVisibility(View.VISIBLE);
@@ -2339,6 +2239,52 @@ public class MainActivity extends AppCompatActivity {
         return "https://inlens.page.link/?link=https://integrals.inlens.in/comid=" + CommunityID + "/&apn=com.integrals.inlens";
     }
 
+    private class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapter.ParticipantsViewHolder> {
+
+        List<String> ImagesList;
+        List<String> NamesList;
+
+        public ParticipantsAdapter(List<String> imagesList, List<String> namesList) {
+            ImagesList = imagesList;
+            NamesList = namesList;
+        }
+
+        @NonNull
+        @Override
+        public ParticipantsAdapter.ParticipantsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.member_card,parent,false);
+            return new ParticipantsAdapter.ParticipantsViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ParticipantsAdapter.ParticipantsViewHolder holder, int position) {
+
+            holder.PName.setText(NamesList.get(position));
+
+            RequestOptions rq = new RequestOptions().placeholder(R.drawable.image_avatar_background);
+            Glide.with(getApplicationContext()).load(ImagesList.get(position)).apply(rq).into(holder.PImage);
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return ImagesList.size();
+        }
+
+        public class ParticipantsViewHolder extends RecyclerView.ViewHolder {
+
+            CircleImageView PImage;
+            TextView PName;
+
+            public ParticipantsViewHolder(View itemView) {
+                super(itemView);
+
+                PImage = itemView.findViewById(R.id.participants_profile_pic);
+                PName = itemView.findViewById(R.id.participants_username);
+            }
+        }
+    }
 }
 
 

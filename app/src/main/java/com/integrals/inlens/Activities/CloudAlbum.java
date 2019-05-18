@@ -666,6 +666,7 @@ public class CloudAlbum extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        CloudBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

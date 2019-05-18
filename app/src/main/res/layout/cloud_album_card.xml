@@ -85,28 +85,10 @@
                     android:id="@+id/album_details_btn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_info_final_main_menu"
+                    android:src="@drawable/ic_info_final_albumviewholder"
                     android:visibility="invisible" />
-
-                <ImageButton
-                    android:id="@+id/album_participants_btn"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_participants_album_final"
-                    android:visibility="invisible" />
-
-                <ImageButton
-                    android:id="@+id/album_changecover_btn"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_edit_black_final"
-                    android:visibility="invisible" />
-
 
             </LinearLayout>
 

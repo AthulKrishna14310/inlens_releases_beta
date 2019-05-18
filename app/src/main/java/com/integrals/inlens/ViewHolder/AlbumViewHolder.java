@@ -47,15 +47,13 @@ import com.integrals.inlens.R;
 
     private View view;
     public Dialog UserDialog;
-    public ImageButton ParticipantsAlbum,AlbumCoverEditBtn,DetailsAlbumn;
+    public ImageButton DetailsAlbumn;
     public LinearLayout AlbumContainer;
     public ProgressBar MainAlbumProgressbar;
 
     public AlbumViewHolder(View ItemView) {
         super(ItemView);
         view=ItemView;
-        AlbumCoverEditBtn = view.findViewById(R.id.album_changecover_btn);
-        ParticipantsAlbum = view.findViewById(R.id.album_participants_btn);
         DetailsAlbumn = view.findViewById(R.id.album_details_btn);
         AlbumContainer = view.findViewById(R.id.album_card_button_container);
         MainAlbumProgressbar = view.findViewById(R.id.main_album_progressbar);
