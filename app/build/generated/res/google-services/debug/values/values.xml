@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">140518233719-1g133m9sppnjvj9dee6usg7l7nrls3sa.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://inlens-f0ce2.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">140518233719</string>
+    <string name="google_api_key" translatable="false">AIzaSyAiTEyqDOSY-eVOhCliR6jwJ9wCL_4SMPo</string>
+    <string name="google_app_id" translatable="false">1:140518233719:android:910d8063e6c2dca6</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAiTEyqDOSY-eVOhCliR6jwJ9wCL_4SMPo</string>
+    <string name="google_storage_bucket" translatable="false">inlens-f0ce2.appspot.com</string>
+    <string name="project_id" translatable="false">inlens-f0ce2</string>
+</resources>

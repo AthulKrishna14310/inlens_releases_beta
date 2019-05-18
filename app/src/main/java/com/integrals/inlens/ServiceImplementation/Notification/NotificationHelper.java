@@ -101,7 +101,8 @@ public class NotificationHelper extends ContextWrapper {
                 NotificationManager notificationManager =
                         (NotificationManager)
                                 getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                Intent intent = new Intent(getApplicationContext(), com.integrals.inlens.GridView.MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(),
+                        com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -116,7 +117,7 @@ public class NotificationHelper extends ContextWrapper {
                                         .setWhen(System.currentTimeMillis())
                                         .setSmallIcon(R.drawable.inlens_logo_m)
                                         .setLargeIcon(logoBitmap)
-                                        .setPriority(Notification.PRIORITY_MAX);
+                                        .setPriority(Notification.PRIORITY_DEFAULT);
                 builder.setContentIntent(pendingIntent);
                 notificationManager.notify(0, builder.build());
 
@@ -129,6 +130,54 @@ public class NotificationHelper extends ContextWrapper {
         }
 
     }
+
+
+    public void notifyRecentImageAlert(String imageLocation)
+    {
+        try {
+            generateNotificationBitmap(imageLocation);
+            remoteViews = new RemoteViews(getPackageName(), R.layout.notification_layout);
+            remoteViews.setImageViewBitmap(R.id.UploadImageViewNotification,recentImageBitmap);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Notification.Builder builder = this.builderNotificationForRecentImageOreo();
+                builder.setOnlyAlertOnce(false);
+                this.getNotificationManager().notify(7907, builder.build());
+            }else{
+                NotificationManager notificationManager =
+                        (NotificationManager)
+                                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                Intent intent = new Intent(getApplicationContext(),
+                        com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                NotificationCompat.Builder builder =
+                        (NotificationCompat.Builder)
+                                new NotificationCompat.Builder(getApplicationContext())
+                                        .setContentTitle("New image detected")
+                                        .setContentText("Inlens has detected a new image. " +
+                                                "Expand to get more info.")
+                                        .setDefaults(Notification.DEFAULT_ALL)
+                                        .setCustomBigContentView(remoteViews)
+                                        .setWhen(System.currentTimeMillis())
+                                        .setSmallIcon(R.drawable.inlens_logo_m)
+                                        .setLargeIcon(logoBitmap)
+                                        .setPriority(Notification.PRIORITY_MAX);
+                builder.setContentIntent(pendingIntent);
+                notificationManager.notify(0, builder.build());
+
+
+            }
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            Log.d("InLens","No recent image found");
+        }
+
+    }
+
+
+
 
     private void generateNotificationBitmap(String imageLocation) {
         File imageFile=new File(imageLocation);

@@ -1,0 +1,4 @@
+#Sat May 18 10:46:07 IST 2019
+base.0=/home/ej/AndroidStudioProjects/inlens_releases_beta/app/build/intermediates/transforms/dexMerger/debug/8
+path.0=classes.dex
+renamed.0=classes.dex
