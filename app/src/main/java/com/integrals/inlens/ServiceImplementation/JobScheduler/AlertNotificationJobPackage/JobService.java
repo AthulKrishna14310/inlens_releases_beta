@@ -1,4 +1,4 @@
-package com.integrals.inlens.ServiceImplementation.JobScheduler;
+package com.integrals.inlens.ServiceImplementation.JobScheduler.AlertNotificationJobPackage;
 
 import android.app.job.JobParameters;
 import android.util.Log;
@@ -25,6 +25,8 @@ public class JobService extends android.app.job.JobService {
         Log.d(TAG, "Job started!");
         isWorking = true;
         String url=recentImage.recentImagePath();
+        notificationHelper.cancelNotificationRecentImage();
+        notificationHelper.cancelUploadDataNotification();
         notificationHelper.notifyRecentImage(url);
         return isWorking;
     }

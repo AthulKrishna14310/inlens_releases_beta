@@ -23,14 +23,12 @@ public void initiateJobInfo(){
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         jobInfo = new JobInfo.Builder(12, componentName)
-                .setRequiresCharging(true)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPersisted(true)
                 .setPeriodic(900000)
                 .build();
     }else{
         jobInfo = new JobInfo.Builder(12, componentName)
-                .setRequiresCharging(true)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPersisted(true)
                 .setPeriodic(90000)
