@@ -38,7 +38,6 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -59,8 +58,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.integrals.inlens.Helper.CurrentDatabase;
-import com.integrals.inlens.Helper.PhotoListHelper;
-import com.integrals.inlens.Helper.ProfileDilaogHelper;
 import com.integrals.inlens.Models.Blog;
 import com.integrals.inlens.Models.SituationModel;
 import com.integrals.inlens.R;
@@ -115,14 +112,6 @@ public class CloudAlbum extends AppCompatActivity {
     private TextView textView;
     private Button InviteLinkButton;
     private Dialog QRCodeDialog;
-    private PhotoListHelper photoListHelper;
-
-
-    private Dialog mBottomSheetDialog;
-    private RecyclerView mBottomSheetDialogRecyclerView;
-    private ImageButton mBottomSheetDialogCloseBtn;
-    private TextView mBottomSheetDialogTitle;
-    private ProgressBar mBottomSheetDialogProgressbar;
 
     //For Snackbar
     private CoordinatorLayout RootForCloudAlbum;

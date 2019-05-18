@@ -9,6 +9,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+/*
+*
+*
+*
+* DO NOT DELETE THIS CLASS
+* ELSON JOSE
+*
+*
+*
+*
+* */
+
 public class PreOperationCheck
 {
     DatabaseReference databaseReference;
