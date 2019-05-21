@@ -3,6 +3,8 @@ package com.integrals.inlens.ServiceImplementation.InLensGallery;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +17,7 @@ import com.integrals.inlens.R;
 import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
 import com.integrals.inlens.ServiceImplementation.JobScheduler.JobHelper;
 import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
+import com.integrals.inlens.Services.RecentImageService;
 import com.vistrav.ask.Ask;
 
 import java.util.List;
@@ -26,8 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private Activity activity;
     private RecyclerView recyclerView;
     List<String> mFiles;
-    // Test Implementation
-    private JobHelper jobHelper;
+
     private NotificationHelper notificationHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +41,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setHasFixedSize(true);
 
-
-          // media file or
-//        List<String> mFiles = FileUtil.findImageFileInDirectory(DIRECTORY, new String[]{"png", "jpg"}); // device file
-
-        //for test implementation
 
     }
 
@@ -96,9 +93,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        jobHelper=new JobHelper(getApplicationContext());
-        jobHelper.initiateJobInfo();
-        jobHelper.scheduleJob();
+
 
     }
 
@@ -117,10 +112,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        notificationHelper=new NotificationHelper(getBaseContext());
-        RecentImage recentImage=new RecentImage(getApplicationContext());
-        notificationHelper.notifyRecentImage(recentImage.recentImagePath());
 
+
+
+        Boolean Default = false;
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("UsingCommunity::", Default) == true) {
+            notificationHelper=new NotificationHelper(getBaseContext());
+            RecentImage recentImage=new RecentImage(getApplicationContext());
+            notificationHelper.notifyRecentImage(recentImage.recentImagePath());
+
+        }
 
     }
 }

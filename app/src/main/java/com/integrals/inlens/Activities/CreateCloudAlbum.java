@@ -232,7 +232,30 @@ public class CreateCloudAlbum extends AppCompatActivity {
             public void onClick(View v) {
                 if(EventTypeSet && AlbumDateSet)
                 {
+
+
+
+
+
                     PostingStarts();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 }
                 else
@@ -527,9 +550,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
                                                 SharedPreferences.Editor  AlbumEditor = AlbumClickDetails.edit();
                                                 AlbumEditor.putInt("last_clicked_position",0);
                                                 AlbumEditor.apply();
-                                                startActivity(new Intent(CreateCloudAlbum.this,MainActivity.class).putExtra("QRCodeVisible",true));
-                                                overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
-                                                finish();
 
                                             }
 
