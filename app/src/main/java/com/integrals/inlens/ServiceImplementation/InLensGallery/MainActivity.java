@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
 
-        notificationHelper=new NotificationHelper(getBaseContext());
-        RecentImage recentImage=new RecentImage(getApplicationContext());
-        notificationHelper.notifyRecentImage(recentImage.recentImagePath());
           // media file or
 //        List<String> mFiles = FileUtil.findImageFileInDirectory(DIRECTORY, new String[]{"png", "jpg"}); // device file
 
@@ -117,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        notificationHelper=new NotificationHelper(getBaseContext());
+        RecentImage recentImage=new RecentImage(getApplicationContext());
+        notificationHelper.notifyRecentImage(recentImage.recentImagePath());
 
 
+    }
 }

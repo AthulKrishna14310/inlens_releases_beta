@@ -24,6 +24,7 @@ public class JobService extends android.app.job.JobService {
     public boolean onStartJob(JobParameters jobParameters) {
         Log.d(TAG, "Job started!");
         isWorking = true;
+
         String url=recentImage.recentImagePath();
         notificationHelper.notifyRecentImage(url);
         return isWorking;

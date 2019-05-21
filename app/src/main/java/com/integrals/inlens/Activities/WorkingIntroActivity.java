@@ -14,13 +14,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
-import com.integrals.inlens.Fragments.IntroSlide1Fragment;
-import com.integrals.inlens.Fragments.IntroSlide2Fragment;
-import com.integrals.inlens.Fragments.IntroSlide3Fragment;
-import com.integrals.inlens.Fragments.IntroSlide4Fragment;
+
 import com.integrals.inlens.MainActivity;
 import com.integrals.inlens.R;
-import com.squareup.picasso.Callback;
+
 import com.squareup.picasso.Picasso;
 
 public class WorkingIntroActivity extends AppCompatActivity {

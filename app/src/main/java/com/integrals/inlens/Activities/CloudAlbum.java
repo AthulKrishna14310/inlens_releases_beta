@@ -1118,7 +1118,7 @@ public class CloudAlbum extends AppCompatActivity {
 
             public SituationViewHolder(View itemView) {
                 super(itemView);
-                Name = itemView.findViewById(R.id.createdby);
+
                 EditButton =  itemView.findViewById(R.id.EditSituationCard);
                 Time = itemView.findViewById(R.id.SituationTimeCL);
                 Title = itemView.findViewById(R.id.SituationNametextViewCloud_Layout);

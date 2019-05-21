@@ -9,18 +9,20 @@ import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelpe
 public class AlbumStartingServices {
 private JobHelper jobHelper;
 private Context context;
-private com.integrals.inlens.ServiceImplementation.JobScheduler.AlertNotificationJobPackage.JobHelper jobHelperAlert;
+private com.integrals.inlens.ServiceImplementation.
+        JobScheduler.AlertNotificationJobPackage.JobHelper jobHelperAlert;
+private    NotificationHelper notificationHelper;
 
     public AlbumStartingServices(Context context) {
         this.context = context;
         this.jobHelper=new JobHelper(context);
         this.jobHelperAlert=
-                new com.integrals.inlens.ServiceImplementation.JobScheduler.AlertNotificationJobPackage.JobHelper(context);
-
+                new com.integrals.inlens.ServiceImplementation.JobScheduler.
+                        AlertNotificationJobPackage.JobHelper(context);
+        notificationHelper=new NotificationHelper(context);
     }
 
     public void intiateNotificationAtStart(){
-        NotificationHelper notificationHelper=new NotificationHelper(context);
         RecentImage recentImage=new RecentImage(context);
         notificationHelper.notifyRecentImageAlert(recentImage.recentImagePath());
     }

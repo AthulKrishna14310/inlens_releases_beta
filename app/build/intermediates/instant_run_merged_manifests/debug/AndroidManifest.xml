@@ -84,7 +84,7 @@
         <activity
             android:name="com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/CalenderTheme" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
@@ -172,6 +172,9 @@
         <service android:name="com.integrals.inlens.ServiceImplementation.Service.UploadService" />
         <service
             android:name="com.integrals.inlens.ServiceImplementation.JobScheduler.JobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name="com.integrals.inlens.ServiceImplementation.JobScheduler.AlertNotificationJobPackage.JobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity

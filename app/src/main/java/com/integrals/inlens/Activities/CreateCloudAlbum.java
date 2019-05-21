@@ -99,14 +99,16 @@ public class CreateCloudAlbum extends AppCompatActivity {
     private JobSchedulerHelper                 jobSchedulerHelper;
     private ImageButton CreateCloudAlbumBackButton;
     private Boolean EventTypeSet = false ,AlbumDateSet = false;
+    private AlbumStartingServices albumStartingServices;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_cloud_album);
 
         EventDialogInit();
-        jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
-        InAuthentication = FirebaseAuth.getInstance();
+         albumStartingServices= new AlbumStartingServices(getApplicationContext());
+         jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
+         InAuthentication = FirebaseAuth.getInstance();
         InUser = InAuthentication.getCurrentUser();
         CommunityDatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Communities");
@@ -663,8 +665,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
                                     SharedPreferences.Editor  AlbumEditor = AlbumClickDetails.edit();
                                     AlbumEditor.putInt("last_clicked_position",0);
                                     AlbumEditor.apply();
-                                    startActivity(new Intent(CreateCloudAlbum.this,MainActivity.class).putExtra("QRCodeVisible",true));
-                                    overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
                                     finish();
 
                                 }
@@ -729,10 +729,8 @@ public class CreateCloudAlbum extends AppCompatActivity {
         editor1.putBoolean("ThisOwner::", true);
         editor1.commit();
 
-        AlbumStartingServices albumStartingServices=
-                new AlbumStartingServices(getApplicationContext());
         albumStartingServices.initiateJobServices();
-
+        albumStartingServices.intiateNotificationAtStart();
     }
 
 

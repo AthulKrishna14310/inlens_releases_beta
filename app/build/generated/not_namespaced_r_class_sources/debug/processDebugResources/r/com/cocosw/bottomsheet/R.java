@@ -20,21 +20,21 @@ public final class R {
     public static final class attr {
         private attr() {}
 
-        public static final int bs_bottomSheetStyle = 0x7f040042;
-        public static final int bs_closeDrawable = 0x7f040043;
-        public static final int bs_collapseListIcons = 0x7f040044;
-        public static final int bs_dialogBackground = 0x7f040045;
-        public static final int bs_dividerColor = 0x7f040046;
-        public static final int bs_gridItemLayout = 0x7f040047;
-        public static final int bs_gridItemTitleTextAppearance = 0x7f040048;
-        public static final int bs_headerLayout = 0x7f040049;
-        public static final int bs_listItemLayout = 0x7f04004a;
-        public static final int bs_listItemTitleTextAppearance = 0x7f04004b;
-        public static final int bs_listStyle = 0x7f04004c;
-        public static final int bs_moreDrawable = 0x7f04004d;
-        public static final int bs_moreText = 0x7f04004e;
-        public static final int bs_numColumns = 0x7f04004f;
-        public static final int bs_titleTextAppearance = 0x7f040050;
+        public static final int bs_bottomSheetStyle = 0x7f040044;
+        public static final int bs_closeDrawable = 0x7f040045;
+        public static final int bs_collapseListIcons = 0x7f040046;
+        public static final int bs_dialogBackground = 0x7f040047;
+        public static final int bs_dividerColor = 0x7f040048;
+        public static final int bs_gridItemLayout = 0x7f040049;
+        public static final int bs_gridItemTitleTextAppearance = 0x7f04004a;
+        public static final int bs_headerLayout = 0x7f04004b;
+        public static final int bs_listItemLayout = 0x7f04004c;
+        public static final int bs_listItemTitleTextAppearance = 0x7f04004d;
+        public static final int bs_listStyle = 0x7f04004e;
+        public static final int bs_moreDrawable = 0x7f04004f;
+        public static final int bs_moreText = 0x7f040050;
+        public static final int bs_numColumns = 0x7f040051;
+        public static final int bs_titleTextAppearance = 0x7f040052;
     }
     public static final class color {
         private color() {}
@@ -70,8 +70,8 @@ public final class R {
         public static final int bs_list_title = 0x7f0a0086;
         public static final int bs_main = 0x7f0a0087;
         public static final int bs_more = 0x7f0a0088;
-        public static final int header = 0x7f0a00f8;
-        public static final int headerlayout = 0x7f0a00f9;
+        public static final int header = 0x7f0a00f0;
+        public static final int headerlayout = 0x7f0a00f1;
     }
     public static final class integer {
         private integer() {}
@@ -84,11 +84,11 @@ public final class R {
     public static final class layout {
         private layout() {}
 
-        public static final int bottom_sheet_dialog = 0x7f0c002d;
-        public static final int bs_grid_entry = 0x7f0c002e;
-        public static final int bs_header = 0x7f0c002f;
-        public static final int bs_list_divider = 0x7f0c0030;
-        public static final int bs_list_entry = 0x7f0c0031;
+        public static final int bottom_sheet_dialog = 0x7f0c002c;
+        public static final int bs_grid_entry = 0x7f0c002d;
+        public static final int bs_header = 0x7f0c002e;
+        public static final int bs_list_divider = 0x7f0c002f;
+        public static final int bs_list_entry = 0x7f0c0030;
     }
     public static final class string {
         private string() {}
@@ -124,7 +124,7 @@ public final class R {
     public static final class styleable {
         private styleable() {}
 
-        public static final int[] BottomSheet = { 0x7f040042, 0x7f040043, 0x7f040044, 0x7f040045, 0x7f040046, 0x7f040047, 0x7f040048, 0x7f040049, 0x7f04004a, 0x7f04004b, 0x7f04004c, 0x7f04004d, 0x7f04004e, 0x7f04004f, 0x7f040050 };
+        public static final int[] BottomSheet = { 0x7f040044, 0x7f040045, 0x7f040046, 0x7f040047, 0x7f040048, 0x7f040049, 0x7f04004a, 0x7f04004b, 0x7f04004c, 0x7f04004d, 0x7f04004e, 0x7f04004f, 0x7f040050, 0x7f040051, 0x7f040052 };
         public static final int BottomSheet_bs_bottomSheetStyle = 0;
         public static final int BottomSheet_bs_closeDrawable = 1;
         public static final int BottomSheet_bs_collapseListIcons = 2;
