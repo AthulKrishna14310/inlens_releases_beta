@@ -3,7 +3,6 @@ package com.integrals.inlens.ServiceImplementation.InLensGallery;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,12 +11,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
+
 import com.integrals.inlens.Helper.CurrentDatabase;
+import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.R;
 import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
-import com.integrals.inlens.ServiceImplementation.JobScheduler.JobHelper;
 import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
-import com.integrals.inlens.Services.RecentImageService;
 import com.vistrav.ask.Ask;
 
 import java.util.List;
@@ -26,11 +26,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private final String DIRECTORY = Environment.getExternalStorageDirectory().toString();
-    private Activity activity;
+    private Activity     activity;
     private RecyclerView recyclerView;
-    List<String> mFiles;
-
+    private List<String> mFiles;
     private NotificationHelper notificationHelper;
+    private DatabaseOperations databaseOperations;
+    private GalleryAdapter galleryAdapter;
+    private List<String> mTimes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setHasFixedSize(true);
-
+        databaseOperations=new DatabaseOperations(getApplicationContext());
 
     }
 
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 protected Object doInBackground(Object[] objects) {
                     mFiles = FileUtil.findMediaFiles(getApplicationContext());
+                    mTimes=FileUtil.getTimeList();
                     return null;
                 }
 
@@ -74,13 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 protected void onPostExecute(Object o) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            recyclerView.setAdapter(new GalleryAdapter(activity, mFiles));
-                        }
-                    });
-
+                    galleryAdapter=new GalleryAdapter(activity,mFiles,mTimes);
+                    recyclerView.setAdapter(galleryAdapter);
                 }
             }.execute();
         }else{
@@ -92,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
 
     }
 

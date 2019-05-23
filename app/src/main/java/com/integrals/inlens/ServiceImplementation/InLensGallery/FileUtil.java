@@ -19,28 +19,36 @@ import java.util.List;
 import java.util.Vector;
 
 class FileUtil {
-    private static int count;
+
+	private static int count;
     private static ContentCheck contentCheck;
     private static List<String> fileList;
     private static  Cursor cursor;
     private static String[] arrPath;
     private static String requiredDate;
     private static String albumExpiry;
+    private static String time;
+    private static List<String> timeList;
+    private static String replacetime1,replacetime2;
     public static List<String> findMediaFiles(Context context) {
 
 		 fileList = new ArrayList<>();
+		 timeList=new ArrayList<>();
 		 final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID,MediaStore.Images.Media.DATE_ADDED };
 		 final String orderBy = MediaStore.Images.Media._ID;
 		 cursor = context.getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
 				null, orderBy);
 
-        contentCheck=new ContentCheck("",context);
-		CurrentDatabase currentDatabase=new CurrentDatabase(context,"",null,1);
-		albumExpiry=currentDatabase.GetAlbumExpiry();
-	    if (cursor != null) {
+		 contentCheck=new ContentCheck("",context);
+
+		 CurrentDatabase currentDatabase=new CurrentDatabase(context,"",null,1);
+		 albumExpiry=currentDatabase.GetAlbumExpiry();
+
+		 if (cursor != null) {
 			 count = cursor.getCount();
 			 arrPath = new String[count];
+
 			for (int i = (count-1); i >0; i--) {
 				cursor.moveToPosition(i);
 				int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
@@ -48,14 +56,18 @@ class FileUtil {
 				if(contentCheck.getImageAddedDate(arrPath[i])==null){
                 	continue;
 				}
-
+                time=contentCheck.getImageAddedDate(arrPath[i]);
 				requiredDate=contentCheck.getImageAddedDate(arrPath[i]).substring(8,10)+"-"
 						+contentCheck.getImageAddedDate(arrPath[i]).substring(5,7)+"-"+
 				contentCheck.getImageAddedDate(arrPath[i]).substring(0,4)  ;
 
+
                 if(contentCheck.isImageDateAfterAlbumExpiryDate(requiredDate,albumExpiry)==true){
-					Log.d("Date:", "date_modified::" + requiredDate);
-					fileList.add(arrPath[i]);
+                	 replacetime1=time.replaceAll(":","-");
+					 replacetime2=replacetime1.replaceAll(" ","T");
+					 Log.d("Date:", "time::" + replacetime2);
+					 fileList.add(arrPath[i]);
+					 timeList.add(replacetime2);
 
 				}else {
 				break;
@@ -125,5 +137,11 @@ class FileUtil {
 	}
 
 
+	public static List<String> getTimeList() {
+		return timeList;
+	}
 
+	public static void setTimeList(List<String> timeList) {
+		FileUtil.timeList = timeList;
+	}
 }

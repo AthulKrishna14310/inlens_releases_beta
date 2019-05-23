@@ -19,10 +19,12 @@ public class GalleryAdapter extends
 
     private final List<String> mFileList;
     private final Activity mActivity;
+    private final List<String> mTimeList;
 
-    public GalleryAdapter(Activity activity, List<String> fileList) {
-        mActivity = activity;
-        mFileList = fileList;
+    public GalleryAdapter(Activity activity, List<String> fileList,List<String> mTimeList) {
+        this.mActivity = activity;
+        this.mFileList = fileList;
+        this.mTimeList=mTimeList;
     }
 
     @Override
