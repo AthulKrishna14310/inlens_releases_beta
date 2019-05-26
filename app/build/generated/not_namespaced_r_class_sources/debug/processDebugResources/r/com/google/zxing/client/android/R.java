@@ -76,7 +76,7 @@ public final class R {
     public static final class style {
         private style() {}
 
-        public static final int zxing_CaptureTheme = 0x7f11019a;
+        public static final int zxing_CaptureTheme = 0x7f11019b;
     }
     public static final class styleable {
         private styleable() {}

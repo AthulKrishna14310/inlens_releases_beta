@@ -2102,6 +2102,11 @@
     </style><style name="UpBottomSlideDialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_up2</item>
         <item name="android:windowExitAnimation">@anim/slide_bottom2</item>
+    </style><style name="AppThemeGallery" parent="Theme.AppCompat.Light.DarkActionBar">
+        
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style></file><file path="/home/athul/Devolopment/app/src/main/res/values/preloaded_fonts.xml" qualifiers=""><array name="preloaded_fonts" translatable="false">
         <item>@font/acme</item>
     </array></file><file path="/home/athul/Devolopment/app/src/main/res/values/font_certs.xml" qualifiers=""><array name="com_google_android_gms_fonts_certs">

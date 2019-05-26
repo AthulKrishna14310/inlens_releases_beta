@@ -258,11 +258,11 @@ ADDED from /home/athul/Devolopment/app/src/main/AndroidManifest.xml:44:17-47:46
 	android:pathPattern
 		ADDED from /home/athul/Devolopment/app/src/main/AndroidManifest.xml:46:21-45
 activity#com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity
-ADDED from /home/athul/Devolopment/app/src/main/AndroidManifest.xml:51:8-53:45
+ADDED from /home/athul/Devolopment/app/src/main/AndroidManifest.xml:51:8-53:52
 	android:screenOrientation
 		ADDED from /home/athul/Devolopment/app/src/main/AndroidManifest.xml:52:12-48
 	android:theme
-		ADDED from /home/athul/Devolopment/app/src/main/AndroidManifest.xml:53:12-43
+		ADDED from /home/athul/Devolopment/app/src/main/AndroidManifest.xml:53:12-50
 	android:name
 		ADDED from /home/athul/Devolopment/app/src/main/AndroidManifest.xml:51:18-82
 activity#com.theartofdev.edmodo.cropper.CropImageActivity

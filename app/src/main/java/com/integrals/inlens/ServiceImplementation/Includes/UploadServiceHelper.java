@@ -30,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.integrals.inlens.Helper.CurrentDatabase;
+import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
 import java.io.File;
 import java.util.ArrayList;
@@ -56,11 +57,12 @@ public class UploadServiceHelper {
     private String                  timeTaken;
     private File                    thumbFile;
     private File                    imageFile;
-
+    private UploadDatabaseHelper    uploadDatabaseHelper;
     public UploadServiceHelper(Context context,
                                ArrayList<String>stringArrayList,
                                String titleValue,
-                               String timeTaken
+                               String timeTaken,
+                               UploadDatabaseHelper uploadDatabaseHelper
     )
     {
         this.stringArrayList=stringArrayList;
@@ -75,6 +77,7 @@ public class UploadServiceHelper {
                 null
 
         );
+        this.uploadDatabaseHelper=uploadDatabaseHelper;
         this.context=context;
         this.downloadThumbUrl=null;
         this.titleValue=titleValue;
@@ -91,7 +94,7 @@ public class UploadServiceHelper {
             @Override
             protected Object doInBackground(Object[] objects) {
 
-                Log.d("inLens_upload","Started bitmap compression");
+                Log.d("Upload::Compression","Started bitmap compression");
 
 
                 bitmapCompressionHelper.compressUploadFile();
@@ -101,7 +104,7 @@ public class UploadServiceHelper {
                 thumbFile=new File(thumbImageUri.getPath());
                 imageFile=new File(uploadImageUri.getPath());
 
-                Log.d("inLens_upload","Uploading started");
+                Log.d("Upload::STATUS","Uploading started");
 
                 final StorageReference FilePath = postStorageReference.child("CommunityPosts").child(uploadImageUri.getLastPathSegment());
                 final StorageReference ThumbNailImage = postStorageReference.child("OriginalImage_thumb").child(uploadImageUri.getLastPathSegment() + System.currentTimeMillis());
@@ -111,7 +114,7 @@ public class UploadServiceHelper {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 downloadThumbUrl = taskSnapshot.getDownloadUrl();
-                                Log.d("inLens_upload","Thumb image uploaded");
+                                Log.d("Upload::STATUS","Thumb image uploaded");
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -119,9 +122,7 @@ public class UploadServiceHelper {
                     public void onFailure(@NonNull Exception e) {
                         //OriginalFilePath.delete();
                         ThumbNailImage.delete();
-                        bitmapCompressionHelper.deleteFile(imageFile);
-                        bitmapCompressionHelper.deleteFile(thumbFile);
-
+                        cancelUploadOperation();
 
 
                     }
@@ -140,7 +141,7 @@ public class UploadServiceHelper {
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
 
-                                        Log.d("inLens_upload","Image file uploaded");
+                                        Log.d("Upload::STATUS","Image file uploaded");
 
                                           notificationHelper.cancelUploadDataNotification();
                                             final DatabaseReference NewPost = postDatabaseReference.push();
@@ -161,10 +162,37 @@ public class UploadServiceHelper {
                                                 NewPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
                                                 NewPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
 
-                                                Log.d("inLens_upload","Data uploaded");
+                                                Log.d("Upload::STATUS","Data uploaded");
                                                 bitmapCompressionHelper.deleteFile(imageFile);
                                                 bitmapCompressionHelper.deleteFile(thumbFile);
-                                                Log.d("inLens_upload","All upload operation done");
+
+
+
+
+                                                try {
+
+                                                    uploadDatabaseHelper.UpdateUploadStatus(uploadID, "UPLOADED");
+                                                    Log.d("Upload::STATUS","UPLOAD_DATABASE " +
+                                                            "updated");
+
+
+                                                } catch (SQLiteReadOnlyDatabaseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                CurrentDatabase currentDatabase =
+                                                        new CurrentDatabase(context, "", null, 1);
+                                                int Value = currentDatabase.GetUploadingTargetColumn();
+                                                currentDatabase.ResetUploadTargetColumn((Value + 1));
+                                                currentDatabase.close();
+                                                Log.d("Upload::STATUS","CURRENT_DATABASE " +
+                                                        "updated");
+
+
+                                                notificationHelper.cancelUploadDataNotification();
+                                                Log.d("Upload::STATUS","All upload operation done");
+
+
                                             }
 
                                             @Override
@@ -172,8 +200,7 @@ public class UploadServiceHelper {
                                                 // OriginalFilePath.delete();
                                                 ThumbNailImage.delete();
                                                 FilePath.delete();
-                                                bitmapCompressionHelper.deleteFile(imageFile);
-                                                bitmapCompressionHelper.deleteFile(thumbFile);
+                                                cancelUploadOperation();
 
                                             }
                                         });
@@ -187,9 +214,7 @@ public class UploadServiceHelper {
                                     //OriginalFilePath.delete();
                                     ThumbNailImage.delete();
                                     FilePath.delete();
-                                    bitmapCompressionHelper.deleteFile(imageFile);
-                                    bitmapCompressionHelper.deleteFile(thumbFile);
-
+                                    cancelUploadOperation();
                                 }
                             });
 
@@ -206,7 +231,7 @@ public class UploadServiceHelper {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                Log.d("inLens_upload","Async task initialised");
+                Log.d("Upload::STATUS","Async task initialised");
 
                 CurrentDatabase currentDatabase=new CurrentDatabase(context,"",null,1);
                 communityID=currentDatabase.GetLiveCommunityID();
@@ -226,28 +251,36 @@ public class UploadServiceHelper {
                         .child("Users")
                         .child(firebaseUser.getUid());
 
-                Log.d("inLens_upload","Async task pre-excecuted");
+                Log.d("Upload::STATUS","Async task pre-excecuted");
             }
 
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                Log.d("inLens_upload","Upload Post-Excecuted");
+                Log.d("Upload::STATUS","Upload Post-Excecuted");
 
             }
 
             @Override
             protected void onCancelled(Object o) {
                 super.onCancelled(o);
+
                 bitmapCompressionHelper.deleteFile(imageFile);
                 bitmapCompressionHelper.deleteFile(thumbFile);
+                uploadDatabaseHelper.UpdateUploadStatus(uploadID, "NOT_UPLOADED");
 
-                }
+                CurrentDatabase currentDatabase = new CurrentDatabase(context, "", null, 1);
+                int Value = currentDatabase.GetUploadingTargetColumn();
+                currentDatabase.ResetUploadTargetColumn((Value));
+                currentDatabase.close();
+
+                notificationHelper.cancelUploadDataNotification();
+            }
 
             @Override
             protected void onProgressUpdate(Object[] values) {
                 super.onProgressUpdate(values);
-                Log.d("inLens_upload","Upload on progress");
+                Log.d("Upload::STATUS","Upload on progress");
             }
         };
 
@@ -255,13 +288,14 @@ public class UploadServiceHelper {
 
     public void proceedUploadOperation(){
         uploadAsyncTask.execute("");
-        Log.d("inLens_upload","Upload process started to run on async task");
+        Log.d("Upload::STATUS","Upload process started to run on async task");
 
     }
 
+
     public void cancelUploadOperation(){
         uploadAsyncTask.cancel(true);
-        Log.d("inLens_upload","Upload process stopped");
+        Log.d("Upload::STATUS","Upload process stopped");
 
     }
 

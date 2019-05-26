@@ -542,8 +542,6 @@ public class RecentImageService extends Service {
                                         pictureFile1.delete();
                                         CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
                                         int Value = currentDatabase.GetUploadingTargetColumn();
-
-
                                         currentDatabase.ResetUploadTargetColumn((Value + 1));
                                         currentDatabase.close();
 

@@ -46,6 +46,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
+import com.integrals.inlens.Services.OreoService;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -749,9 +750,12 @@ public class CreateCloudAlbum extends AppCompatActivity {
         editor1.putBoolean("ThisOwner::", true);
         editor1.commit();
 
+
         albumStartingServices.initiateJobServices();
         albumStartingServices.intiateNotificationAtStart();
+        albumStartingServices.initiateUploadService();
     }
+
 
 
 
