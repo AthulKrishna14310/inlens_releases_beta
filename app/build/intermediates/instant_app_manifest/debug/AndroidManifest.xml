@@ -57,6 +57,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/inlens_logo_m"
         android:supportsRtl="true"
+        android:testOnly="true"
         android:theme="@style/AppTheme" >
         <activity android:name="com.integrals.inlens.Activities.WorkingIntroActivity" />
         <activity android:name="com.integrals.inlens.Activities.IssueActivity" />
@@ -183,7 +184,8 @@
         <activity android:name="com.integrals.inlens.Activities.PhotoView" />
         <activity
             android:name="com.integrals.inlens.Activities.IntroActivity"
-            android:theme="@style/NoActionBarTheme" />
+            android:theme="@style/NoActionBarTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.integrals.inlens.Activities.SharedImageActivity"
             android:parentActivityName="com.integrals.inlens.MainActivity"
@@ -206,6 +208,18 @@
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--
+ FirebaseMessagingService performs security checks at runtime,
+             no need for explicit permissions despite exported="true"
+        -->
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:exported="true" >
+            <intent-filter android:priority="-500" >
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name="com.google.android.gms.appinvite.PreviewActivity"
             android:exported="true"

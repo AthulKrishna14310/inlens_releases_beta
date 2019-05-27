@@ -39,8 +39,8 @@ public final class R {
     public static final class color {
         private color() {}
 
-        public static final int bs_dark_divider_color = 0x7f060029;
-        public static final int bs_divider_color = 0x7f06002a;
+        public static final int bs_dark_divider_color = 0x7f06002a;
+        public static final int bs_divider_color = 0x7f06002b;
     }
     public static final class dimen {
         private dimen() {}
@@ -53,25 +53,25 @@ public final class R {
     public static final class drawable {
         private drawable() {}
 
-        public static final int bs_ic_clear = 0x7f08005f;
-        public static final int bs_ic_clear_light = 0x7f080060;
-        public static final int bs_ic_more = 0x7f080061;
-        public static final int bs_ic_more_light = 0x7f080062;
-        public static final int bs_list_dark_selector = 0x7f080063;
-        public static final int bs_list_selector = 0x7f080064;
+        public static final int bs_ic_clear = 0x7f080060;
+        public static final int bs_ic_clear_light = 0x7f080061;
+        public static final int bs_ic_more = 0x7f080062;
+        public static final int bs_ic_more_light = 0x7f080063;
+        public static final int bs_list_dark_selector = 0x7f080064;
+        public static final int bs_list_selector = 0x7f080065;
     }
     public static final class id {
         private id() {}
 
-        public static final int bottom_sheet_gridview = 0x7f0a0082;
-        public static final int bottom_sheet_title = 0x7f0a0083;
-        public static final int bottom_sheet_title_image = 0x7f0a0084;
-        public static final int bs_list_image = 0x7f0a0085;
-        public static final int bs_list_title = 0x7f0a0086;
-        public static final int bs_main = 0x7f0a0087;
-        public static final int bs_more = 0x7f0a0088;
-        public static final int header = 0x7f0a00f0;
-        public static final int headerlayout = 0x7f0a00f1;
+        public static final int bottom_sheet_gridview = 0x7f0a0088;
+        public static final int bottom_sheet_title = 0x7f0a0089;
+        public static final int bottom_sheet_title_image = 0x7f0a008a;
+        public static final int bs_list_image = 0x7f0a008b;
+        public static final int bs_list_title = 0x7f0a008c;
+        public static final int bs_main = 0x7f0a008d;
+        public static final int bs_more = 0x7f0a008e;
+        public static final int header = 0x7f0a00f6;
+        public static final int headerlayout = 0x7f0a00f7;
     }
     public static final class integer {
         private integer() {}
@@ -84,11 +84,11 @@ public final class R {
     public static final class layout {
         private layout() {}
 
-        public static final int bottom_sheet_dialog = 0x7f0c002c;
-        public static final int bs_grid_entry = 0x7f0c002d;
-        public static final int bs_header = 0x7f0c002e;
-        public static final int bs_list_divider = 0x7f0c002f;
-        public static final int bs_list_entry = 0x7f0c0030;
+        public static final int bottom_sheet_dialog = 0x7f0c002d;
+        public static final int bs_grid_entry = 0x7f0c002e;
+        public static final int bs_header = 0x7f0c002f;
+        public static final int bs_list_divider = 0x7f0c0030;
+        public static final int bs_list_entry = 0x7f0c0031;
     }
     public static final class string {
         private string() {}

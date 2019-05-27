@@ -6,5 +6,7 @@
     <color name="dimPrimary">#484773</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="dimdark">#3c3c3c</color>
+    <color name="brighdark">#1b1b1b</color>
 
 </resources>

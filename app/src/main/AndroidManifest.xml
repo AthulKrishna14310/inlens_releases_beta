@@ -152,7 +152,8 @@
         <activity android:name=".Activities.PhotoView" />
         <activity
             android:name=".Activities.IntroActivity"
-            android:theme="@style/NoActionBarTheme" />
+            android:theme="@style/NoActionBarTheme"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Activities.SharedImageActivity"
             android:parentActivityName=".MainActivity"

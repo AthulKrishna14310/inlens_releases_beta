@@ -5,95 +5,102 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.IntroActivity">
+    <TextView
+        android:id="@+id/appname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Inlens"
+        android:layout_below="@id/appicon"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="25sp" />
+
+
+    <ImageView
+        android:id="@+id/appicon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/inlens_logo_m" />
 
     <RelativeLayout
-        android:id="@+id/welcomecontainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true">
 
-        <TextView
-            android:id="@+id/appname"
+        <LinearLayout
+            android:id="@+id/auth_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="70dp"
-            android:text="InLens"
-            android:textColor="@color/colorAccent"
-            android:textSize="30sp" />
+            android:background="@drawable/dimdark_curved_border">
 
+            <TextView
+                android:id="@+id/auth_countrycode_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:text="Country"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:background="@drawable/circle_accent_small_radius"
+                android:visibility="gone">
+            </TextView>
 
-        <ImageView
-            android:id="@+id/appicon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_below="@id/appname"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/inlens_notification" />
+            <EditText
+                android:id="@+id/auth_edittext"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:background="@android:color/transparent"
+                android:hint="Phone Number"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:inputType="number"
+                android:maxLength="12"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/apptagline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/appicon"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="center_horizontal"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp" />
+            <ImageButton
+                android:id="@+id/auth_next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_forward"
+                android:background="@drawable/circle_accent"
+                android:padding="5dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"/>
 
-        <Button
-            android:id="@+id/introsignup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/introsignin"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentBottom="false"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/border"
-            android:padding="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:text="Register"
-            android:textColor="#3E3D63"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/introsignin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="50dp"
-            android:background="@drawable/border"
-            android:padding="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:text="Sign In"
-            android:textColor="#3E3D63"
-            android:textSize="13sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/appabout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@id/auth_container"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            android:text="By InLens Team."
-            android:textColor="@color/colorPrimary"
+            android:text="By Inlens Team."
+            android:textColor="@color/colorAccent"
             android:textSize="14sp" />
 
+
+
     </RelativeLayout>
+
 
 
 </RelativeLayout>

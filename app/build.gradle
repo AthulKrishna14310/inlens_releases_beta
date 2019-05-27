@@ -44,6 +44,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:11.0.2'
     implementation 'com.firebaseui:firebase-ui-database:0.4.0'
     implementation 'com.google.firebase:firebase-invites:11.0.2'
+    implementation 'com.google.firebase:firebase-messaging:11.0.2'
+
     implementation 'com.google.android.gms:play-services-base:11.0.2'
     implementation 'com.google.android.gms:play-services-basement:11.0.2'
     implementation 'com.google.android.gms:play-services-tasks:11.0.2'

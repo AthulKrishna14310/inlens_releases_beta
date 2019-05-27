@@ -577,6 +577,7 @@ color background_floating_material_light
 color background_material_dark
 color background_material_light
 color black
+color brighdark
 color bright_foreground_disabled_material_dark
 color bright_foreground_disabled_material_light
 color bright_foreground_inverse_material_dark
@@ -625,6 +626,7 @@ color dim_foreground_disabled_material_dark
 color dim_foreground_disabled_material_light
 color dim_foreground_material_dark
 color dim_foreground_material_light
+color dimdark
 color error_color_material
 color foreground_material_dark
 color foreground_material_light
@@ -934,6 +936,7 @@ drawable add_location
 drawable avd_hide_password
 drawable avd_show_password
 drawable border
+drawable border_accent
 drawable borderless_button
 drawable bs_ic_clear
 drawable bs_ic_clear_light
@@ -942,6 +945,8 @@ drawable bs_ic_more_light
 drawable bs_list_dark_selector
 drawable bs_list_selector
 drawable circle
+drawable circle_accent
+drawable circle_accent_small_radius
 drawable circle_primarydark
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
@@ -972,6 +977,7 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
+drawable dimdark_curved_border
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable ic_account_200dp
@@ -980,6 +986,7 @@ drawable ic_account_main_menu
 drawable ic_album_link
 drawable ic_app_working_tour_main_menu
 drawable ic_arrow_back
+drawable ic_arrow_forward
 drawable ic_camera
 drawable ic_card_giftcard
 drawable ic_card_giftcard_main_menu
@@ -1000,6 +1007,7 @@ drawable ic_info_outline_white_24dp
 drawable ic_launch_main_menu
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable ic_location
 drawable ic_location_icon
 drawable ic_menu_icon
 drawable ic_more_vert
@@ -1167,12 +1175,18 @@ id album_card_button_container
 id album_details_btn
 id alertTitle
 id all
+id all_country_edittext
+id all_country_recyclerview
+id all_country_title
 id always
 id appabout
 id appicon
 id appname
-id apptagline
 id async
+id auth_container
+id auth_countrycode_picker
+id auth_edittext
+id auth_next_button
 id auto
 id barcode_fragment
 id barrier
@@ -1300,8 +1314,6 @@ id ifRoom
 id image
 id image_resource
 id info
-id introsignin
-id introsignup
 id invisible
 id invite
 id issue_by
@@ -1442,6 +1454,9 @@ id snackbar_action
 id snackbar_text
 id snap
 id spacer
+id spinner_country_code
+id spinner_country_fullname
+id spinner_country_name
 id split_action_bar
 id spread
 id spread_inside
@@ -1496,7 +1511,6 @@ id useLogo
 id view_offset_helper
 id visible
 id weathericon
-id welcomecontainer
 id wide
 id withText
 id working_tour
@@ -1576,6 +1590,7 @@ layout activity_reset_password
 layout activity_shared_image
 layout activity_weather_layout
 layout activity_working_intro
+layout all_country_layout
 layout bottom_sheet_dialog
 layout bs_grid_entry
 layout bs_header
@@ -1583,6 +1598,7 @@ layout bs_list_divider
 layout bs_list_entry
 layout cloud_album_card
 layout cloud_album_layout
+layout country_spinner_layout
 layout create_new_situation_layout
 layout crop_image_activity
 layout crop_image_view
@@ -1708,6 +1724,7 @@ string crop_image_menu_flip_vertically
 string crop_image_menu_rotate_left
 string crop_image_menu_rotate_right
 string default_web_client_id
+string fcm_fallback_notification_channel_label
 string firebase_database_url
 string gcm_defaultSenderId
 string google_api_key
