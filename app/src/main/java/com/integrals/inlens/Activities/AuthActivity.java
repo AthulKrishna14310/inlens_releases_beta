@@ -2,8 +2,12 @@ package com.integrals.inlens.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,42 +15,68 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
+import com.integrals.inlens.MainActivity;
 import com.integrals.inlens.R;
 import com.integrals.inlens.UI.Extras.CountryItem;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class IntroActivity extends AppCompatActivity {
+public class AuthActivity extends AppCompatActivity {
 
 
-    private EditText AuthEditText,AllCountryEditText;
-    private ImageButton  AuthNextButton;
-    private TextView AuthCodeButton;
+    private EditText AuthEditText,AllCountryEditText,VerifyEditText;
+    private ImageButton  AuthNextButton,VerifyBackButton,VerifyManualButton;
+    private TextView AuthCodeButton , CustomToastTitle, CustomToastMessage,VerifyCounter,VerifyTextView,VerifyTextViewNote;
     private InputMethodManager AuthIMM;
     private Animation FadeIn,FadeOut;
     private LinearLayout AuthContainer;
     private ArrayList<CountryItem> CountryList,SearchList;
     private CountryAdapter AllAdapter,SearchAdapter;
     private RecyclerView AllCountryRecyclerView;
-    private Dialog AllCountryDialog;
-    private String ChoosenCode;
-
+    private Dialog AllCountryDialog,VerificationDialog;
+    private String ChoosenCode ,VerificationID;
+    private ProgressBar CustomToastProgressbar,VerifyProgressbar;
+    private Toast toast;
+    private Button VerifyGoManualButton;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks Callbacks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intro);
+        setContentView(R.layout.activity_auth);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+        InitCountryNames();
+        InitAllCountryDialog();
+        InitCustomToast();
+        VerifyDialogInit();
 
         AuthEditText = findViewById(R.id.auth_edittext);
         AuthCodeButton = findViewById(R.id.auth_countrycode_picker);
@@ -77,12 +107,39 @@ public class IntroActivity extends AppCompatActivity {
                     AuthContainer.getAnimation().start();
                     AuthContainer.setVisibility(View.VISIBLE);
                 }
+                else if (AuthCodeButton.isShown() && AuthEditText.isShown() && !TextUtils.isEmpty(AuthEditText.getText().toString()))
+                {
+                    if(!TextUtils.isEmpty(ChoosenCode))
+                    {
+                        PhoneAuthProvider.getInstance().verifyPhoneNumber(ChoosenCode+AuthEditText.getText().toString(),60, TimeUnit.SECONDS,AuthActivity.this,Callbacks);
+                        new CountDownTimer(60000, 1000) {
+
+                            public void onTick(long millisUntilFinished) {
+                                VerifyCounter.setText(String.format("Timeout in : %d s", millisUntilFinished / 1000));
+                            }
+
+                            public void onFinish() {
+                                VerifyCounter.setText("Please wait.");
+                                EnableManualVerification();
+                            }
+
+                        }.start();
+                        VerificationDialog.show();
+                    }
+                    else
+                    {
+                        ShowCustomToast("Country Code Missing","Select country code and continue further.",false,1000);
+
+                    }
+                }
+                else
+                {
+                    ShowCustomToast("Phone Number Missing","Enter phone number and continue further.",false,1000);
+                }
 
             }
         });
 
-        InitCountryNames();
-        InitAllCountryDialog();
 
         AuthCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +153,202 @@ public class IntroActivity extends AppCompatActivity {
             }
         });
 
+        Callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+
+
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+
+                ShowCustomToast("Login Successful","Successfully completed verification.",false,1000);
+                SignInWithCredential(phoneAuthCredential);
+
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+
+                VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+                VerifyTextViewNote.setText("*NOTE \nVerification failed. Please try after sometime.");
+                VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+                VerifyTextViewNote.setVisibility(View.VISIBLE);
+                Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCodeSent(final String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+
+                VerificationID = s;
+            }
+        };
+
+
+    }
+
+    private void SignInWithCredential(PhoneAuthCredential phoneAuthCredential) {
+
+        FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if(task.isSuccessful())
+                {
+
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("number").setValue(ChoosenCode+AuthEditText.getText().toString());
+                    VerificationDialog.dismiss();
+                    startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    finish();
+                }
+                else  if(!task.isSuccessful())
+                {
+                    try {
+                        throw task.getException();
+                    }
+                    catch (FirebaseAuthInvalidCredentialsException e)
+                    {
+                        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+                        VerifyTextViewNote.setText("*NOTE \nVerification code is invalid or has expired.");
+                        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+                        VerifyTextViewNote.setVisibility(View.VISIBLE);
+                    }
+                    catch (FirebaseAuthInvalidUserException e)
+                    {
+                        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+                        VerifyTextViewNote.setText("*NOTE \nThe corresponding account has been blocked. Please contact FoodyGuide help-desk.");
+                        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+                        VerifyTextViewNote.setVisibility(View.VISIBLE);
+                    }
+                    catch (RuntimeException e)
+                    {
+                        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+                        VerifyTextViewNote.setText("*NOTE \nVerification failed. Please try after sometime.");
+                        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+                        VerifyTextViewNote.setVisibility(View.VISIBLE);
+                    }
+                    catch (Exception e)
+                    {
+                        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+                        VerifyTextViewNote.setText("*NOTE \nVerification failed. Please try after sometime.");
+                        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+                        VerifyTextViewNote.setVisibility(View.VISIBLE);
+                    }
+
+
+                }
+                else
+                {
+                    ShowCustomToast("Registration Failed"," Registration failed due to  some unknown reasons.Please try after sometime.",false,1000);
+                }
+            }
+        });
+
+    }
+
+    private void EnableManualVerification() {
+
+        VerifyGoManualButton.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+        VerifyGoManualButton.setVisibility(View.GONE);
+        VerifyCounter.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+        VerifyCounter.setVisibility(View.GONE);
+        VerifyProgressbar.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+        VerifyProgressbar.setVisibility(View.GONE);
+        VerifyEditText.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+        VerifyEditText.setVisibility(View.VISIBLE);
+
+        VerifyTextView.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+        VerifyTextView.setText("Manual Verification");
+        VerifyTextView.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+        VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+        VerifyTextViewNote.setVisibility(View.VISIBLE);
+        VerifyManualButton.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+        VerifyManualButton.setVisibility(View.VISIBLE);
+    }
+
+    private void VerifyDialogInit() {
+
+        VerificationDialog  = new Dialog(this);
+        VerificationDialog.setCancelable(false);
+        VerificationDialog.setContentView(R.layout.verification_layout);
+        VerifyProgressbar = VerificationDialog.findViewById(R.id.verification_progressbar);
+        VerifyEditText = VerificationDialog.findViewById(R.id.verification_edittext);
+        VerifyTextView = VerificationDialog.findViewById(R.id.verification_textview);
+        VerifyTextViewNote = VerificationDialog.findViewById(R.id.verification_textviewnote);
+        VerifyManualButton = VerificationDialog.findViewById(R.id.verification_done_button);
+        VerifyBackButton = VerificationDialog.findViewById(R.id.verification_back_button);
+        VerifyCounter = VerificationDialog.findViewById(R.id.verification_counter);
+        VerifyGoManualButton = VerificationDialog.findViewById(R.id.verification_manual_verify_button);
+
+        VerificationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        VerifyManualButton.setVisibility(View.GONE);
+        VerifyTextView.setText("Verifying");
+        VerifyEditText.setVisibility(View.GONE);
+        VerifyProgressbar.setAnimation(AnimationUtils.loadAnimation(this,android.R.anim.fade_in));
+        VerifyProgressbar.setVisibility(View.VISIBLE);
+        VerifyTextViewNote.setVisibility(View.INVISIBLE);
+
+        VerifyBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                VerificationDialog.dismiss();
+            }
+        });
+
+        VerifyManualButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!TextUtils.isEmpty(VerifyEditText.getText().toString()))
+                {
+                    PhoneAuthCredential credential =PhoneAuthProvider.getCredential(VerificationID,VerifyEditText.getText().toString());
+                    SignInWithCredential(credential);
+                }
+                else
+                {
+                    VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_out));
+                    VerifyTextViewNote.setText("*NOTE \nVerification field is empty");
+                    VerifyTextViewNote.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),android.R.anim.fade_in));
+                    VerifyTextViewNote.setVisibility(View.VISIBLE);
+                }
+
+
+            }
+        });
+
+        VerifyGoManualButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                EnableManualVerification();
+
+            }
+        });
+    }
+
+    private void ShowCustomToast(String Title, String Message, boolean isProgressbarShown, int duration) {
+
+        CustomToastTitle.setText(Title);
+        CustomToastMessage.setText(Message);
+        toast.setDuration(duration);
+        if(isProgressbarShown)
+            CustomToastProgressbar.setVisibility(View.VISIBLE);
+        else
+            CustomToastProgressbar.setVisibility(View.GONE);
+
+        toast.show();
+
+    }
+
+    private void InitCustomToast() {
+        toast = new Toast(getApplicationContext());
+        View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.custom_toast_layout,null);
+        toast.setView(view);
+        toast.setGravity(Gravity.BOTTOM,0,100);
+
+        CustomToastTitle = view.findViewById(R.id.custom_toast_title);
+        CustomToastMessage= view.findViewById(R.id.custom_toast_message);
+        CustomToastProgressbar = view.findViewById(R.id.custom_toast_progressbar);
 
     }
 
@@ -443,7 +696,7 @@ public class IntroActivity extends AppCompatActivity {
 
                     AllCountryDialog.dismiss();
                     AuthCodeButton.setText(countryItem.getCountryName().toUpperCase()+" "+ String.format("+ %s", countryItem.getCountryCode()));
-                    ChoosenCode = String.format("+ %s", countryItem.getCountryCode());
+                    ChoosenCode = String.format("+%s", countryItem.getCountryCode());
 
                 }
             });

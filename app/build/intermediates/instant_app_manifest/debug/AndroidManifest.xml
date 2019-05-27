@@ -90,10 +90,6 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
         <activity
-            android:name="com.integrals.inlens.Activities.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CalenderTheme" />
-        <activity
             android:name="com.integrals.inlens.Activities.AttachSituation"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
@@ -119,10 +115,6 @@
             android:exported="true"
             android:label="RestartWhenStopped" />
 
-        <activity
-            android:name="com.integrals.inlens.Activities.RegisterUser"
-            android:screenOrientation="portrait"
-            android:theme="@style/CalenderTheme" />
         <activity
             android:name="com.integrals.inlens.Activities.CloudAlbum"
             android:parentActivityName="com.integrals.inlens.MainActivity"
@@ -178,12 +170,9 @@
             android:name="com.integrals.inlens.ServiceImplementation.JobScheduler.AlertNotificationJobPackage.JobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <activity
-            android:name="com.integrals.inlens.Activities.ResetPassword"
-            android:theme="@style/CalenderTheme" />
         <activity android:name="com.integrals.inlens.Activities.PhotoView" />
         <activity
-            android:name="com.integrals.inlens.Activities.IntroActivity"
+            android:name="com.integrals.inlens.Activities.AuthActivity"
             android:theme="@style/NoActionBarTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity

@@ -63,15 +63,15 @@ public final class R {
     public static final class id {
         private id() {}
 
-        public static final int bottom_sheet_gridview = 0x7f0a0088;
-        public static final int bottom_sheet_title = 0x7f0a0089;
-        public static final int bottom_sheet_title_image = 0x7f0a008a;
-        public static final int bs_list_image = 0x7f0a008b;
-        public static final int bs_list_title = 0x7f0a008c;
-        public static final int bs_main = 0x7f0a008d;
-        public static final int bs_more = 0x7f0a008e;
-        public static final int header = 0x7f0a00f6;
-        public static final int headerlayout = 0x7f0a00f7;
+        public static final int bottom_sheet_gridview = 0x7f0a0076;
+        public static final int bottom_sheet_title = 0x7f0a0077;
+        public static final int bottom_sheet_title_image = 0x7f0a0078;
+        public static final int bs_list_image = 0x7f0a0079;
+        public static final int bs_list_title = 0x7f0a007a;
+        public static final int bs_main = 0x7f0a007b;
+        public static final int bs_more = 0x7f0a007c;
+        public static final int header = 0x7f0a00e4;
+        public static final int headerlayout = 0x7f0a00e5;
     }
     public static final class integer {
         private integer() {}
@@ -84,11 +84,11 @@ public final class R {
     public static final class layout {
         private layout() {}
 
-        public static final int bottom_sheet_dialog = 0x7f0c002d;
-        public static final int bs_grid_entry = 0x7f0c002e;
-        public static final int bs_header = 0x7f0c002f;
-        public static final int bs_list_divider = 0x7f0c0030;
-        public static final int bs_list_entry = 0x7f0c0031;
+        public static final int bottom_sheet_dialog = 0x7f0c002a;
+        public static final int bs_grid_entry = 0x7f0c002b;
+        public static final int bs_header = 0x7f0c002c;
+        public static final int bs_list_divider = 0x7f0c002d;
+        public static final int bs_list_entry = 0x7f0c002e;
     }
     public static final class string {
         private string() {}
