@@ -19,7 +19,7 @@ public class Checker {
     }
 
 
-    //if active returns a value less than or equal to zero
+    //if active returns a value less than or equal to zero else more than zero
 
     public int checkAlbumActive() {
         CurrentDatabase currentDatabase = new CurrentDatabase(context, "", null, 1);
