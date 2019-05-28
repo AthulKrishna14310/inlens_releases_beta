@@ -1,17 +1,13 @@
 package com.integrals.inlens.Activities;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 
@@ -20,22 +16,27 @@ import com.integrals.inlens.R;
 
 import com.squareup.picasso.Picasso;
 
-public class WorkingIntroActivity extends AppCompatActivity {
+public class AppAboutActivity extends AppCompatActivity {
 
     private ViewFlipper TourViewFlipper;
     private Boolean SHOW_TOUR = true;
     private String StringShowTour;
     private ImageButton CloseTourImageButton;
     private int Images[] = {R.drawable.intro_slide_1,R.drawable.intro_slide_2,R.drawable.intro_slide_3,R.drawable.intro_slide_4};
-
+    private TextView AppAboutTextview;
+    private String AppAbout = "Inlens is android application dedicated for providing unlimited storage to all its customers at zero cost. An online" +
+            " gallery that can have infinite number of participants with equal access, except for the admin who is the owner of a particular album. " +
+            "Your memories are precious. We will keep them safe."+"\n\n Your Inlens Team \n\n";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_working_intro);
+        setContentView(R.layout.activity_app_about);
 
         getSupportActionBar().hide();
         TourViewFlipper = findViewById(R.id.tour_viewflipper);
         CloseTourImageButton = findViewById(R.id.close_tour_imagebutton);
+        AppAboutTextview = findViewById(R.id.app_about_textview);
+        AppAboutTextview.setText(AppAbout);
 
         StringShowTour = getIntent().getStringExtra("ShowTour");
         if(StringShowTour.equals("no"))
@@ -51,7 +52,7 @@ public class WorkingIntroActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(WorkingIntroActivity.this, MainActivity.class).putExtra("ShowTour",SHOW_TOUR));
+                startActivity(new Intent(AppAboutActivity.this, MainActivity.class).putExtra("ShowTour",SHOW_TOUR));
                 overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
                 finish();
 
@@ -77,7 +78,7 @@ public class WorkingIntroActivity extends AppCompatActivity {
 
         if(keyCode==KeyEvent.KEYCODE_BACK)
         {
-            startActivity(new Intent(WorkingIntroActivity.this,MainActivity.class));
+            startActivity(new Intent(AppAboutActivity.this,MainActivity.class));
             overridePendingTransition(R.anim.activity_fade_in,R.anim.activity_fade_out);
             finish();
         }

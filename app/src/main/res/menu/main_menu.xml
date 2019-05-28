@@ -4,7 +4,7 @@
 
 
  <item android:id="@+id/profile_pic"
-     android:title="User Profile"
+     android:title="Profile"
      android:icon="@drawable/ic_account_main_menu"/>
 
 

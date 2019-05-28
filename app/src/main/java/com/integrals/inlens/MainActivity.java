@@ -112,7 +112,7 @@ import com.integrals.inlens.Activities.AuthActivity;
 import com.integrals.inlens.Activities.IssueActivity;
 import com.integrals.inlens.Activities.QRCodeReader;
 import com.integrals.inlens.Activities.SharedImageActivity;
-import com.integrals.inlens.Activities.WorkingIntroActivity;
+import com.integrals.inlens.Activities.AppAboutActivity;
 import com.integrals.inlens.Helper.CurrentDatabase;
 
 import com.integrals.inlens.Helper.JobSchedulerHelper;
@@ -491,7 +491,7 @@ public class MainActivity extends AppCompatActivity {
 
                             break;
                         case R.id.working_tour: {
-                            startActivity(new Intent(MainActivity.this, WorkingIntroActivity.class).putExtra("ShowTour", "no"));
+                            startActivity(new Intent(MainActivity.this, AppAboutActivity.class).putExtra("ShowTour", "no"));
                             overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
                             finish();
                             break;
@@ -660,6 +660,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     });
+
+
 
 
 }

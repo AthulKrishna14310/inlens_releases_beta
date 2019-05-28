@@ -63,15 +63,15 @@ public final class R {
     public static final class id {
         private id() {}
 
-        public static final int bottom_sheet_gridview = 0x7f0a0076;
-        public static final int bottom_sheet_title = 0x7f0a0077;
-        public static final int bottom_sheet_title_image = 0x7f0a0078;
-        public static final int bs_list_image = 0x7f0a0079;
-        public static final int bs_list_title = 0x7f0a007a;
-        public static final int bs_main = 0x7f0a007b;
-        public static final int bs_more = 0x7f0a007c;
-        public static final int header = 0x7f0a00e4;
-        public static final int headerlayout = 0x7f0a00e5;
+        public static final int bottom_sheet_gridview = 0x7f0a0078;
+        public static final int bottom_sheet_title = 0x7f0a0079;
+        public static final int bottom_sheet_title_image = 0x7f0a007a;
+        public static final int bs_list_image = 0x7f0a007b;
+        public static final int bs_list_title = 0x7f0a007c;
+        public static final int bs_main = 0x7f0a007d;
+        public static final int bs_more = 0x7f0a007e;
+        public static final int header = 0x7f0a00e6;
+        public static final int headerlayout = 0x7f0a00e7;
     }
     public static final class integer {
         private integer() {}

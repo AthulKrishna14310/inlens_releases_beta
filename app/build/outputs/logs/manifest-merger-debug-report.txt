@@ -212,10 +212,10 @@ MERGED from [com.github.bumptech.glide:gifdecoder:4.8.0] /home/ej/.gradle/caches
 		ADDED from /home/ej/AndroidStudioProjects/inlens_releases_beta/app/src/main/AndroidManifest.xml:26:9-40
 	android:name
 		ADDED from /home/ej/AndroidStudioProjects/inlens_releases_beta/app/src/main/AndroidManifest.xml:20:9-45
-activity#com.integrals.inlens.Activities.WorkingIntroActivity
-ADDED from /home/ej/AndroidStudioProjects/inlens_releases_beta/app/src/main/AndroidManifest.xml:27:9-69
+activity#com.integrals.inlens.Activities.AppAboutActivity
+ADDED from /home/ej/AndroidStudioProjects/inlens_releases_beta/app/src/main/AndroidManifest.xml:27:9-65
 	android:name
-		ADDED from /home/ej/AndroidStudioProjects/inlens_releases_beta/app/src/main/AndroidManifest.xml:27:19-66
+		ADDED from /home/ej/AndroidStudioProjects/inlens_releases_beta/app/src/main/AndroidManifest.xml:27:19-62
 activity#com.integrals.inlens.Activities.IssueActivity
 ADDED from /home/ej/AndroidStudioProjects/inlens_releases_beta/app/src/main/AndroidManifest.xml:28:9-62
 	android:name

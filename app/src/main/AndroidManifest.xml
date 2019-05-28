@@ -24,7 +24,7 @@
         android:roundIcon="@drawable/inlens_logo_m"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.WorkingIntroActivity" />
+        <activity android:name=".Activities.AppAboutActivity" />
         <activity android:name=".Activities.IssueActivity" />
         <activity
             android:name=".MainActivity"
