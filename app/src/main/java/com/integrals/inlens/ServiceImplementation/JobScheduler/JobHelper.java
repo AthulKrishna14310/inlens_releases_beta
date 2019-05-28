@@ -45,5 +45,11 @@ public void scheduleJob(){
     } else {
         Log.d("Job:", "Job not scheduled");
     }
-}
+  }
+
+  public void stopJob(){
+      JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
+      jobScheduler.cancel(12);
+  }
+
 }

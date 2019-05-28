@@ -56,6 +56,26 @@ private    NotificationHelper notificationHelper;
             }
         }
 
+    public void deinitiateAlbumServices(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Intent serviceIntent = new Intent(context, UploadService.class);
+            serviceIntent.putExtra("inputExtra", "Ongoing InLens Recent-Image service.");
+            ContextCompat.startForegroundService(context, serviceIntent);
+        }
+        else
+        {
+            Intent serviceIntent=new Intent(context, UploadService.class);
+            context.startService(serviceIntent);
+        }
+
+    }
+    public void quitCloudAlbum(){
+
+
+
+
+    }
+
     }
 
 

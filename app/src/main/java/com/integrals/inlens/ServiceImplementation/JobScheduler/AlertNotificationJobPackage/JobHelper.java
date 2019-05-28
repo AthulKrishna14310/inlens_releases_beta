@@ -24,13 +24,13 @@ public class JobHelper {
     public void initiateJobInfo(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            jobInfo = new JobInfo.Builder(12, componentName)
+            jobInfo = new JobInfo.Builder(15, componentName)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .setPersisted(true)
                     .setPeriodic(40*60000)
                     .build();
         }else{
-            jobInfo = new JobInfo.Builder(12, componentName)
+            jobInfo = new JobInfo.Builder(15, componentName)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .setPersisted(true)
                     .setPeriodic(40*60000)
@@ -47,5 +47,11 @@ public class JobHelper {
         } else {
             Log.d("Job:", "Job not scheduled");
         }
+    }
+
+    public void stopJob(){
+        JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
+        jobScheduler.cancel(15);
+
     }
 }

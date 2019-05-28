@@ -46,6 +46,8 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
+import com.integrals.inlens.Helper.RecentImageDatabase;
+import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.Services.OreoService;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -519,6 +521,15 @@ public class CreateCloudAlbum extends AppCompatActivity {
                         NewPost.child("AlbumType").setValue(EventType);
 
                         InProgressDialog.setMessage("Saving new data....");
+
+                        CurrentDatabase currentDatabase1 = new CurrentDatabase(getApplicationContext(), "", null, 1);
+                        currentDatabase1.DeleteDatabase();
+                        RecentImageDatabase recentImageDatabase = new RecentImageDatabase(getApplicationContext(), "", null, 1);
+                        recentImageDatabase.DeleteDatabase();
+                        UploadDatabaseHelper uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
+                        uploadDatabaseHelper.DeleteDatabase();
+
+
                         CurrentDatabase currentDatabase= new CurrentDatabase(getApplicationContext(),"",null,1);
                         currentDatabase.InsertUploadValues(PostKey,0,1,0,AlbumTime,1,1,"CUREE");
                         currentDatabase.close();
