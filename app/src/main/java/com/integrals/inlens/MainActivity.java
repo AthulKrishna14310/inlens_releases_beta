@@ -81,6 +81,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.integrals.inlens.AlbumProcedures.Checker;
+import com.integrals.inlens.AlbumProcedures.QuitCloudAlbumProcess;
 import com.integrals.inlens.Helper.NotificationHelper;
 import com.integrals.inlens.ServiceImplementation.Service.UploadService;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
@@ -447,19 +449,7 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 }
                                 case R.id.quit_cloud_album:
-                                    SharedPreferences sharedPreferences3 = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-                                    if (sharedPreferences3.getBoolean("UsingCommunity::", false) == true) {
-                                        CurrentDatabase currentDatabase1 = new CurrentDatabase(getApplicationContext(), "", null, 1);
-                                        if (currentDatabase1.GetUploadingTargetColumn() >= currentDatabase1.GetUploadingTotal()) {
-                                            QuitCloudAlbum(0);
-                                        } else {
-                                            QuitCloudAlbum(1);
-                                        }
-
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), "No Active Cloud-Album to quit.", Toast.LENGTH_SHORT).show();
-                                    }
-
+                                    quitCloudAlbum(0);
                                     break;
 
 
@@ -1289,90 +1279,39 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void QuitCloudAlbum(int XYZ) {
-        String Txt = " ";
-        if (XYZ == 1) {
-            Txt = "Selected images will not be uploaded to the Cloud-Album.";
-        }
-        final SharedPreferences sharedPreferences4 = getSharedPreferences("Owner.pref", MODE_PRIVATE);
-        CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
-                .child("Communities")
-                .child(currentDatabase.GetLiveCommunityID())
-                .child("ActiveIndex");
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setCancelable(true);
-        builder.setTitle("Quit Cloud-Album");
-        builder.setMessage("Are you sure you want to quit the current community ." + Txt);
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+    private void quitCloudAlbum(int XYZ) {
+        Checker checker = new Checker(getApplicationContext());
+        if (checker.isConnectedToNet()) {
+            if (checker.checkIfInAlbum()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setCancelable(true);
+                builder.setTitle("Quit Cloud-Album");
+                builder.setMessage("Are you sure you want to quit the current community .");
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
 
-                dialogInterface.dismiss();
-
-            }
-        });
-        builder.setPositiveButton(" Yes ", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                if (sharedPreferences4.getBoolean("ThisOwner::", false) == true) {
-                    databaseReference.setValue("F")
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
-                                    currentDatabase.DeleteDatabase();
-                                    RecentImageDatabase recentImageDatabase = new RecentImageDatabase(getApplicationContext(), "", null, 1);
-                                    recentImageDatabase.DeleteDatabase();
-                                    UploadDatabaseHelper uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
-                                    uploadDatabaseHelper.DeleteDatabase();
-                                    SharedPreferences sharedPreferencesC = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-                                    SharedPreferences.Editor editorC = sharedPreferencesC.edit();
-                                    editorC.putBoolean("UsingCommunity::", false);
-                                    editorC.commit();
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        stopService(new Intent(getApplicationContext(), OreoService.class));
-                                    } else {
-                                        jobSchedulerHelper.stopJobScheduler();
-                                        stopService(new Intent(getApplicationContext(), RecentImageService.class));
-
-                                    }
-                                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                    notificationManager.cancelAll();
-                                    Toast.makeText(getApplicationContext(), "Successfully left from the current Cloud-Album", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Error . Please try again", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
-                    currentDatabase.DeleteDatabase();
-                    RecentImageDatabase recentImageDatabase = new RecentImageDatabase(getApplicationContext(), "", null, 1);
-                    recentImageDatabase.DeleteDatabase();
-                    UploadDatabaseHelper uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
-                    uploadDatabaseHelper.DeleteDatabase();
-                    SharedPreferences sharedPreferencesC = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-                    SharedPreferences.Editor editorC = sharedPreferencesC.edit();
-                    editorC.putBoolean("UsingCommunity::", false);
-                    editorC.commit();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        stopService(new Intent(getApplicationContext(), OreoService.class));
-                    } else {
-                        stopService(new Intent(getApplicationContext(), RecentImageService.class));
-                        jobSchedulerHelper.stopJobScheduler();
                     }
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancelAll();
-                    Toast.makeText(getApplicationContext(), "Successfully left from the current Cloud-Album", Toast.LENGTH_SHORT).show();
-                }
+                });
+                builder.setPositiveButton(" Yes ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        QuitCloudAlbumProcess quitCloudAlbumProcess = new QuitCloudAlbumProcess(
+                                getApplicationContext(),
+                                MainActivity.this
+                        );
+                        quitCloudAlbumProcess.execute();
+                    }
+
+                });
+                builder.create().show();
+            } else {
+                  Toast.makeText(getApplicationContext(),
+                          "Sorry you don't participate in any Cloud-Album to quit",
+                          Toast.LENGTH_SHORT).show();
             }
-        });
-        builder.create().show();
+        }
     }
 
 

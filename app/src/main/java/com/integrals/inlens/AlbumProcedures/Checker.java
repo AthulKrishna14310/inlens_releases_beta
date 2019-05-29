@@ -68,7 +68,7 @@ public class Checker {
         }
 
         return result;
-    }
+       }
 
 
         public boolean isConnectedToNet() {

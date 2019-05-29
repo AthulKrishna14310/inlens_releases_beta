@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.GridView.MainActivity;
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.Helper.NotificationHelper;
@@ -34,6 +35,7 @@ public class UploadService extends Service {
    private NotificationCompat.Builder Uploadbuilder;
    private Handler handler;
    private Runnable runnable;
+   private Checker checker;
 
    @Override
     public void onCreate() {
@@ -47,6 +49,8 @@ public class UploadService extends Service {
        uploadDatabaseHelper.UpdateUploadStatus(currentDatabase.GetUploadingTargetColumn(), "NOT_UPLOADED");
        currentDatabase.close();
        uploadDatabaseHelper.close();
+
+       checker=new Checker(getApplicationContext());
     }
 
 
@@ -74,7 +78,14 @@ public class UploadService extends Service {
         runnable = new Runnable() {
             @Override
             public void run() {
-                uploadProcedure();
+
+                if(checker.isConnectedToNet()) {
+                    uploadProcedure();
+                }
+                else{
+
+                }
+
                 handler.postDelayed(this, 10000);
             }
         };

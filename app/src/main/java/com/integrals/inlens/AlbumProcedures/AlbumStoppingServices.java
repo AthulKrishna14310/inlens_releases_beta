@@ -97,6 +97,6 @@ public class AlbumStoppingServices {
     }
 
 
-     //Need to write code for to stop services
+     //Need to write code for to stop Upload services
 }
 

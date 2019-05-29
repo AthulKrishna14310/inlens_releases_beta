@@ -3,6 +3,8 @@ package com.integrals.inlens.ServiceImplementation.InLensGallery;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +15,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 
+import com.integrals.inlens.AlbumProcedures.AlbumStoppingServices;
+import com.integrals.inlens.AlbumProcedures.Checker;
+import com.integrals.inlens.AlbumProcedures.QuitCloudAlbumProcess;
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.R;
@@ -39,11 +44,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_inlens_gallery);
         requirePermission();
-        activity=this;
+        activity = this;
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setHasFixedSize(true);
-        databaseOperations=new DatabaseOperations(getApplicationContext());
+        databaseOperations = new DatabaseOperations(getApplicationContext());
+
+        Checker checker = new Checker(getApplicationContext());
+        if (checker.isConnectedToNet()) {
+            if (checker.checkIfInAlbum()) {
+                if (checker.checkAlbumActiveTime() <= 0) {
+                    QuitCloudAlbumProcess quitCloudAlbumProcess = new QuitCloudAlbumProcess(
+                            getApplicationContext(),
+                            MainActivity.this
+                    );
+                    quitCloudAlbumProcess.execute();
+                }
+            }
+        }
+
 
     }
 
@@ -109,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-
 
         Boolean Default = false;
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
