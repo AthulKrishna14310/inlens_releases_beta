@@ -27,10 +27,7 @@ import java.util.List;
 import info.androidhive.barcode.BarcodeReader;
 import com.integrals.inlens.Helper.CurrentDatabase;
 
-import com.integrals.inlens.Helper.JobSchedulerHelper;
 import com.integrals.inlens.R;
-import com.integrals.inlens.Services.OreoService;
-import com.integrals.inlens.Services.RecentImageService;
 
 
 public class QRCodeReader extends AppCompatActivity
@@ -46,7 +43,6 @@ public class QRCodeReader extends AppCompatActivity
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference2,databaseReference3,databaseReference4;
     private Activity activity;
-    private JobSchedulerHelper jobSchedulerHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +63,6 @@ public class QRCodeReader extends AppCompatActivity
         UserID = CommunityPhotographerAuthentication.getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
 
     }
 
@@ -225,7 +220,6 @@ public class QRCodeReader extends AppCompatActivity
                                 SharedPreferences.Editor editor1 = sharedPreferences1.edit();
                                 editor1.putBoolean("ThisOwner::", false);
                                 editor1.commit();
-                                startService(getApplicationContext(),new Intent(getApplicationContext(),RecentImageService.class));
                                 finish();
                             }
                         });
@@ -247,18 +241,6 @@ public class QRCodeReader extends AppCompatActivity
         });
 
 
-    }
-    public void startService(Context context, Intent intent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent serviceIntent = new Intent(context, OreoService.class);
-            serviceIntent.putExtra("inputExtra", "Ongoing InLens Recent-Image service.");
-            ContextCompat.startForegroundService(context, serviceIntent);
-        }
-        else
-        {
-            jobSchedulerHelper.startJobScheduler();
-            context.startService(intent);
-        }
     }
 
 

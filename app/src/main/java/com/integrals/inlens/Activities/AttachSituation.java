@@ -41,19 +41,22 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Calendar;
 import id.zelory.compressor.Compressor;
+
+import com.google.gson.reflect.TypeToken;
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.Helper.LocationHelper;
 import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.R;
+
 import com.integrals.inlens.Weather.Common.Common;
 import com.integrals.inlens.Weather.Helper.Helper;
 import com.integrals.inlens.Weather.Model.OpenWeatherMap;
+
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**

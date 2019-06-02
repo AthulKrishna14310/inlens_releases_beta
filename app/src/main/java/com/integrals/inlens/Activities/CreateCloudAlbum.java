@@ -3,13 +3,10 @@ package com.integrals.inlens.Activities;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -48,7 +45,6 @@ import com.google.firebase.storage.UploadTask;
 import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
 import com.integrals.inlens.Helper.RecentImageDatabase;
 import com.integrals.inlens.Helper.UploadDatabaseHelper;
-import com.integrals.inlens.Services.OreoService;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -61,7 +57,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.integrals.inlens.Helper.CurrentDatabase;
-import com.integrals.inlens.Helper.JobSchedulerHelper;
 import com.integrals.inlens.MainActivity;
 import com.integrals.inlens.R;
 
@@ -99,7 +94,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
     private Dialog EventDialog,QRCodeDialog;
     private String EventType = "";
     private String CheckTimeTaken="";
-    private JobSchedulerHelper                 jobSchedulerHelper;
     private ImageButton CreateCloudAlbumBackButton;
     private Boolean EventTypeSet = false ,AlbumDateSet = false;
     private AlbumStartingServices albumStartingServices;
@@ -110,7 +104,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
 
         EventDialogInit();
          albumStartingServices= new AlbumStartingServices(getApplicationContext());
-         jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
          InAuthentication = FirebaseAuth.getInstance();
         InUser = InAuthentication.getCurrentUser();
         CommunityDatabaseReference = FirebaseDatabase.getInstance().getReference()

@@ -13,17 +13,14 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.integrals.inlens.AlbumProcedures.Checker;
-import com.integrals.inlens.GridView.MainActivity;
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.Helper.NotificationHelper;
 import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.R;
-import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
+import com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity;
 import com.integrals.inlens.ServiceImplementation.Includes.UploadServiceHelper;
 
 import java.util.ArrayList;
-
-import static android.os.Build.VERSION.SDK;
 
 public class UploadService extends Service {
    private String UPLOAD_STATUS;

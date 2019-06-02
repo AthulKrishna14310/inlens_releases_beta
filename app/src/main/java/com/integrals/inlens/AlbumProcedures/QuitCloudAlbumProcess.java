@@ -35,8 +35,8 @@ public class QuitCloudAlbumProcess {
 
                 builder.setMessage("Your Album-Time had been expired. " +
                         "Now you can only upload images to Cloud-Album from inLens " +
-                        "gallery. You can no longer capture the image to this " +
-                        "inLens gallery");
+                        "Gallery. You can no longer capture the image to this " +
+                        "inLens Gallery");
 
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override

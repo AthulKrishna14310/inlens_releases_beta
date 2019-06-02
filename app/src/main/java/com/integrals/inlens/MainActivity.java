@@ -118,12 +118,7 @@ import com.integrals.inlens.Activities.SharedImageActivity;
 import com.integrals.inlens.Activities.WorkingIntroActivity;
 import com.integrals.inlens.Helper.CurrentDatabase;
 
-import com.integrals.inlens.Helper.JobSchedulerHelper;
-import com.integrals.inlens.Helper.RecentImageDatabase;
-import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.Models.AlbumModel;
-import com.integrals.inlens.Services.OreoService;
-import com.integrals.inlens.Services.RecentImageService;
 import com.integrals.inlens.ViewHolder.AlbumViewHolder;
 
 
@@ -212,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
     private NotificationHelper ImageNotyHelper;
 
 
-    private JobSchedulerHelper jobSchedulerHelper;
     private ImageButton MainMenuButton , MainSearchButton , MainBackButton;
     private EditText MainSearchEdittext;
     private RelativeLayout MainActionbar , MainSearchView;
@@ -336,7 +330,6 @@ public class MainActivity extends AppCompatActivity {
             ShowAllTapTargets();
         }
 
-        jobSchedulerHelper=new JobSchedulerHelper(getApplicationContext());
 
 
         MainMenuButton.setOnClickListener(new View.OnClickListener() {
@@ -350,7 +343,6 @@ public class MainActivity extends AppCompatActivity {
                             switch (which) {
                                 case R.id.upload_activity:
                                     //startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
-                                    startService(getApplicationContext(),new Intent(getApplicationContext(),UploadService.class));
                                     break;
                                 case R.id.profile_pic:
                                     DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -454,10 +446,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 case R.id.restart_service: {
-                                    SharedPreferences sharedPreferencesS = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-                                    if (sharedPreferencesS.getBoolean("UsingCommunity::", false)) {
-                                        startService(getApplicationContext(), new Intent(getApplicationContext(), RecentImageService.class));
-                                    }
 
                                 }
                                 break;
@@ -992,20 +980,9 @@ public class MainActivity extends AppCompatActivity {
             CreateAlbumFab.setAnimation(FabClose);
             CreateAlbumFab.getAnimation().start();
 
-            /*
-            MainScanQrTxtview.clearAnimation();
-            MainScanQrTxtview.setAnimation(FabClose);
-            MainScanQrTxtview.getAnimation().start();
-
-            MainCreateAlbumTxtview.clearAnimation();
-            MainCreateAlbumTxtview.setAnimation(FabClose);
-            MainCreateAlbumTxtview.getAnimation().start();
-             */
 
             CreateAlbumFab.setVisibility(View.INVISIBLE);
             ScanQrFab.setVisibility(View.INVISIBLE);
-            //MainCreateAlbumTxtview.setVisibility(View.INVISIBLE);
-            //MainScanQrTxtview.setVisibility(View.INVISIBLE);
 
             MainFab.clearAnimation();
             MainFab.setAnimation(FabRotateBackward);
@@ -1022,15 +999,6 @@ public class MainActivity extends AppCompatActivity {
             CreateAlbumFab.setAnimation(FabOpen);
             CreateAlbumFab.getAnimation().start();
 
-            /*
-            MainScanQrTxtview.clearAnimation();
-            MainScanQrTxtview.setAnimation(FabOpen);
-            MainScanQrTxtview.getAnimation().start();
-
-            MainCreateAlbumTxtview.clearAnimation();
-            MainCreateAlbumTxtview.setAnimation(FabOpen);
-            MainCreateAlbumTxtview.getAnimation().start();
-             */
 
             CreateAlbumFab.setVisibility(View.VISIBLE);
             ScanQrFab.setVisibility(View.VISIBLE);
@@ -1432,7 +1400,6 @@ public class MainActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor1 = sharedPreferences1.edit();
                             editor1.putBoolean("ThisOwner::", false);
                             editor1.commit();
-                            startService(getApplicationContext(), new Intent(getApplicationContext(), RecentImageService.class));
 
                         }
 
@@ -1457,16 +1424,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void startService(Context context, Intent intent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent serviceIntent = new Intent(context, OreoService.class);
-            serviceIntent.putExtra("inputExtra", "Ongoing InLens Recent-Image service.");
-            ContextCompat.startForegroundService(context, serviceIntent);
-        } else {
-            jobSchedulerHelper.startJobScheduler();
-            context.startService(intent);
-        }
-    }
 
 
     public void GetStartedWithNewProfileImage() {
@@ -1977,35 +1934,6 @@ public class MainActivity extends AppCompatActivity {
 
                                             }
                                         });
-                                        /*
-
-                                        Toast.makeText(getApplicationContext(),Image,Toast.LENGTH_SHORT).show();
-                                        RequestOptions requestOptions = new RequestOptions()
-                                                .fitCenter().placeholder(R.drawable.image_avatar);
-
-                                        Glide.with(getApplicationContext())
-                                                .load(Image)
-                                                .thumbnail(0.1f)
-                                                .apply(requestOptions)
-                                                .listener(new RequestListener<Drawable>() {
-                                                    @Override
-                                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                        AlbumCoverEditprogressBar.setVisibility(View.GONE);
-                                                        FLAG=1;
-                                                        return true;
-                                                    }
-                                                    @Override
-                                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                        Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
-                                                        AlbumCoverEditprogressBar.setVisibility(View.GONE);
-                                                        return true;
-                                                    }
-
-                                                })
-                                                .into(AlbumCoverEditUserImage);
-                                         */
-
-
                                     }
 
                                     else

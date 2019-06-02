@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.integrals.inlens.Helper.CurrentDatabase;
-import com.integrals.inlens.Services.RecentImageService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

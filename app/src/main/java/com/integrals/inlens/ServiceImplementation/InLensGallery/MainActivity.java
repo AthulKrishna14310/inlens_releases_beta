@@ -54,11 +54,13 @@ public class MainActivity extends AppCompatActivity {
         if (checker.isConnectedToNet()) {
             if (checker.checkIfInAlbum()) {
                 if (checker.checkAlbumActiveTime() <= 0) {
+                     }else{
                     QuitCloudAlbumProcess quitCloudAlbumProcess = new QuitCloudAlbumProcess(
                             getApplicationContext(),
                             MainActivity.this
                     );
                     quitCloudAlbumProcess.execute();
+
                 }
             }
         }

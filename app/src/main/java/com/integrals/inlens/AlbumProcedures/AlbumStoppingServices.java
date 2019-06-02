@@ -2,7 +2,6 @@ package com.integrals.inlens.AlbumProcedures;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.widget.Toast;

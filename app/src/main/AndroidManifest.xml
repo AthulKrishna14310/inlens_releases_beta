@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.integrals.inlens">
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -74,17 +72,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/CalenderTheme"/>
 
-        <service android:name=".Services.RecentImageService" />
-        <service
-            android:name=".Services.InLensJobScheduler"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <receiver
-            android:name=".Broadcast_Receivers.RestartRecentImageService"
-            android:enabled="true"
-            android:exported="true"
-            android:label="RestartWhenStopped" />
 
         <activity
             android:name=".Activities.RegisterUser"
@@ -101,12 +88,6 @@
         <activity
             android:name=".Activities.QRCodeReader"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".GridView.MainActivity"
-            android:autoRemoveFromRecents="true"
-            android:excludeFromRecents="true"
-            android:label="Upload Activity"
-            android:parentActivityName=".MainActivity" />
 
         <meta-data
             android:name="com.google.android.gms.vision"
@@ -115,28 +96,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <receiver android:name=".Broadcast_Receivers.NotificationWorks">
-            <intent-filter>
-                <action android:name="ADD_FOR_UPLOAD_INLENS" />
-                <action android:name="ATTACH_ACTIVITY_INLENS" />
-                <action android:name="RECENT_IMAGES_GRID_INLENS" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".Broadcast_Receivers.BootCompleteReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".Broadcast_Receivers.NetworkChangeReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".Services.OreoService" />
         <service android:name=".ServiceImplementation.Service.UploadService" />
         <service
              android:name=".ServiceImplementation.JobScheduler.JobService"

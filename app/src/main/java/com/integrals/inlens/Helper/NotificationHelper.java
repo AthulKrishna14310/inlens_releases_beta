@@ -13,8 +13,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.widget.RemoteViews;
 
-import com.integrals.inlens.GridView.MainActivity;
 import com.integrals.inlens.R;
+import com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity;
 
 public class NotificationHelper extends ContextWrapper {
     private NotificationManager notificationManager;

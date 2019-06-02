@@ -56,7 +56,6 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/inlens_logo_m"
         android:supportsRtl="true"
-        android:testOnly="true"
         android:theme="@style/AppTheme" >
         <activity android:name="com.integrals.inlens.Activities.WorkingIntroActivity" />
         <activity android:name="com.integrals.inlens.Activities.IssueActivity" />
@@ -105,19 +104,6 @@
             android:name="com.integrals.inlens.Activities.CreateCloudAlbum"
             android:screenOrientation="portrait"
             android:theme="@style/CalenderTheme" />
-
-        <service android:name="com.integrals.inlens.Services.RecentImageService" />
-        <service
-            android:name="com.integrals.inlens.Services.InLensJobScheduler"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <receiver
-            android:name="com.integrals.inlens.Broadcast_Receivers.RestartRecentImageService"
-            android:enabled="true"
-            android:exported="true"
-            android:label="RestartWhenStopped" />
-
         <activity
             android:name="com.integrals.inlens.Activities.RegisterUser"
             android:screenOrientation="portrait"
@@ -133,12 +119,6 @@
         <activity
             android:name="com.integrals.inlens.Activities.QRCodeReader"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="com.integrals.inlens.GridView.MainActivity"
-            android:autoRemoveFromRecents="true"
-            android:excludeFromRecents="true"
-            android:label="Upload Activity"
-            android:parentActivityName="com.integrals.inlens.MainActivity" />
 
         <meta-data
             android:name="com.google.android.gms.vision"
@@ -147,28 +127,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <receiver android:name="com.integrals.inlens.Broadcast_Receivers.NotificationWorks" >
-            <intent-filter>
-                <action android:name="ADD_FOR_UPLOAD_INLENS" />
-                <action android:name="ATTACH_ACTIVITY_INLENS" />
-                <action android:name="RECENT_IMAGES_GRID_INLENS" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.integrals.inlens.Broadcast_Receivers.BootCompleteReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.integrals.inlens.Broadcast_Receivers.NetworkChangeReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name="com.integrals.inlens.Services.OreoService" />
         <service android:name="com.integrals.inlens.ServiceImplementation.Service.UploadService" />
         <service
             android:name="com.integrals.inlens.ServiceImplementation.JobScheduler.JobService"
@@ -289,10 +247,6 @@
             android:name="com.squareup.picasso.PicassoProvider"
             android:authorities="com.integrals.inlens.com.squareup.picasso"
             android:exported="false" />
-        <provider
-            android:name="com.android.tools.ir.server.InstantRunContentProvider"
-            android:authorities="com.integrals.inlens.com.android.tools.ir.server.InstantRunContentProvider"
-            android:multiprocess="true" />
     </application>
 
 </manifest>
