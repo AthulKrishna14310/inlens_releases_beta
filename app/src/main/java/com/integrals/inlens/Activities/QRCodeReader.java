@@ -25,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 import info.androidhive.barcode.BarcodeReader;
+
+import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
 import com.integrals.inlens.Helper.CurrentDatabase;
 
 import com.integrals.inlens.R;
@@ -43,6 +45,7 @@ public class QRCodeReader extends AppCompatActivity
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference2,databaseReference3,databaseReference4;
     private Activity activity;
+    private AlbumStartingServices albumStartingServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,7 @@ public class QRCodeReader extends AppCompatActivity
         getSupportActionBar().hide();
         activity=this;
 
-
+        albumStartingServices=new AlbumStartingServices(getApplicationContext());
         barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_fragment);
         NewCommunityStatus = (TextView) findViewById(R.id.NewCommunityStatus);
         CommunityPhotographerAuthentication = FirebaseAuth.getInstance();
@@ -220,6 +223,10 @@ public class QRCodeReader extends AppCompatActivity
                                 SharedPreferences.Editor editor1 = sharedPreferences1.edit();
                                 editor1.putBoolean("ThisOwner::", false);
                                 editor1.commit();
+                                albumStartingServices.initiateJobServices();
+                                albumStartingServices.intiateNotificationAtStart();
+                                albumStartingServices.initiateUploadService();
+
                                 finish();
                             }
                         });

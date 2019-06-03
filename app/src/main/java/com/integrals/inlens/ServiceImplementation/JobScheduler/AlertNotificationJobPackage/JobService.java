@@ -2,7 +2,10 @@ package com.integrals.inlens.ServiceImplementation.JobScheduler.AlertNotificatio
 
 import android.app.job.JobParameters;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
+import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
 import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
 
@@ -27,6 +30,9 @@ public class JobService extends android.app.job.JobService {
         String url=recentImage.recentImagePath();
         notificationHelper.cancelNotificationRecentImage();
         notificationHelper.notifyRecentImage(url);
+
+
+
         return isWorking;
     }
 

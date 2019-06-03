@@ -16,12 +16,12 @@
         "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/drawable-xhdpi-v4/abc_textfield_default_mtrl_alpha.9.png"
     },
     {
-        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_bs_ic_more_light.png.flat",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/d18f72058503612c87f3f28b34cf37f1/res/drawable-xxhdpi-v4/bs_ic_more_light.png"
-    },
-    {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_list_divider_mtrl_alpha.9.png.flat",
         "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/drawable-xxhdpi-v4/abc_list_divider_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_bs_ic_more_light.png.flat",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/d18f72058503612c87f3f28b34cf37f1/res/drawable-xxhdpi-v4/bs_ic_more_light.png"
     },
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_abc_ic_star_black_48dp.png.flat",
@@ -44,24 +44,24 @@
         "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/drawable/abc_ratingbar_material.xml"
     },
     {
-        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_ic_info_outline_white_24dp.png.flat",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/67747d6c25338d94fa43984787a3f3bb/res/drawable-hdpi-v4/ic_info_outline_white_24dp.png"
-    },
-    {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable_ic_photo_camera.xml.flat",
         "source": "/home/athul/Devolopment/app/src/main/res/drawable/ic_photo_camera.xml"
+    },
+    {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_ic_info_outline_white_24dp.png.flat",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/67747d6c25338d94fa43984787a3f3bb/res/drawable-hdpi-v4/ic_info_outline_white_24dp.png"
     },
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-ldrtl-hdpi-v17_abc_ic_menu_cut_mtrl_alpha.png.flat",
         "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/drawable-ldrtl-hdpi-v17/abc_ic_menu_cut_mtrl_alpha.png"
     },
     {
-        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/layout_issue_item.xml.flat",
-        "source": "/home/athul/Devolopment/app/src/main/res/layout/issue_item.xml"
-    },
-    {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_launcher_foreground.png.flat",
         "source": "/home/athul/Devolopment/app/build/generated/res/pngs/debug/drawable-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/layout_issue_item.xml.flat",
+        "source": "/home/athul/Devolopment/app/src/main/res/layout/issue_item.xml"
     },
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_ic_star_black_48dp.png.flat",
@@ -96,16 +96,16 @@
         "source": "/home/athul/Devolopment/app/src/main/res/drawable/upload_icon_notification.png"
     },
     {
-        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/color_abc_background_cache_hint_selector_material_light.xml.flat",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/color/abc_background_cache_hint_selector_material_light.xml"
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_list_selector_disabled_holo_light.9.png.flat",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/drawable-hdpi-v4/abc_list_selector_disabled_holo_light.9.png"
     },
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-v21_avd_hide_password.xml.flat",
         "source": "/root/.gradle/caches/transforms-2/files-2.1/5880c18593534c12093bbd478950ffbd/res/drawable-v21/avd_hide_password.xml"
     },
     {
-        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_list_selector_disabled_holo_light.9.png.flat",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/drawable-hdpi-v4/abc_list_selector_disabled_holo_light.9.png"
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/color_abc_background_cache_hint_selector_material_light.xml.flat",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/color/abc_background_cache_hint_selector_material_light.xml"
     },
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_btn_check_to_on_mtrl_000.png.flat",
@@ -126,6 +126,10 @@
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_common_full_open_on_phone.png.flat",
         "source": "/root/.gradle/caches/transforms-2/files-2.1/7a474ce047bdb0a9e9704757859ad0eb/res/drawable-hdpi-v4/common_full_open_on_phone.png"
+    },
+    {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/menu_create_album_menu.xml.flat",
+        "source": "/home/athul/Devolopment/app/src/main/res/menu/create_album_menu.xml"
     },
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/color-v23_abc_tint_default.xml.flat",
@@ -1884,6 +1888,10 @@
         "source": "/root/.gradle/caches/transforms-2/files-2.1/5880c18593534c12093bbd478950ffbd/res/anim-v21/design_bottom_sheet_slide_in.xml"
     },
     {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable_ic_photo_album_menu_24dp.xml.flat",
+        "source": "/home/athul/Devolopment/app/src/main/res/drawable/ic_photo_album_menu_24dp.xml"
+    },
+    {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/layout_design_text_input_password_icon.xml.flat",
         "source": "/root/.gradle/caches/transforms-2/files-2.1/5880c18593534c12093bbd478950ffbd/res/layout/design_text_input_password_icon.xml"
     },
@@ -2400,6 +2408,10 @@
         "source": "/home/athul/Devolopment/app/src/main/res/drawable/ic_edit_situation_menu.xml"
     },
     {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable_ic_camera_alt_black_24dp.xml.flat",
+        "source": "/home/athul/Devolopment/app/src/main/res/drawable/ic_camera_alt_black_24dp.xml"
+    },
+    {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_design_ic_visibility.png.flat",
         "source": "/root/.gradle/caches/transforms-2/files-2.1/5880c18593534c12093bbd478950ffbd/res/drawable-mdpi-v4/design_ic_visibility.png"
     },
@@ -2532,6 +2544,10 @@
         "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/drawable-v21/abc_btn_colored_material.xml"
     },
     {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable_ic_scan_album_24dp.xml.flat",
+        "source": "/home/athul/Devolopment/app/src/main/res/drawable/ic_scan_album_24dp.xml"
+    },
+    {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_ic_warning_outline_white_24dp.png.flat",
         "source": "/root/.gradle/caches/transforms-2/files-2.1/67747d6c25338d94fa43984787a3f3bb/res/drawable-xhdpi-v4/ic_warning_outline_white_24dp.png"
     },
@@ -2594,6 +2610,10 @@
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_textfield_search_activated_mtrl_alpha.9.png.flat",
         "source": "/root/.gradle/caches/transforms-2/files-2.1/cc75e2ea4146b2a1ab8d5ed156317ae8/res/drawable-xxhdpi-v4/abc_textfield_search_activated_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable_ic_album_cover_image_default.xml.flat",
+        "source": "/home/athul/Devolopment/app/src/main/res/drawable/ic_album_cover_image_default.xml"
     },
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable_common_google_signin_btn_icon_dark_focused.xml.flat",

@@ -43,7 +43,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
-import com.integrals.inlens.Helper.RecentImageDatabase;
 import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -517,8 +516,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
 
                         CurrentDatabase currentDatabase1 = new CurrentDatabase(getApplicationContext(), "", null, 1);
                         currentDatabase1.DeleteDatabase();
-                        RecentImageDatabase recentImageDatabase = new RecentImageDatabase(getApplicationContext(), "", null, 1);
-                        recentImageDatabase.DeleteDatabase();
                         UploadDatabaseHelper uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
                         uploadDatabaseHelper.DeleteDatabase();
 
@@ -753,7 +750,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
         SharedPreferences.Editor editor1 = sharedPreferences1.edit();
         editor1.putBoolean("ThisOwner::", true);
         editor1.commit();
-
 
         albumStartingServices.initiateJobServices();
         albumStartingServices.intiateNotificationAtStart();

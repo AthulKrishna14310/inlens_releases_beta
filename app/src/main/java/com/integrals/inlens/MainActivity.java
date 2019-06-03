@@ -1,5 +1,6 @@
 package com.integrals.inlens;
 
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +18,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
+
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -25,7 +26,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -75,12 +75,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
 import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.AlbumProcedures.QuitCloudAlbumProcess;
 import com.integrals.inlens.Helper.NotificationHelper;
@@ -171,21 +173,6 @@ public class MainActivity extends AppCompatActivity {
     private List<String> AlbumKeys = new ArrayList<>();
     private Boolean QRCodeVisible = false;
     private int INTID = 3939;
-    //
-    //
-    // Import from Elson.............................................................................
-    //1.Service Running  Continuation
-    //2.Progress Bar for Profile Pic Upload
-    //3.Date of Completion date picker on the CREATE CLOUD ALBUM
-    //4.Add Situation
-
-    //Update for Elson
-    // Remove Unncessary code for Invitaitoon Database in
-    //Cloud-Album
-    //Situation Adapter
-    //Setting Activity
-
-    //for lastclick album
     private SharedPreferences AlbumClickDetails;
     private FloatingActionButton MainFab, CreateAlbumFab, ScanQrFab;
     private Animation FabOpen, FabClose, FabRotateForward, FabRotateBackward, AlbumCardOpen, AlbumCardClose;
@@ -214,8 +201,7 @@ public class MainActivity extends AppCompatActivity {
     private View MainCloudInfoBottomSheetView;
     String MemberName="";
     String MemberImage="";
-
-
+    private AlbumStartingServices albumStartingServices;
     public MainActivity() {
     }
 
@@ -228,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
         InAuthentication = FirebaseAuth.getInstance();
         ProgressRef = FirebaseDatabase.getInstance().getReference().child("Users");
         firebaseUser = InAuthentication.getCurrentUser();
+        albumStartingServices=new AlbumStartingServices(getApplicationContext());
         try {
             if (firebaseUser == null) {
                 startActivity(new Intent(MainActivity.this, IntroActivity.class));
@@ -342,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case R.id.upload_activity:
-                                    //startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
+                                    startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
                                     break;
                                 case R.id.profile_pic:
                                     DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -382,30 +369,6 @@ public class MainActivity extends AppCompatActivity {
                                                         }
                                                     });
 
-                                                /*
-                                                Toast.makeText(getApplicationContext(),image,Toast.LENGTH_SHORT).show();
-                                                RequestOptions requestOptions = new RequestOptions()
-                                                        .fitCenter().placeholder(R.drawable.ic_account_200dp);
-
-                                                Glide.with(MainActivity.this)
-                                                        .load(image)
-                                                        .apply(requestOptions)
-                                                        .listener(new RequestListener<Drawable>() {
-                                                            @Override
-                                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                                progressBar.setVisibility(View.GONE);
-                                                                Toast.makeText(getApplicationContext(),"Image loading failed.",Toast.LENGTH_SHORT).show();
-                                                                return true;
-                                                            }
-
-                                                            @Override
-                                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                                progressBar.setVisibility(View.GONE);
-                                                                return true;
-                                                            }
-                                                        })
-                                                        .into(UserImage);
-                                                 */
 
                                                 }  else {
                                                     Toast.makeText(getApplicationContext(),"Loading failed.",Toast.LENGTH_SHORT).show();
@@ -446,6 +409,29 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 case R.id.restart_service: {
+                                    Checker checker = new Checker(getApplicationContext());
+                                    if (checker.isConnectedToNet()) {
+                                        if (checker.checkIfInAlbum()) {
+                                            if (checker.checkAlbumActiveTime() <= 0) {
+                                            AlbumStartingServices albumStartingServices=
+                                                    new AlbumStartingServices(getApplicationContext());
+                                            albumStartingServices.initiateUploadService();
+                                            }else{
+                                                Toast.makeText(getApplicationContext()
+                                                        ,"Cloud-Album expired",
+                                                        Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        }else{
+                                            Toast.makeText(getApplicationContext()
+                                                    ," You don't participate in a Cloud-Album",
+                                                    Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }else {
+                                        Toast.makeText(getApplicationContext()
+                                        ,"No internet connection",Toast.LENGTH_SHORT).show();
+                                    }
 
                                 }
                                 break;
@@ -807,39 +793,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void StartUpload(String Title ,String Content) {
-
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            Notification.Builder builder=ImageNotyHelper.buildNotificationForUploadData(
-                    Title,
-                    Content
-            );
-            builder.setAutoCancel(true);
-            ImageNotyHelper.getNotificationManager().notify(503,builder.build());
-
-        }
-        else {
-
-            ImageNotyManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            ImageNotyBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
-                    .setContentTitle(Title)
-                    .setContentText(Content)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.inlens_logo_m)
-                    .setPriority(Notification.PRIORITY_MAX)
-                    .setOngoing(true)
-                    .setProgress(100, 0, true);
-
-
-            ImageNotyManager.notify(503, ImageNotyBuilder.build());
-
-        }
-
-
-
-    }
-
 
     private void ProfileDialogInit() {
 
@@ -1032,7 +985,8 @@ public class MainActivity extends AppCompatActivity {
                 .go();
     }
 
-    private void DisplayAllParticipantsAsBottomSheet(String postKeyForEdit, DatabaseReference getParticipantDatabaseReference) {
+    private void DisplayAllParticipantsAsBottomSheet(String postKeyForEdit,
+                                                     DatabaseReference getParticipantDatabaseReference) {
 
         final Dialog BottomSheetUserDialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar);
         BottomSheetUserDialog.setCancelable(true);
@@ -1247,7 +1201,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void quitCloudAlbum(int XYZ) {
+    private void quitCloudAlbum(int x) {
         Checker checker = new Checker(getApplicationContext());
         if (checker.isConnectedToNet()) {
             if (checker.checkIfInAlbum()) {
@@ -1400,6 +1354,9 @@ public class MainActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor1 = sharedPreferences1.edit();
                             editor1.putBoolean("ThisOwner::", false);
                             editor1.commit();
+                            albumStartingServices.initiateJobServices();
+                            albumStartingServices.intiateNotificationAtStart();
+                            albumStartingServices.initiateUploadService();
 
                         }
 
@@ -1422,9 +1379,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
-
 
     public void GetStartedWithNewProfileImage() {
         CropImage.activity()
@@ -1501,7 +1455,6 @@ public class MainActivity extends AppCompatActivity {
 
                 final StorageReference filepath = mStorageRef.child("profile_images").child(current_u_i_d + ".jpg");
                 final StorageReference thumb_filepath = mStorageRef.child("profile_images").child("thumbs").child(current_u_i_d + ".jpg");
-                StartUpload("Updating Profile Picture","Please wait until profile picture is updated.");
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -1607,7 +1560,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void UploadCOverPhoto(Uri imageUri) {
 
-        StartUpload("Updating Album Cover Image","Please wait until album cover image is updated.");
         MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.VISIBLE);
         if (!TextUtils.isEmpty(PostKeyForEdit) && imageUri != null) {
 
@@ -1639,37 +1591,17 @@ public class MainActivity extends AppCompatActivity {
                                     MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(MainActivity.this, "Successfully changed the Cover-Photo.", Toast.LENGTH_LONG).show();
 
-                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                        ImageNotyHelper.cancelUploadDataNotification();
-                                    }
-                                    else
-                                    {
-                                        ImageNotyManager.cancel(503);
-                                    }
                                 } else {
                                     MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
 
-                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                        ImageNotyHelper.cancelUploadDataNotification();
-                                    }
-                                    else
-                                    {
-                                        ImageNotyManager.cancel(503);
-                                    }
-                                }
+                                     }
                             }
                         });
                     } else {
                         MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                            ImageNotyHelper.cancelUploadDataNotification();
-                        }
-                        else
-                        {
-                            ImageNotyManager.cancel(503);
-                        }
+
 
                     }
 
@@ -1679,26 +1611,26 @@ public class MainActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Exception e) {
                     MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        ImageNotyHelper.cancelUploadDataNotification();
-                    }
-                    else
-                    {
-                        ImageNotyManager.cancel(503);
-                    }
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress =
+                            (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                    Toast toast=Toast.makeText(getApplicationContext(),"",Toast.LENGTH_SHORT);
+                    toast.setText("Uploading your cover photo  " +
+                            (int)progress+"%  " +
+                            "completed.");
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+
                 }
             });
 
         } else {
             MainBottomSheetAlbumCoverEditprogressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(MainActivity.this, "Unable to perform to change cover now.", Toast.LENGTH_LONG).show();
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                ImageNotyHelper.cancelUploadDataNotification();
-            }
-            else
-            {
-                ImageNotyManager.cancel(503);
-            }
         }
 
 

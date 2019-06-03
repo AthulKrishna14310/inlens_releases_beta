@@ -977,10 +977,12 @@ drawable googleg_standard_color_18
 drawable ic_account_200dp
 drawable ic_account_circle
 drawable ic_account_main_menu
+drawable ic_album_cover_image_default
 drawable ic_album_link
 drawable ic_app_working_tour_main_menu
 drawable ic_arrow_back
 drawable ic_camera
+drawable ic_camera_alt_black_24dp
 drawable ic_card_giftcard
 drawable ic_card_giftcard_main_menu
 drawable ic_close
@@ -1005,11 +1007,13 @@ drawable ic_menu_icon
 drawable ic_more_vert
 drawable ic_more_vert_black_18dp
 drawable ic_original_image
+drawable ic_photo_album_menu_24dp
 drawable ic_photo_camera
 drawable ic_photo_library_main_menu
 drawable ic_playlist_play
 drawable ic_recent_images
 drawable ic_refresh_main_menu
+drawable ic_scan_album_24dp
 drawable ic_search
 drawable ic_success_white_24dp
 drawable ic_swipe_left
@@ -1222,6 +1226,7 @@ id contentPanel
 id coordinator
 id copy_link
 id create_cloud_album_backbutton
+id create_cloud_album_photo
 id create_cloud_album_toolbar
 id create_issue_btn
 id create_issues
@@ -1412,6 +1417,7 @@ id rootforsharedimage
 id save_image_matrix
 id save_non_transition_alpha
 id save_scale_type
+id scan_cloud_album_photo
 id screen
 id scroll
 id scrollIndicatorDown
@@ -1633,6 +1639,7 @@ layout support_simple_spinner_dropdown_item
 layout zxing_barcode_scanner
 layout zxing_capture
 menu cloud_album_menu
+menu create_album_menu
 menu crop_image_menu
 menu main_menu
 menu photo_menu

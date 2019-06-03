@@ -10,14 +10,14 @@
     android:layout_marginRight="10dp"
     android:layout_marginBottom="10dp"
     app:cardCornerRadius="5dp"
-    app:cardElevation="2dp">
+    app:cardElevation="5dp">
 
     <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         app:cardCornerRadius="5dp"
-        app:cardElevation="0dp">
+        app:cardElevation="1dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -26,17 +26,18 @@
             <ImageView
                 android:id="@+id/CloudAlbumCover"
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
+                android:layout_height="200dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="false"
                 android:adjustViewBounds="true"
                 android:background="@drawable/rounded_corners"
-                android:scaleType="fitXY" />
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_album_cover_image_default" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/CreatedByProfilePic"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_below="@+id/CloudAlbumCover"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
@@ -54,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/CloudAlbumCover"
                 android:layout_gravity="start"
-                android:background="@android:drawable/screen_background_dark_transparent"
+                android:background="#B76965A0"
                 android:fontFamily="sans-serif"
                 android:maxLength="25"
 
@@ -65,26 +66,25 @@
                 android:text="Album Title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="#ffffff"
-                android:textSize="22sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:id="@+id/album_card_button_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/CloudAlbumCover"
+                android:layout_alignTop="@id/CreatedByProfilePic"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:orientation="horizontal"
-                android:layout_alignTop="@id/CreatedByProfilePic"
-                >
+                android:orientation="horizontal">
 
 
                 <ImageButton
                     android:id="@+id/album_details_btn"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_info_final_albumviewholder"
@@ -94,12 +94,12 @@
 
             <ProgressBar
                 android:id="@+id/main_album_progressbar"
-                android:layout_width="30dp"
-                android:indeterminateTint="@color/colorAccent"
                 style="@style/Base.Widget.AppCompat.ProgressBar"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerInParent="true"
-                android:indeterminate="true"/>
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccent" />
 
         </RelativeLayout>
 

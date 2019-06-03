@@ -37,6 +37,7 @@ import com.integrals.inlens.R;
     public LinearLayout AlbumContainer;
     public ProgressBar MainAlbumProgressbar;
 
+
     public AlbumViewHolder(View ItemView) {
         super(ItemView);
         view=ItemView;
@@ -51,10 +52,15 @@ import com.integrals.inlens.R;
 
         MainAlbumProgressbar.setVisibility(View.VISIBLE);
 
-        ImageView imageView=(ImageView)view.findViewById(R.id.CloudAlbumCover);
+
+        final ImageView imageView=(ImageView)view.findViewById(R.id.CloudAlbumCover);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
         RequestOptions requestOptions=new RequestOptions()
-                .placeholder(R.drawable.image_avatar_background)
-                .fitCenter();
+                .placeholder(R.drawable.ic_album_cover_image_default)
+                .fitCenter()
+                ;
+
 
         Glide.with(context)
                 .load(Uri)
@@ -64,12 +70,14 @@ import com.integrals.inlens.R;
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         MainAlbumProgressbar.setVisibility(View.GONE);
+
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         MainAlbumProgressbar.setVisibility(View.GONE);
+                        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                         return false;
                     }
                 })

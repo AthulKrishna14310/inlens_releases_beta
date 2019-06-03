@@ -70,8 +70,8 @@ public final class R {
         public static final int bs_list_title = 0x7f0a0086;
         public static final int bs_main = 0x7f0a0087;
         public static final int bs_more = 0x7f0a0088;
-        public static final int header = 0x7f0a00f0;
-        public static final int headerlayout = 0x7f0a00f1;
+        public static final int header = 0x7f0a00f1;
+        public static final int headerlayout = 0x7f0a00f2;
     }
     public static final class integer {
         private integer() {}

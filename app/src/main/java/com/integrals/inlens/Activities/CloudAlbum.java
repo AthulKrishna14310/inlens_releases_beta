@@ -938,12 +938,15 @@ public class CloudAlbum extends AppCompatActivity {
 
         }
 
-        private void StoreImage(String imageThumb, ViewFlipper cloudAlbumLayout_ImageView, ProgressBar cloudAlbumPBar) {
+        private void StoreImage(String imageThumb,
+                                ViewFlipper cloudAlbumLayout_ImageView,
+                                ProgressBar cloudAlbumPBar) {
             LoadImage(imageThumb,cloudAlbumLayout_ImageView,cloudAlbumPBar);
 
         }
 
-        private void LoadImage(String img, ViewFlipper cloudAlbumLayout_ImageView, final ProgressBar cloudAlbumPBar) {
+        private void LoadImage(String img, ViewFlipper cloudAlbumLayout_ImageView,
+                               final ProgressBar cloudAlbumPBar) {
 
             cloudAlbumPBar.setVisibility(View.VISIBLE);
 

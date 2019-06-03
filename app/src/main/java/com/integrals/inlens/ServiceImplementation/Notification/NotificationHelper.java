@@ -360,8 +360,12 @@ public class NotificationHelper extends ContextWrapper {
         }
     }
     public void cancelNotificationRecentImage(){
-        notificationManager.cancel(7907);
-    }
+        try {
+            notificationManager.cancel(7907);
+        }catch (NullPointerException e)
+        {
+            Toast.makeText(getApplicationContext(),"NotificationHelper NullPointer Exception.",Toast.LENGTH_SHORT).show();
+        }  }
 
 
     public void notifyUploadData(int uploadID,int record)

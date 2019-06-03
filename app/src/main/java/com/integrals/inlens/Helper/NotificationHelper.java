@@ -29,7 +29,8 @@ public class NotificationHelper extends ContextWrapper {
     private void createNotificationChannels() {
         NotificationChannel notificationChannel= null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = new NotificationChannel("ID_503","Recent Image Notification",NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel = new NotificationChannel("ID_503","InLens",
+                    NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.enableLights(true);
             notificationChannel.enableLights(true);
             notificationChannel.setSound(null,null);
@@ -66,91 +67,8 @@ public class NotificationHelper extends ContextWrapper {
     }
 
 
-    public Notification.Builder buildNotificationForRecentImage(
-            RemoteViews remoteViews,
-            Bitmap LogoBitMap
-    ){
-        Intent upload_intent;
-        Intent attach_intent ;
-        Intent upload_activity_intent;
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            upload_intent = new Intent();
-            upload_intent.setAction("ADD_FOR_UPLOAD_INLENS");
-            attach_intent = new Intent("ATTACH_ACTIVITY_INLENS");
-            upload_activity_intent = new Intent("RECENT_IMAGES_GRID_INLENS");
-
-            upload_intent.setComponent(new ComponentName(getPackageName(),"integrals.inlens.Broadcast_Receivers.NotificationWorks"));
-            attach_intent.setComponent(new ComponentName(getPackageName(),"integrals.inlens.Broadcast_Receivers.NotificationWorks"));
-            upload_activity_intent.setComponent(new ComponentName(getPackageName(),"integrals.inlens.Broadcast_Receivers.NotificationWorks"));
-
-
-        }else{
-
-            upload_intent = new Intent("ADD_FOR_UPLOAD_INLENS");
-            attach_intent = new Intent("ATTACH_ACTIVITY_INLENS");
-            upload_activity_intent = new Intent("RECENT_IMAGES_GRID_INLENS");
-
-
-
-        }
-
-
-
-
-
-
-
-
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 9388, upload_intent, 0);
-        PendingIntent pendingIntent3 = PendingIntent.getBroadcast(getApplicationContext(), 1428, upload_activity_intent, 0);
-
-        remoteViews.setOnClickPendingIntent(R.id.AddForUpload, pendingIntent1);
-        remoteViews.setOnClickPendingIntent(R.id.GotoUploadActivity, pendingIntent3);
-
-
-        Notification.Builder builder = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder = (Notification.Builder)
-                        new Notification.Builder(getApplicationContext(), "ID_503")
-                                .setContentTitle("New image detected")
-                                .setContentText("Inlens has detected a new image. Expand to get more info.")
-                                .setOnlyAlertOnce(true)
-                                .setCustomBigContentView(remoteViews)
-                                .setWhen(System.currentTimeMillis())
-                                .setSmallIcon(R.drawable.inlens_logo_m)
-                                .setLargeIcon(LogoBitMap);
-
-                builder.setContentIntent(pendingIntent);
-            }
-
-        return builder;
-    }
-
-
-    public Notification.Builder buildNotificationForUploadData(int uploadID,int Record)
-    {
-
-        Notification.Builder Uploadbuilder = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Uploadbuilder = (Notification.Builder) new Notification.Builder(getApplicationContext(),"ID_504")
-                    .setContentTitle("Upload Started")
-                    .setContentText("Uploading " + uploadID + "/" + Record)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.inlens_logo_m)
-                    .setProgress(100, 0, true);
-        }
-
-        return Uploadbuilder;
-    }
 
     public Notification.Builder buildNotificationForUploadData(String Title ,String Content)
     {
@@ -173,8 +91,5 @@ public class NotificationHelper extends ContextWrapper {
     public void cancelUploadDataNotification(){
         notificationManager.cancel(672);
         }
-    public void cancelNotificationRecentImage(){
-        notificationManager.cancel(7907);
-    }
 
 }

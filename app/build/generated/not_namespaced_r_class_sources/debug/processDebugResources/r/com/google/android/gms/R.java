@@ -66,17 +66,17 @@ public final class R {
         public static final int adjust_width = 0x7f0a0071;
         public static final int auto = 0x7f0a007c;
         public static final int center = 0x7f0a008d;
-        public static final int dark = 0x7f0a00c1;
-        public static final int icon_only = 0x7f0a00f6;
-        public static final int light = 0x7f0a010c;
-        public static final int none = 0x7f0a013d;
-        public static final int normal = 0x7f0a013e;
-        public static final int radio = 0x7f0a0156;
-        public static final int standard = 0x7f0a018f;
-        public static final int text = 0x7f0a0196;
-        public static final int text2 = 0x7f0a0197;
-        public static final int wide = 0x7f0a01c0;
-        public static final int wrap_content = 0x7f0a01c4;
+        public static final int dark = 0x7f0a00c2;
+        public static final int icon_only = 0x7f0a00f7;
+        public static final int light = 0x7f0a010d;
+        public static final int none = 0x7f0a013e;
+        public static final int normal = 0x7f0a013f;
+        public static final int radio = 0x7f0a0157;
+        public static final int standard = 0x7f0a0191;
+        public static final int text = 0x7f0a0198;
+        public static final int text2 = 0x7f0a0199;
+        public static final int wide = 0x7f0a01c2;
+        public static final int wrap_content = 0x7f0a01c6;
     }
     public static final class integer {
         private integer() {}
