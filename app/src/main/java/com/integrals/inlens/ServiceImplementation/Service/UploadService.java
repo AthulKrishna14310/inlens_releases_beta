@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.integrals.inlens.AlbumProcedures.AlbumStoppingServices;
 import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.Helper.NotificationHelper;
@@ -33,6 +34,9 @@ public class UploadService extends Service {
    private Handler handler;
    private Runnable runnable;
    private Checker checker;
+   private CurrentDatabase currentDatabase;
+   private UploadDatabaseHelper uploadDatabaseHelper;
+   private AlbumStoppingServices albumStoppingServices;
 
    @Override
     public void onCreate() {
@@ -41,13 +45,13 @@ public class UploadService extends Service {
         notificationHelper=new NotificationHelper(getBaseContext());
         handler = new Handler();
 
-       UploadDatabaseHelper uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
-       CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
-       uploadDatabaseHelper.UpdateUploadStatus(currentDatabase.GetUploadingTargetColumn(), "NOT_UPLOADED");
-       currentDatabase.close();
-       uploadDatabaseHelper.close();
-
-       checker=new Checker(getApplicationContext());
+        albumStoppingServices=new AlbumStoppingServices(getApplicationContext());
+        uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
+        currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
+        uploadDatabaseHelper.UpdateUploadStatus(currentDatabase.GetUploadingTargetColumn(), "NOT_UPLOADED");
+        currentDatabase.close();
+        uploadDatabaseHelper.close();
+        checker=new Checker(getApplicationContext());
     }
 
 
@@ -77,7 +81,11 @@ public class UploadService extends Service {
             public void run() {
 
                 if(checker.isConnectedToNet()) {
-                    uploadProcedure();
+                    if(checker.isThereImageToUpload(currentDatabase)) {
+                        uploadProcedure();
+                    }else{
+                        albumStoppingServices.deinitiateUploadService();
+                    }
                 }
                 else{
 

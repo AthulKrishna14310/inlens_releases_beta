@@ -225,8 +225,6 @@ public class QRCodeReader extends AppCompatActivity
                                 editor1.commit();
                                 albumStartingServices.initiateJobServices();
                                 albumStartingServices.intiateNotificationAtStart();
-                                albumStartingServices.initiateUploadService();
-
                                 finish();
                             }
                         });

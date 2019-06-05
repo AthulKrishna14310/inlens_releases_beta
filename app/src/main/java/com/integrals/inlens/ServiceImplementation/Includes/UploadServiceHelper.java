@@ -294,7 +294,7 @@ public class UploadServiceHelper {
 
 
     public void cancelUploadOperation(){
-        uploadAsyncTask.cancel(true);
+        uploadAsyncTask.cancel(false);
         Log.d("Upload::STATUS","Upload process stopped");
 
     }

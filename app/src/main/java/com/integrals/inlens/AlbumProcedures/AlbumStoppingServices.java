@@ -2,6 +2,7 @@ package com.integrals.inlens.AlbumProcedures;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.ServiceImplementation.JobScheduler.JobHelper;
 import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
+import com.integrals.inlens.ServiceImplementation.Service.UploadService;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -90,12 +92,19 @@ public class AlbumStoppingServices {
 
                 }
             });
-        } else {
+        }
+        else
+            {
+
                }
 
     }
 
 
-     //Need to write code for to stop Upload services
+     public void deinitiateUploadService(){
+                    context.stopService(new Intent(context, UploadService.class));
+     }
+
+
 }
 

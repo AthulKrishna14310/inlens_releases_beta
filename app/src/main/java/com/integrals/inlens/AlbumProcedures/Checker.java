@@ -58,6 +58,14 @@ public class Checker {
 
     }
 
+    public boolean isThereImageToUpload(CurrentDatabase currentDatabase){
+        boolean result=false;
+        if(currentDatabase.GetUploadingTargetColumn()<=currentDatabase.GetUploadingTotal()){
+            return true;
+        }
+
+        return result;
+    }
 
     public boolean checkIfInAlbum(){
         boolean result=false;

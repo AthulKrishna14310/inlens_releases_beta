@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 
+import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
 import com.integrals.inlens.AlbumProcedures.AlbumStoppingServices;
 import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.AlbumProcedures.QuitCloudAlbumProcess;
@@ -38,23 +39,37 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseOperations databaseOperations;
     private GalleryAdapter galleryAdapter;
     private List<String> mTimes;
+    private AlbumStoppingServices albumStoppingServices;
+    private AlbumStartingServices albumStartingServices;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_inlens_gallery);
         requirePermission();
+
         activity = this;
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setHasFixedSize(true);
+
         databaseOperations = new DatabaseOperations(getApplicationContext());
+        albumStoppingServices=new AlbumStoppingServices(getApplicationContext());
+        albumStartingServices=new AlbumStartingServices(getApplicationContext());
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         Checker checker = new Checker(getApplicationContext());
         if (checker.isConnectedToNet()) {
             if (checker.checkIfInAlbum()) {
                 if (checker.checkAlbumActiveTime() <= 0) {
-                     }else{
+                }else{
                     QuitCloudAlbumProcess quitCloudAlbumProcess = new QuitCloudAlbumProcess(
                             getApplicationContext(),
                             MainActivity.this
@@ -65,18 +80,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        try {
+            albumStoppingServices.deinitiateUploadService();
 
-    }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+       }
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
         Snackbar.make(recyclerView,"Loading your images ..Please wait",Snackbar.LENGTH_SHORT).show();
-        CurrentDatabase currentDatabase=new CurrentDatabase(getApplicationContext(),"",null,1);
 
-        if(currentDatabase.GetAlbumExpiry()!=null) {
             new AsyncTask() {
                 @Override
                 protected Object doInBackground(Object[] objects) {
@@ -103,17 +121,10 @@ public class MainActivity extends AppCompatActivity {
                     recyclerView.setAdapter(galleryAdapter);
                 }
             }.execute();
-        }else{
-            Snackbar.make(recyclerView,"Your album time is expired to upload photos ",Snackbar.LENGTH_LONG).show();
-        }
+
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
 
     private void requirePermission() {
         Ask.on(this)
@@ -130,15 +141,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        Boolean Default = false;
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-        if (sharedPreferences.getBoolean("UsingCommunity::", Default) == true) {
-            notificationHelper=new NotificationHelper(getBaseContext());
-            RecentImage recentImage=new RecentImage(getApplicationContext());
-            notificationHelper.notifyRecentImage(recentImage.recentImagePath());
-
-        }
-
-    }
+            albumStartingServices.initiateUploadService();
+         }
 }

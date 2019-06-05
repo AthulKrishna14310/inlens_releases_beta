@@ -409,30 +409,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 case R.id.restart_service: {
-                                    Checker checker = new Checker(getApplicationContext());
-                                    if (checker.isConnectedToNet()) {
-                                        if (checker.checkIfInAlbum()) {
-                                            if (checker.checkAlbumActiveTime() <= 0) {
-                                            AlbumStartingServices albumStartingServices=
-                                                    new AlbumStartingServices(getApplicationContext());
-                                            albumStartingServices.initiateUploadService();
-                                            }else{
-                                                Toast.makeText(getApplicationContext()
-                                                        ,"Cloud-Album expired",
-                                                        Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        }else{
-                                            Toast.makeText(getApplicationContext()
-                                                    ," You don't participate in a Cloud-Album",
-                                                    Toast.LENGTH_SHORT).show();
-
-                                        }
-                                    }else {
-                                        Toast.makeText(getApplicationContext()
-                                        ,"No internet connection",Toast.LENGTH_SHORT).show();
-                                    }
-
+                                   AlbumStartingServices albumStartingServices
+                                           =new AlbumStartingServices(getApplicationContext());
+                                   albumStartingServices.initiateUploadService();
                                 }
                                 break;
                                 case R.id.create_issues: {
@@ -1222,6 +1201,7 @@ public class MainActivity extends AppCompatActivity {
                         QuitCloudAlbumProcess quitCloudAlbumProcess = new QuitCloudAlbumProcess(
                                 getApplicationContext(),
                                 MainActivity.this
+
                         );
                         quitCloudAlbumProcess.execute();
                     }
@@ -1356,7 +1336,6 @@ public class MainActivity extends AppCompatActivity {
                             editor1.commit();
                             albumStartingServices.initiateJobServices();
                             albumStartingServices.intiateNotificationAtStart();
-                            albumStartingServices.initiateUploadService();
 
                         }
 

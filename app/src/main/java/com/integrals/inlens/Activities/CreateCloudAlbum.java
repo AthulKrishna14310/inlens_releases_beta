@@ -753,7 +753,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
 
         albumStartingServices.initiateJobServices();
         albumStartingServices.intiateNotificationAtStart();
-        albumStartingServices.initiateUploadService();
     }
 
 
