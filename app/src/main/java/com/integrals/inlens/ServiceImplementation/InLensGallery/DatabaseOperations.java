@@ -9,6 +9,7 @@ import java.util.Calendar;
 public class DatabaseOperations {
 
     private UploadDatabaseHelper uploadDatabaseHelper;
+    private CurrentDatabase      currentDatabase;
     private Context context;
     private String DatabaseImageUri,
     DatabaseWeatherDetails,
@@ -26,6 +27,7 @@ public class DatabaseOperations {
     public DatabaseOperations(Context context) {
         this.context = context;
         this.uploadDatabaseHelper = new UploadDatabaseHelper(context, "", null, 1);
+        this.currentDatabase=new CurrentDatabase(context,"",null,1);
 
     }
 
@@ -55,12 +57,14 @@ public class DatabaseOperations {
         DatabaseImageUri = filename;
         DatabaseCurrentTimeMilliSecond = String.valueOf(System.currentTimeMillis());
         DatabaseUploadStatus = "NOT_UPLOADED";
-        Calendar calendar = Calendar.getInstance();
         DatabaseTimeTaken = time;
-        CurrentDatabase currentDatabase = new CurrentDatabase(context, "", null, 1);
+        currentDatabase = new CurrentDatabase(context, "", null, 1);
+
         int Value = currentDatabase.GetUploadingTotal();
         currentDatabase.ResetUploadTotal((Value + 1));
         currentDatabase.close();
+
+
     }
 
 

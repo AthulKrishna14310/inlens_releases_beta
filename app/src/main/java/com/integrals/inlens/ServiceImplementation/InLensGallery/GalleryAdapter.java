@@ -3,19 +3,16 @@ package com.integrals.inlens.ServiceImplementation.InLensGallery;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.integrals.inlens.R;
-
 import java.util.List;
 
 public class GalleryAdapter extends
@@ -25,21 +22,27 @@ public class GalleryAdapter extends
     private final Activity mActivity;
     private final List<String> mTimeList;
     private  DatabaseOperations databaseOperations;
-    public GalleryAdapter(Activity activity, List<String> fileList,List<String> mTimeList) {
+
+
+    public GalleryAdapter(Activity activity, List<String> fileList,List<String> mTimeList)
+    {
         this.mActivity = activity;
         this.mFileList = fileList;
         this.mTimeList=mTimeList;
         this.databaseOperations=new DatabaseOperations(mActivity);
+
     }
 
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gallery_list_row, parent, false);
         return new GalleryAdapter.CustomViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
+    public void onBindViewHolder(CustomViewHolder holder, int position)
+    {
 
 
             RequestOptions requestOptions=new RequestOptions()
@@ -91,11 +94,14 @@ public class GalleryAdapter extends
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+
+    {
         return mFileList.size();
     }
 
-    static class CustomViewHolder extends RecyclerView.ViewHolder {
+    static class CustomViewHolder extends RecyclerView.ViewHolder
+    {
         final ImageView imageResource;
         CustomViewHolder(View itemView) {
             super(itemView);

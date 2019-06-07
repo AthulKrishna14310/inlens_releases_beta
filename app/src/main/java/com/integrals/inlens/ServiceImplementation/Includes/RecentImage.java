@@ -12,12 +12,14 @@ public class RecentImage {
     private String recentImageStringPath;
     private Context context;
 
-    public RecentImage(Context context) {
+    public RecentImage(Context context)
+    {
         this.context = context;
         tempImagePathString="";
     }
 
-    public String recentImagePath() {
+    public String recentImagePath()
+    {
 
         projection[0] = new String[]{
                 MediaStore.Images.ImageColumns._ID,

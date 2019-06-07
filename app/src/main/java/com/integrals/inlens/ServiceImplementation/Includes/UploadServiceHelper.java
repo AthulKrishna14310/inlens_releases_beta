@@ -1,19 +1,12 @@
 package com.integrals.inlens.ServiceImplementation.Includes;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteReadOnlyDatabaseException;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -58,6 +51,7 @@ public class UploadServiceHelper {
     private File                    thumbFile;
     private File                    imageFile;
     private UploadDatabaseHelper    uploadDatabaseHelper;
+
     public UploadServiceHelper(Context context,
                                ArrayList<String>stringArrayList,
                                String titleValue,
@@ -88,7 +82,8 @@ public class UploadServiceHelper {
 
 
     @SuppressLint("StaticFieldLeak")
-    public void initiateUploadOperation(){
+    public void initiateUploadOperation()
+    {
 
         uploadAsyncTask=new AsyncTask() {
             @Override
@@ -143,7 +138,6 @@ public class UploadServiceHelper {
 
                                         Log.d("Upload::STATUS","Image file uploaded");
 
-                                          notificationHelper.cancelUploadDataNotification();
                                             final DatabaseReference NewPost = postDatabaseReference.push();
                                             inUserReference.addValueEventListener(new ValueEventListener() {
                                             @Override
@@ -185,11 +179,9 @@ public class UploadServiceHelper {
                                                 int Value = currentDatabase.GetUploadingTargetColumn();
                                                 currentDatabase.ResetUploadTargetColumn((Value + 1));
                                                 currentDatabase.close();
+                                                uploadDatabaseHelper.close();
                                                 Log.d("Upload::STATUS","CURRENT_DATABASE " +
                                                         "updated");
-
-
-                                                notificationHelper.cancelUploadDataNotification();
                                                 Log.d("Upload::STATUS","All upload operation done");
 
 
@@ -258,7 +250,7 @@ public class UploadServiceHelper {
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
                 Log.d("Upload::STATUS","Upload Post-Excecuted");
-
+                notificationHelper.cancelUploadDataNotification();
             }
 
             @Override
@@ -273,6 +265,7 @@ public class UploadServiceHelper {
                 int Value = currentDatabase.GetUploadingTargetColumn();
                 currentDatabase.ResetUploadTargetColumn((Value));
                 currentDatabase.close();
+                uploadDatabaseHelper.close();
 
                 notificationHelper.cancelUploadDataNotification();
             }
@@ -286,19 +279,17 @@ public class UploadServiceHelper {
 
     }
 
-    public void proceedUploadOperation(){
+    public void proceedUploadOperation()
+    {
         uploadAsyncTask.execute("");
         Log.d("Upload::STATUS","Upload process started to run on async task");
 
     }
 
-
-    public void cancelUploadOperation(){
+    public void cancelUploadOperation()
+    {
         uploadAsyncTask.cancel(false);
         Log.d("Upload::STATUS","Upload process stopped");
 
     }
-
-
-
 }

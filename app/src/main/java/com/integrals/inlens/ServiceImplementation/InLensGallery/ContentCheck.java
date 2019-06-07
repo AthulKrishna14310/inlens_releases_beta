@@ -20,23 +20,14 @@ public class ContentCheck {
     private boolean isPresent=false;
     private Context context;
 
-    public ContentCheck(String imageName,Context context) {
+    public ContentCheck(String imageName,Context context)
+    {
         ImageName = imageName;
         this.context=context;
     }
 
-    public boolean isImagePresent(){
-        return isPresent;
-    }
-
-    public String  getExpiryDate(){
-        CurrentDatabase currentDatabase=new CurrentDatabase(context,"",null,1);
-        String ExpiryDate=currentDatabase.GetAlbumExpiry().toString().trim();
-        return ExpiryDate;
-    }
-
-
-    public String getImageAddedDate(String filePath){
+    public String getImageAddedDate(String filePath)
+    {
         String stringDate=null;
         File file = new File(filePath);
         if(file.exists()) //Extra check, Just to validate the given path
@@ -61,20 +52,8 @@ public class ContentCheck {
         return stringDate;
     }
 
-    public String getImageModifiedDate(String filePath){
-        String stringDate=null;
-        File file = new File(filePath);
-        if(file.exists()) //Extra check, Just to validate the given path
-        {
-                Date lastModDate = new Date(file.lastModified());
-                stringDate=lastModDate.toString();
-        }
-
-
-        return stringDate;
-    }
-
-    public boolean isImageDateAfterAlbumExpiryDate(String imageDate,String albumExpiryDate){
+    public boolean isImageDateAfterAlbumExpiryDate(String imageDate,String albumExpiryDate)
+    {
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             Date d1 = null, d2 = null;
@@ -94,14 +73,11 @@ public class ContentCheck {
                 else
             return false;
             } catch (NullPointerException e) {
-                Toast.makeText(context,"Null",Toast.LENGTH_SHORT).show();
-
+            Log.d("InLens","Null for date");
             }
 
 
-
-
-        return false;
+            return false;
     }
 
 

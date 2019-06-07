@@ -28,7 +28,8 @@ public class BitmapCompressionHelper  {
 
     public BitmapCompressionHelper(File bitmapFile, Bitmap result,
                                    Context context, Uri resultUri,
-                                   File pictureFile) {
+                                   File pictureFile)
+    {
         this.bitmapFile = bitmapFile;
         this.result = result;
         this.context = context;
@@ -39,7 +40,8 @@ public class BitmapCompressionHelper  {
     }
 
 
-    public void compressUploadFile(){
+    public void compressUploadFile()
+    {
         try {
             compressionDimensions(bitmapFile);
             result = new Compressor(context)
@@ -57,7 +59,8 @@ public class BitmapCompressionHelper  {
 
     }
 
-    public void compressThumbImageFile(){
+    public void compressThumbImageFile()
+    {
         try {
             result = new Compressor(context)
                     .setMaxHeight(130)
@@ -74,9 +77,8 @@ public class BitmapCompressionHelper  {
 
     }
 
-
-
-    private void compressionDimensions(File file){
+    private void compressionDimensions(File file)
+    {
 
         if(file.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -94,9 +96,8 @@ public class BitmapCompressionHelper  {
         }
     }
 
-
-
-    private void storeImage(Bitmap image) {
+    private void storeImage(Bitmap image)
+    {
         pictureFile = getOutputMediaFile();
 
         if (pictureFile == null) {
@@ -119,7 +120,8 @@ public class BitmapCompressionHelper  {
         }
     }
 
-    private File getOutputMediaFile() {
+    private File getOutputMediaFile()
+    {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
@@ -143,7 +145,8 @@ public class BitmapCompressionHelper  {
         return mediaFile;
     }
 
-    public void deleteFile(File file){
+    public void deleteFile(File file)
+    {
         file.delete();
         Log.d("inLens_upload","Deleting file");
     }

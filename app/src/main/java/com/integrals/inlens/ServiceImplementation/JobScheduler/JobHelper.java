@@ -14,12 +14,14 @@ private ComponentName componentName;
 private Context       context;
 private JobInfo       jobInfo;
 
-public JobHelper( Context context) {
+  public JobHelper( Context context)
+  {
         this.context=context;
         this.componentName=new ComponentName(this.context,JobService.class);
     }
 
-public void initiateJobInfo(){
+  public void initiateJobInfo()
+  {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         jobInfo = new JobInfo.Builder(12, componentName)
@@ -37,7 +39,9 @@ public void initiateJobInfo(){
     }
 
 }
-public void scheduleJob(){
+
+  public void scheduleJob()
+  {
     JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
     int resultCode = jobScheduler.schedule(jobInfo);
     if (resultCode == JobScheduler.RESULT_SUCCESS) {
@@ -47,7 +51,8 @@ public void scheduleJob(){
     }
   }
 
-  public void stopJob(){
+  public void stopJob()
+  {
       JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
       jobScheduler.cancel(12);
   }

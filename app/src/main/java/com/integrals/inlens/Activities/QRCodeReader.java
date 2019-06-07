@@ -29,6 +29,7 @@ import info.androidhive.barcode.BarcodeReader;
 import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
 import com.integrals.inlens.Helper.CurrentDatabase;
 
+import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.R;
 
 
@@ -140,6 +141,12 @@ public class QRCodeReader extends AppCompatActivity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 {
+
+
+                                    CurrentDatabase currentDatabase1 = new CurrentDatabase(getApplicationContext(), "", null, 1);
+                                    currentDatabase1.DeleteDatabase();
+                                    UploadDatabaseHelper uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
+                                    uploadDatabaseHelper.DeleteDatabase();
 
 
 

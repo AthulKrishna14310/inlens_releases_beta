@@ -1,7 +1,6 @@
 package com.integrals.inlens.AlbumProcedures;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -58,14 +57,6 @@ public class Checker {
 
     }
 
-    public boolean isThereImageToUpload(CurrentDatabase currentDatabase){
-        boolean result=false;
-        if(currentDatabase.GetUploadingTargetColumn()<=currentDatabase.GetUploadingTotal()){
-            return true;
-        }
-
-        return result;
-    }
 
     public boolean checkIfInAlbum(){
         boolean result=false;

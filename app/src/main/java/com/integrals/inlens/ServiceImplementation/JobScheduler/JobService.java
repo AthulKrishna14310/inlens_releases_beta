@@ -13,27 +13,29 @@ public class JobService extends android.app.job.JobService {
     private boolean jobCancelled = false;
     private NotificationHelper notificationHelper;
     private RecentImage        recentImage;
+
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
         notificationHelper=new NotificationHelper(getBaseContext());
         recentImage=new RecentImage(getApplicationContext());
     }
 
     @Override
-    public boolean onStartJob(JobParameters jobParameters) {
+    public boolean onStartJob(JobParameters jobParameters)
+    {
         Log.d(TAG, "Job started!");
         isWorking = true;
-
         notificationHelper.cancelNotificationRecentImage();
         String url=recentImage.recentImagePath();
         notificationHelper.notifyRecentImage(url);
         return isWorking;
     }
 
-
     @Override
-    public boolean onStopJob(JobParameters jobParameters) {
+    public boolean onStopJob(JobParameters jobParameters)
+    {
         Log.d(TAG, "Job cancelled before being completed.");
         jobCancelled = true;
         boolean needsReschedule = isWorking;

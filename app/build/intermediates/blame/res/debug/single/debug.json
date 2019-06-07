@@ -124,12 +124,12 @@
         "source": "/home/athul/Devolopment/app/src/main/res/anim/activity_fade_in.xml"
     },
     {
-        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_common_full_open_on_phone.png.flat",
-        "source": "/root/.gradle/caches/transforms-2/files-2.1/7a474ce047bdb0a9e9704757859ad0eb/res/drawable-hdpi-v4/common_full_open_on_phone.png"
-    },
-    {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/menu_create_album_menu.xml.flat",
         "source": "/home/athul/Devolopment/app/src/main/res/menu/create_album_menu.xml"
+    },
+    {
+        "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_common_full_open_on_phone.png.flat",
+        "source": "/root/.gradle/caches/transforms-2/files-2.1/7a474ce047bdb0a9e9704757859ad0eb/res/drawable-hdpi-v4/common_full_open_on_phone.png"
     },
     {
         "merged": "/home/athul/Devolopment/app/build/intermediates/res/merged/debug/color-v23_abc_tint_default.xml.flat",

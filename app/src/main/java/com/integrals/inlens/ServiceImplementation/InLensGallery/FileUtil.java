@@ -3,14 +3,9 @@ package com.integrals.inlens.ServiceImplementation.InLensGallery;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.integrals.inlens.Helper.CurrentDatabase;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -30,6 +25,7 @@ class FileUtil {
     private static String time;
     private static List<String> timeList;
     private static String replacetime1,replacetime2;
+
     public static List<String> findMediaFiles(Context context) {
 
 		 fileList = new ArrayList<>();
@@ -65,13 +61,15 @@ class FileUtil {
                 if(contentCheck.isImageDateAfterAlbumExpiryDate(requiredDate,albumExpiry)==true){
                 	 replacetime1=time.replaceAll(":","-");
 					 replacetime2=replacetime1.replaceAll(" ","T");
-					 Log.d("Date:", "time::" + replacetime2);
 					 fileList.add(arrPath[i]);
 					 timeList.add(replacetime2);
+ 					Log.d("Date:", "time::" + replacetime2);
 
-				}else {
-				break;
-                }
+				}
+                else
+                	{
+				   break;
+                  }
 
 
                 }
@@ -141,7 +139,4 @@ class FileUtil {
 		return timeList;
 	}
 
-	public static void setTimeList(List<String> timeList) {
-		FileUtil.timeList = timeList;
-	}
 }

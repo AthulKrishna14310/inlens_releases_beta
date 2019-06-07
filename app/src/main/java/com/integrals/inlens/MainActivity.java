@@ -86,6 +86,7 @@ import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
 import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.AlbumProcedures.QuitCloudAlbumProcess;
 import com.integrals.inlens.Helper.NotificationHelper;
+import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.ServiceImplementation.Service.UploadService;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Callback;
@@ -1258,6 +1259,11 @@ public class MainActivity extends AppCompatActivity {
                     builder.setPositiveButton(" YES ", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
+                            CurrentDatabase currentDatabase1 = new CurrentDatabase(getApplicationContext(), "", null, 1);
+                            currentDatabase1.DeleteDatabase();
+                            UploadDatabaseHelper uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
+                            uploadDatabaseHelper.DeleteDatabase();
 
 
                             final DatabaseReference NewPhotographer = CommunityPhotographer.push();

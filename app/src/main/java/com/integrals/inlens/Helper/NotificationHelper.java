@@ -3,18 +3,11 @@ package com.integrals.inlens.Helper;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
-import android.widget.RemoteViews;
 
-import com.integrals.inlens.R;
-import com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity;
 
 public class NotificationHelper extends ContextWrapper {
     private NotificationManager notificationManager;
@@ -70,21 +63,6 @@ public class NotificationHelper extends ContextWrapper {
 
 
 
-    public Notification.Builder buildNotificationForUploadData(String Title ,String Content)
-    {
-
-        Notification.Builder Uploadbuilder = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Uploadbuilder = (Notification.Builder) new Notification.Builder(getApplicationContext(),"ID_503")
-                    .setContentTitle(Title)
-                    .setContentText(Content)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.inlens_logo_m)
-                    .setProgress(100, 0, true);
-        }
-
-        return Uploadbuilder;
-    }
 
 
 
