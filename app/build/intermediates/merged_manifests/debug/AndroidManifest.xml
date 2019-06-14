@@ -248,6 +248,10 @@
             android:name="com.squareup.picasso.PicassoProvider"
             android:authorities="com.integrals.inlens.com.squareup.picasso"
             android:exported="false" />
+        <provider
+            android:name="com.android.tools.ir.server.InstantRunContentProvider"
+            android:authorities="com.integrals.inlens.com.android.tools.ir.server.InstantRunContentProvider"
+            android:multiprocess="true" />
     </application>
 
 </manifest>

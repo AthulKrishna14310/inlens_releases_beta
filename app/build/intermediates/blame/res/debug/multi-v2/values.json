@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/athul/Devolopment/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/home/athul/InLens/Update_2/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
                     "source": "/root/.gradle/caches/transforms-2/files-2.1/ff880832e6fdda962aebdbe4eef29032/res/values/values.xml",
@@ -54,6 +54,25 @@
                         "startOffsets": "25723,25782,25830,26497,26572,26648,29114,195221",
                         "endColumns": "58,47,55,74,75,71,65,629",
                         "endOffsets": "25777,25825,25881,26567,26643,26715,29175,195846"
+                    }
+                },
+                {
+                    "source": "/home/athul/InLens/Update_2/app/src/main/res/values/font_certs.xml",
+                    "from": {
+                        "startLines": "2,6,11",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,257,1982",
+                        "endLines": "5,10,15",
+                        "endColumns": "12,19,19",
+                        "endOffsets": "252,1977,3567"
+                    },
+                    "to": {
+                        "startLines": "2,6,11",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "150,352,2077",
+                        "endLines": "5,10,15",
+                        "endColumns": "12,19,19",
+                        "endOffsets": "347,2072,3662"
                     }
                 },
                 {
@@ -133,76 +152,6 @@
                     }
                 },
                 {
-                    "source": "/home/athul/Devolopment/app/build/generated/res/google-services/debug/values/values.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,199,306,388,492,595,715,811",
-                        "endColumns": "143,106,81,103,102,119,95,72",
-                        "endOffsets": "194,301,383,487,590,710,806,879"
-                    },
-                    "to": {
-                        "startLines": "560,561,562,563,564,565,566,582",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "37375,37519,37626,37708,37812,37915,38035,39747",
-                        "endColumns": "143,106,81,103,102,119,95,72",
-                        "endOffsets": "37514,37621,37703,37807,37910,38030,38126,39815"
-                    }
-                },
-                {
-                    "source": "/home/athul/Devolopment/app/src/main/res/values/strings.xml",
-                    "from": {
-                        "startLines": "1,2,5",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "16,60,178",
-                        "endColumns": "43,58,69",
-                        "endOffsets": "55,114,243"
-                    },
-                    "to": {
-                        "startLines": "523,533,569",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "33713,34444,38233",
-                        "endColumns": "43,58,69",
-                        "endOffsets": "33752,34498,38298"
-                    }
-                },
-                {
-                    "source": "/home/athul/Devolopment/app/src/main/res/values/colors.xml",
-                    "from": {
-                        "startLines": "7,4,2,3,5,6",
-                        "startColumns": "4,4,4,4,4,4",
-                        "startOffsets": "284,153,55,102,199,244",
-                        "endColumns": "39,45,46,50,44,39",
-                        "endOffsets": "319,194,97,148,239,279"
-                    },
-                    "to": {
-                        "startLines": "168,183,184,185,207,253",
-                        "startColumns": "4,4,4,4,4,4",
-                        "startOffsets": "11071,12112,12158,12205,13746,16752",
-                        "endColumns": "39,45,46,50,44,39",
-                        "endOffsets": "11106,12153,12200,12251,13786,16787"
-                    }
-                },
-                {
-                    "source": "/home/athul/Devolopment/app/src/main/res/values/font_certs.xml",
-                    "from": {
-                        "startLines": "2,6,11",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "55,257,1982",
-                        "endLines": "5,10,15",
-                        "endColumns": "12,19,19",
-                        "endOffsets": "252,1977,3567"
-                    },
-                    "to": {
-                        "startLines": "2,6,11",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "150,352,2077",
-                        "endLines": "5,10,15",
-                        "endColumns": "12,19,19",
-                        "endOffsets": "347,2072,3662"
-                    }
-                },
-                {
                     "source": "/root/.gradle/caches/transforms-2/files-2.1/543dc7cc75b3e86edfdc26de77669d68/res/values/values.xml",
                     "from": {
                         "startLines": "2",
@@ -239,25 +188,6 @@
                     }
                 },
                 {
-                    "source": "/home/athul/Devolopment/app/src/main/res/values/preloaded_fonts.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "4",
-                        "endColumns": "12",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "16",
-                        "startColumns": "4",
-                        "startOffsets": "3667",
-                        "endLines": "18",
-                        "endColumns": "12",
-                        "endOffsets": "3763"
-                    }
-                },
-                {
                     "source": "/root/.gradle/caches/transforms-2/files-2.1/3968626c48ff35e0de4b93cc92c07a82/res/values/values.xml",
                     "from": {
                         "startLines": "2",
@@ -272,6 +202,23 @@
                         "startOffsets": "173617",
                         "endColumns": "256",
                         "endOffsets": "173869"
+                    }
+                },
+                {
+                    "source": "/home/athul/InLens/Update_2/app/src/main/res/values/colors.xml",
+                    "from": {
+                        "startLines": "7,4,2,3,5,6",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "284,153,55,102,199,244",
+                        "endColumns": "39,45,46,50,44,39",
+                        "endOffsets": "319,194,97,148,239,279"
+                    },
+                    "to": {
+                        "startLines": "168,183,184,185,207,253",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "11071,12112,12158,12205,13746,16752",
+                        "endColumns": "39,45,46,50,44,39",
+                        "endOffsets": "11106,12153,12200,12251,13786,16787"
                     }
                 },
                 {
@@ -292,22 +239,39 @@
                     }
                 },
                 {
-                    "source": "/home/athul/Devolopment/app/src/main/res/values/styles.xml",
+                    "source": "/home/athul/InLens/Update_2/app/src/main/res/values/preloaded_fonts.xml",
                     "from": {
-                        "startLines": "3,9,34,15,29,22,39",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "54,373,1538,698,1347,1021,1747",
-                        "endLines": "8,14,37,20,32,27,42",
-                        "endColumns": "12,12,12,12,12,12,12",
-                        "endOffsets": "368,693,1741,1015,1532,1341,1952"
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "601,607,1814,1818,1832,1836,2220",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "41208,41527,117519,117727,118367,118557,146434",
-                        "endLines": "606,612,1817,1823,1835,1841,2223",
-                        "endColumns": "12,12,12,12,12,12,12",
-                        "endOffsets": "41522,41847,117722,118044,118552,118877,146639"
+                        "startLines": "16",
+                        "startColumns": "4",
+                        "startOffsets": "3667",
+                        "endLines": "18",
+                        "endColumns": "12",
+                        "endOffsets": "3763"
+                    }
+                },
+                {
+                    "source": "/home/athul/InLens/Update_2/app/build/generated/res/google-services/debug/values/values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,199,306,388,492,595,715,811",
+                        "endColumns": "143,106,81,103,102,119,95,72",
+                        "endOffsets": "194,301,383,487,590,710,806,879"
+                    },
+                    "to": {
+                        "startLines": "560,561,562,563,564,565,566,582",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "37375,37519,37626,37708,37812,37915,38035,39747",
+                        "endColumns": "143,106,81,103,102,119,95,72",
+                        "endOffsets": "37514,37621,37703,37807,37910,38030,38126,39815"
                     }
                 },
                 {
@@ -455,6 +419,23 @@
                     }
                 },
                 {
+                    "source": "/home/athul/InLens/Update_2/app/src/main/res/values/strings.xml",
+                    "from": {
+                        "startLines": "1,2,5",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "16,60,178",
+                        "endColumns": "43,58,69",
+                        "endOffsets": "55,114,243"
+                    },
+                    "to": {
+                        "startLines": "523,533,569",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "33713,34444,38233",
+                        "endColumns": "43,58,69",
+                        "endOffsets": "33752,34498,38298"
+                    }
+                },
+                {
                     "source": "/root/.gradle/caches/transforms-2/files-2.1/de6873a5970da499209bc65848bdd07f/res/values/values.xml",
                     "from": {
                         "startLines": "2,6,7,8,9,10",
@@ -488,6 +469,25 @@
                         "endLines": "254,255,256,257,258,259,260,261,262,263,468,469,470,471,472,473,474,588,589,590,591,2384,2807,2808,2809",
                         "endColumns": "71,60,63,64,64,53,53,53,58,57,46,47,41,48,51,57,53,58,46,143,112,10,406,271,115",
                         "endOffsets": "16859,16920,16984,17049,17114,17168,17222,17276,17335,17393,30216,30264,30306,30355,30407,30465,30519,40170,40217,40361,40474,158371,204783,205055,205171"
+                    }
+                },
+                {
+                    "source": "/home/athul/InLens/Update_2/app/src/main/res/values/styles.xml",
+                    "from": {
+                        "startLines": "3,9,34,15,29,22,39",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "54,373,1538,698,1347,1021,1747",
+                        "endLines": "8,14,37,20,32,27,42",
+                        "endColumns": "12,12,12,12,12,12,12",
+                        "endOffsets": "368,693,1741,1015,1532,1341,1952"
+                    },
+                    "to": {
+                        "startLines": "601,607,1814,1818,1832,1836,2220",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "41208,41527,117519,117727,118367,118557,146434",
+                        "endLines": "606,612,1817,1823,1835,1841,2223",
+                        "endColumns": "12,12,12,12,12,12,12",
+                        "endOffsets": "41522,41847,117722,118044,118552,118877,146639"
                     }
                 }
             ]

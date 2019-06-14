@@ -185,9 +185,8 @@ public class QRCodeReader extends AppCompatActivity
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                     String AlbumExpiry=dataSnapshot.getValue().toString();
-                                                    CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
-                                                    currentDatabase.InsertUploadValues(CommunityID, 0, 1, 0,AlbumExpiry,1,1,"NILL");
-                                                    currentDatabase.close();
+                                                    albumStartingServices.deleteDatabases();
+                                                    albumStartingServices.createDatabases(CommunityID,AlbumExpiry);
                                                     StartServices();
 
                                                 }

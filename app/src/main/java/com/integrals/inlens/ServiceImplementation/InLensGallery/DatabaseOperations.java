@@ -1,10 +1,11 @@
 package com.integrals.inlens.ServiceImplementation.InLensGallery;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.Helper.UploadDatabaseHelper;
 
-import java.util.Calendar;
 
 public class DatabaseOperations {
 
@@ -48,7 +49,11 @@ public class DatabaseOperations {
                 DatabaseCurrentTimeMilliSecond
 
         );
-        uploadDatabaseHelper.close();
+        currentDatabase = new CurrentDatabase(context, "", null, 1);
+        int Value = currentDatabase.GetUploadingTotal();
+        currentDatabase.ResetUploadTotal((Value + 1));
+        Log.d("InLens::",currentDatabase.GetUploadingTotal()+"");
+        Log.d("InLens::",currentDatabase.GetUploadingTargetColumn()+"");
 
     }
 
@@ -58,15 +63,11 @@ public class DatabaseOperations {
         DatabaseCurrentTimeMilliSecond = String.valueOf(System.currentTimeMillis());
         DatabaseUploadStatus = "NOT_UPLOADED";
         DatabaseTimeTaken = time;
-        currentDatabase = new CurrentDatabase(context, "", null, 1);
-
-        int Value = currentDatabase.GetUploadingTotal();
-        currentDatabase.ResetUploadTotal((Value + 1));
-        currentDatabase.close();
-
-
     }
 
-
+    public void closeDatabases(){
+        currentDatabase.close();
+        uploadDatabaseHelper.getWritableDatabase().close();
+    }
 
 }

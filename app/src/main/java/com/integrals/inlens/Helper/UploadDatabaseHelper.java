@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -199,7 +200,8 @@ public  class UploadDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void DeleteDatabase(){
-    contextX.deleteDatabase("UploadDatabase.db");
+        contextX.deleteDatabase("UploadDatabase.db");
+        Log.d("InLens::","upload database deleted");
     }
 
     @Override

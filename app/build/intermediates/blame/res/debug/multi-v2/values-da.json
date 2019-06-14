@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/athul/Devolopment/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-da/values-da.xml",
+            "outputFile": "/home/athul/InLens/Update_2/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-da/values-da.xml",
             "map": [
                 {
                     "source": "/root/.gradle/caches/transforms-2/files-2.1/f2159845d44896c03f8ad2afa7b7eeab/res/values-da/values-da.xml",

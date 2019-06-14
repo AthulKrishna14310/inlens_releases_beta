@@ -5,7 +5,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -87,7 +86,6 @@ import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.AlbumProcedures.QuitCloudAlbumProcess;
 import com.integrals.inlens.Helper.NotificationHelper;
 import com.integrals.inlens.Helper.UploadDatabaseHelper;
-import com.integrals.inlens.ServiceImplementation.Service.UploadService;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -330,7 +328,10 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case R.id.upload_activity:
-                                    startActivity(new Intent(MainActivity.this, com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
+                                    startActivity(
+                                            new Intent(MainActivity.this,
+                                                    com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity.class));
+
                                     break;
                                 case R.id.profile_pic:
                                     DatabaseReference DbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -1302,9 +1303,9 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             String ALBT = dataSnapshot.getValue().toString();
-                                            CurrentDatabase currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
-                                            currentDatabase.InsertUploadValues(CommunityID, 0, 1, 0, ALBT, 1, 1, "NILL");
-                                            currentDatabase.close();
+                                            albumStartingServices.deleteDatabases();
+                                            albumStartingServices.createDatabases(CommunityID,ALBT);
+
                                             StartServices();
                                         }
 

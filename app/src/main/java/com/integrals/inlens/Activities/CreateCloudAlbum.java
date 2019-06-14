@@ -514,15 +514,9 @@ public class CreateCloudAlbum extends AppCompatActivity {
 
                         InProgressDialog.setMessage("Saving new data....");
 
-                        CurrentDatabase currentDatabase1 = new CurrentDatabase(getApplicationContext(), "", null, 1);
-                        currentDatabase1.DeleteDatabase();
-                        UploadDatabaseHelper uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
-                        uploadDatabaseHelper.DeleteDatabase();
 
 
-                        CurrentDatabase currentDatabase= new CurrentDatabase(getApplicationContext(),"",null,1);
-                        currentDatabase.InsertUploadValues(PostKey,0,1,0,AlbumTime,1,1,"CUREE");
-                        currentDatabase.close();
+
                         InProgressDialog.setMessage("Finishing....");
                         if (PhotographerCreated == false) {
                             photographerReference = FirebaseDatabase.getInstance()
@@ -547,6 +541,10 @@ public class CreateCloudAlbum extends AppCompatActivity {
                                                 UploadProgress.setVisibility(View.INVISIBLE);
                                                 SubmitButton.setVisibility(View.VISIBLE);
                                                 CloudAlbumDone=true;
+
+                                                albumStartingServices.deleteDatabases();
+                                                albumStartingServices.createDatabases(PostKey,AlbumTime);
+
                                                 StartServices();
                                                 SharedPreferences AlbumClickDetails = getSharedPreferences("LastClickedAlbum",MODE_PRIVATE);
                                                 SharedPreferences.Editor  AlbumEditor = AlbumClickDetails.edit();

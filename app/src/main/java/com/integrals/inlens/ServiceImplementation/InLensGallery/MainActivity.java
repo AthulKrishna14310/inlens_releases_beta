@@ -6,20 +6,24 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
 import com.integrals.inlens.AlbumProcedures.AlbumStoppingServices;
 import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.AlbumProcedures.QuitCloudAlbumProcess;
+import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.R;
 import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
 import com.vistrav.ask.Ask;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private List<String> mTimes;
     private AlbumStoppingServices albumStoppingServices;
     private AlbumStartingServices albumStartingServices;
-
+    private String albumExpiry;
+    private CurrentDatabase currentDatabase;
+    private Queue<String> timeQueue;
+    private Queue<String> imageUriQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,11 +59,18 @@ public class MainActivity extends AppCompatActivity {
         albumStoppingServices = new AlbumStoppingServices(getApplicationContext());
         albumStartingServices = new AlbumStartingServices(getApplicationContext());
 
+        currentDatabase=new CurrentDatabase(getApplicationContext(),"",null,1);
+        albumExpiry=currentDatabase.GetAlbumExpiry();
+        currentDatabase.close();
+
+        timeQueue=new LinkedList<>();
+        imageUriQueue=new LinkedList<>();
+
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
+
         super.onStart();
 
         Checker checker = new Checker(getApplicationContext());
@@ -83,13 +97,12 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onResume();
 
-        Snackbar.make(recyclerView, "Loading your images ..Please wait", Snackbar.LENGTH_SHORT).show();
-
         new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
-                mFiles = FileUtil.findMediaFiles(getApplicationContext());
+                mFiles = FileUtil.findMediaFiles(getApplicationContext(),albumExpiry);
                 mTimes = FileUtil.getTimeList();
+
                 return null;
             }
 
@@ -102,13 +115,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onProgressUpdate(Object[] values) {
                 super.onProgressUpdate(values);
-
             }
 
             @Override
             protected void onPostExecute(Object o) {
                 galleryAdapter = new GalleryAdapter(activity, mFiles, mTimes);
                 recyclerView.setAdapter(galleryAdapter);
+
             }
         }.execute();
 
@@ -133,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy()
     {
         super.onDestroy();
-        albumStartingServices.initiateUploadService();
+        galleryAdapter.executeUploadDatabaseTasks(albumStartingServices);
+
     }
 
 }

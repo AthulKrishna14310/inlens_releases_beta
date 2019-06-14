@@ -108,14 +108,10 @@ public class UploadService extends Service {
 
     private void uploadProcedure()
     {
-        uploadDatabaseHelper.getReadableDatabase().beginTransaction();
-        currentDatabase.getReadableDatabase().beginTransaction();
         CommunityID = currentDatabase.GetLiveCommunityID();
         UploadingIntegerID = currentDatabase.GetUploadingTargetColumn();
         Record = currentDatabase.GetUploadingTotal();
         UPLOAD_STATUS = uploadDatabaseHelper.GetUploadStatus(UploadingIntegerID);
-        currentDatabase.getReadableDatabase().endTransaction();
-        uploadDatabaseHelper.getReadableDatabase().endTransaction();
 
         if ((UploadingIntegerID <= Record)) {
             try {
@@ -125,10 +121,11 @@ public class UploadService extends Service {
 
                 } catch (NullPointerException e) {
                 e.printStackTrace();
+
                 uploadDatabaseHelper.close();
                 currentDatabase.close();
 
-                Log.d("InLens","Canceled upload");
+                Log.d("InLens","Cancelled upload");
                 albumStoppingServices.deinitiateUploadService();
 
             }

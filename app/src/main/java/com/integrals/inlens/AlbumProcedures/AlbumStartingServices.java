@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.integrals.inlens.Helper.CurrentDatabase;
+import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.integrals.inlens.ServiceImplementation.Includes.RecentImage;
 import com.integrals.inlens.ServiceImplementation.JobScheduler.JobHelper;
 import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
@@ -45,6 +46,21 @@ public class AlbumStartingServices {
     jobHelper.scheduleJob();
     jobHelperAlert.initiateJobInfo();
     jobHelperAlert.scheduleJob();
+
+    }
+
+    public void deleteDatabases(){
+        CurrentDatabase currentDatabase1 = new CurrentDatabase(context, "", null, 1);
+        currentDatabase1.DeleteDatabase();
+        UploadDatabaseHelper uploadDatabaseHelper1 =
+                new UploadDatabaseHelper(context, "", null, 1);
+        uploadDatabaseHelper1.DeleteDatabase();
+
+    }
+    public void createDatabases(String PostKey,String AlbumTime){
+        CurrentDatabase currentDatabase= new CurrentDatabase(context,"",null,1);
+        currentDatabase.InsertUploadValues(PostKey,1,1,0,AlbumTime,1,1,"");
+        currentDatabase.close();
 
     }
 

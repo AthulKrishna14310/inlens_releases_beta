@@ -26,7 +26,7 @@ class FileUtil {
     private static List<String> timeList;
     private static String replacetime1,replacetime2;
 
-    public static List<String> findMediaFiles(Context context) {
+    public static List<String> findMediaFiles(Context context,String albumExpiryD) {
 
 		 fileList = new ArrayList<>();
 		 timeList=new ArrayList<>();
@@ -38,8 +38,7 @@ class FileUtil {
 
 		 contentCheck=new ContentCheck("",context);
 
-		 CurrentDatabase currentDatabase=new CurrentDatabase(context,"",null,1);
-		 albumExpiry=currentDatabase.GetAlbumExpiry();
+		 albumExpiry=albumExpiryD;
 
 		 if (cursor != null) {
 			 count = cursor.getCount();
