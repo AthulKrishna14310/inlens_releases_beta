@@ -13,6 +13,8 @@ import com.integrals.inlens.ServiceImplementation.JobScheduler.JobHelper;
 import com.integrals.inlens.ServiceImplementation.Notification.NotificationHelper;
 import com.integrals.inlens.ServiceImplementation.Service.UploadService;
 
+import java.util.Calendar;
+
 public class AlbumStartingServices {
 
     private JobHelper jobHelper;
@@ -58,8 +60,19 @@ public class AlbumStartingServices {
 
     }
     public void createDatabases(String PostKey,String AlbumTime){
-        CurrentDatabase currentDatabase= new CurrentDatabase(context,"",null,1);
-        currentDatabase.InsertUploadValues(PostKey,1,1,0,AlbumTime,1,1,"");
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH)+1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+       String albumCreated=null;
+       if(month<9) {
+            albumCreated = day + "-0" + month + "-" + year;
+       }else{
+           albumCreated = day + "-" + month + "-" + year;
+
+       }
+       CurrentDatabase currentDatabase= new CurrentDatabase(context,"",null,1);
+        currentDatabase.InsertUploadValues(PostKey,1,1,0,AlbumTime,1,1,"",albumCreated);
         currentDatabase.close();
 
     }

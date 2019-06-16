@@ -19,55 +19,71 @@ class FileUtil {
     private static ContentCheck contentCheck;
     private static List<String> fileList;
     private static  Cursor cursor;
-    private static String[] arrPath;
+    private static List<String> arrayPath;
     private static String requiredDate;
     private static String albumExpiry;
     private static String time;
     private static List<String> timeList;
     private static String replacetime1,replacetime2;
+    private static String TAG="InLens";
+    private static int x=0;
 
     public static List<String> findMediaFiles(Context context,String albumExpiryD) {
 
 		 fileList = new ArrayList<>();
 		 timeList=new ArrayList<>();
+		 arrayPath=new ArrayList<>();
+
 		 final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID,MediaStore.Images.Media.DATE_ADDED };
 		 final String orderBy = MediaStore.Images.Media._ID;
+
 		 cursor = context.getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
 				null, orderBy);
 
 		 contentCheck=new ContentCheck("",context);
-
 		 albumExpiry=albumExpiryD;
 
+
 		 if (cursor != null) {
-			 count = cursor.getCount();
-			 arrPath = new String[count];
+             showLog("Cursor found");
+
+		 	 count = cursor.getCount();
+
+			 showLog(count+"");
+
 
 			for (int i = (count-1); i >0; i--) {
 				cursor.moveToPosition(i);
+
 				int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-				arrPath[i] = cursor.getString(dataColumnIndex);
-				if(contentCheck.getImageAddedDate(arrPath[i])==null){
-                	continue;
+
+				arrayPath.add(cursor.getString(dataColumnIndex));
+				showLog(arrayPath.get(arrayPath.size()-1));
+
+				if(contentCheck.getImageAddedDate(arrayPath.get(arrayPath.size()-1))==null){
+				 	continue;
+              	}else{
 				}
-                time=contentCheck.getImageAddedDate(arrPath[i]);
-				requiredDate=contentCheck.getImageAddedDate(arrPath[i]).substring(8,10)+"-"
-						+contentCheck.getImageAddedDate(arrPath[i]).substring(5,7)+"-"+
-				contentCheck.getImageAddedDate(arrPath[i]).substring(0,4)  ;
+                time=contentCheck.getImageAddedDate(arrayPath.get(arrayPath.size()-1));
+				requiredDate=contentCheck.getImageAddedDate(arrayPath.get(arrayPath.size()-1)).substring(8,10)+"-"
+						+contentCheck.getImageAddedDate(arrayPath.get(arrayPath.size()-1)).substring(5,7)+"-"+
+						contentCheck.getImageAddedDate(arrayPath.get(arrayPath.size()-1)).substring(0,4)  ;
 
 
-                if(contentCheck.isImageDateAfterAlbumExpiryDate(requiredDate,albumExpiry)==true){
+
+                if(contentCheck.isImageDateAfterAlbumCreatedDate(requiredDate,albumExpiry)==true){
                 	 replacetime1=time.replaceAll(":","-");
 					 replacetime2=replacetime1.replaceAll(" ","T");
-					 fileList.add(arrPath[i]);
+					 fileList.add(arrayPath.get(arrayPath.size()-1));
 					 timeList.add(replacetime2);
- 					Log.d("Date:", "time::" + replacetime2);
+ 					Log.d("InLens::Date:", "time::" + replacetime2);
 
 				}
                 else
                 	{
-				   break;
+                       showLog("Album time expired");
+                		break;
                   }
 
 
@@ -76,8 +92,14 @@ class FileUtil {
 
 
 
-		}
+		}else{
+		 	Log.d("InLens::","Cursor is Null");
+		 }
 		return fileList;
+	}
+
+	private static void showLog(String data) {
+     Log.d(TAG,data);
 	}
 
 	public static List<String> findImageFileInDirectory(String directory, String[] imageTypes) {

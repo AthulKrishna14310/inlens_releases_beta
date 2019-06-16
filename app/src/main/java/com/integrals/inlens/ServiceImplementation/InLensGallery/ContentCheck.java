@@ -44,36 +44,47 @@ public class ContentCheck {
                    }
             } catch (NullPointerException e){
                e.printStackTrace();
+               Log.d("InLens:","NullPointException");
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.d("InLens:","IOException");
+
             }
         }
 
         return stringDate;
     }
 
-    public boolean isImageDateAfterAlbumExpiryDate(String imageDate,String albumExpiryDate)
+    public boolean isImageDateAfterAlbumCreatedDate(String imageDate,String albumCreatedDate)
     {
+        Log.d("InLens_Compare:",imageDate);
+        Log.d("InLens_Compare:",albumCreatedDate);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             Date d1 = null, d2 = null;
             try {
 
                 d1 = dateFormat.parse(imageDate);
-                d2 = dateFormat.parse(albumExpiryDate);
+                d2 = dateFormat.parse(albumCreatedDate);
 
             } catch (ParseException e) {
                e.printStackTrace();
+                Log.d("InLens::","Parse Exception");
+
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
             try {
-                if(d1.compareTo(d2)==0)
-            return true;
-                else
-            return false;
+                if(d1.compareTo(d2)>=0) {
+
+                    return true;
+                }
+                else {
+                    return false;
+                }
+
             } catch (NullPointerException e) {
-            Log.d("InLens","Null for date");
+            Log.d("InLens::","Null for date");
             }
 
 

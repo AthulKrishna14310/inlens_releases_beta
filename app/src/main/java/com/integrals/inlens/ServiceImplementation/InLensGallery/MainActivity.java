@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> mTimes;
     private AlbumStoppingServices albumStoppingServices;
     private AlbumStartingServices albumStartingServices;
-    private String albumExpiry;
+    private String albumCreated;
     private CurrentDatabase currentDatabase;
     private Queue<String> timeQueue;
     private Queue<String> imageUriQueue;
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main_inlens_gallery);
         requirePermission();
 
@@ -60,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
         albumStartingServices = new AlbumStartingServices(getApplicationContext());
 
         currentDatabase=new CurrentDatabase(getApplicationContext(),"",null,1);
-        albumExpiry=currentDatabase.GetAlbumExpiry();
+        albumCreated=currentDatabase.GetAlbumCreated();
         currentDatabase.close();
 
         timeQueue=new LinkedList<>();
         imageUriQueue=new LinkedList<>();
-
+        Log.d("InLens::AlbumExpiry::",albumCreated);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
-                mFiles = FileUtil.findMediaFiles(getApplicationContext(),albumExpiry);
+                mFiles = FileUtil.findMediaFiles(getApplicationContext(),albumCreated);
                 mTimes = FileUtil.getTimeList();
 
                 return null;

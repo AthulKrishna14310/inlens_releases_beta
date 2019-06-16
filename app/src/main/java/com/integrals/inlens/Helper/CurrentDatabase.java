@@ -28,13 +28,16 @@ public class CurrentDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE CURRENT( ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "LIVECOMMUNITY TEXT,UPLOADING_TOTAL INTEGER,UPLOADING_TARGET_COLUMN INTEGER," +
-                "RECENT_TOTAL INTEGER, ALBUMEXPIRY TEXT,RECENT_IMAGE_INDEX INTEGER,UPLOADING_INDEX INTEGER,CURRENT_IMAGE TEXT);");
+                "RECENT_TOTAL INTEGER, ALBUMEXPIRY TEXT,RECENT_IMAGE_INDEX INTEGER," +
+                "UPLOADING_INDEX INTEGER,CURRENT_IMAGE TEXT,ALBUM_CREATED TEXT);");
 
 
     }
 
     public void InsertUploadValues(String LiveCommunityID,int UploadingTotal,int UploadingTargetColumn,
-                                   int RecentTotal, String AlbumExpiry,int RecentImageIndex,int UploadingIndex,String CurrentImage) {
+                                   int RecentTotal, String AlbumExpiry,int RecentImageIndex,
+                                   int UploadingIndex,String CurrentImage,
+                                   String AlbumCreated) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("LIVECOMMUNITY", LiveCommunityID);
         contentValues.put("UPLOADING_TOTAL",UploadingTotal);
@@ -44,6 +47,7 @@ public class CurrentDatabase extends SQLiteOpenHelper {
         contentValues.put("RECENT_IMAGE_INDEX",RecentImageIndex);
         contentValues.put("UPLOADING_INDEX",UploadingIndex);
         contentValues.put("CURRENT_IMAGE",CurrentImage);
+        contentValues.put("ALBUM_CREATED",AlbumCreated);
 
         this.getWritableDatabase().insertOrThrow("CURRENT", "", contentValues);
 
@@ -62,6 +66,14 @@ public class CurrentDatabase extends SQLiteOpenHelper {
         Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM CURRENT WHERE ID =" + 1, null);
         while (cursor.moveToNext()) {
             S= cursor.getString(5);
+        }
+        return S;
+    }
+    public String GetAlbumCreated() {
+        String S=null;
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM CURRENT WHERE ID =" + 1, null);
+        while (cursor.moveToNext()) {
+            S= cursor.getString(9);
         }
         return S;
     }

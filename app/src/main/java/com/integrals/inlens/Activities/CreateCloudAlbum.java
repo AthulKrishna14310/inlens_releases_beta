@@ -623,9 +623,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
                                         NewPost.child("AlbumType").setValue(EventType);
 
                                         InProgressDialog.setMessage("Saving new data....");
-                                        CurrentDatabase currentDatabase= new CurrentDatabase(getApplicationContext(),"",null,1);
-                                        currentDatabase.InsertUploadValues(PostKey,0,1,0,AlbumTime,1,1,"CUREE");
-                                        currentDatabase.close();
                                         InProgressDialog.setMessage("Finishing....");
                                         if (PhotographerCreated == false) {
                                             photographerReference = FirebaseDatabase.getInstance()

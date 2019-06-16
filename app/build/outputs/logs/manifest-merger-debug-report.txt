@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
-INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
-INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
-INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
+INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
+INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
+INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
 MERGED from [com.ramotion.cardslider:card-slider:0.3.0] /root/.gradle/caches/transforms-2/files-2.1/543dc7cc75b3e86edfdc26de77669d68/AndroidManifest.xml:2:1-17:12
 MERGED from [info.androidhive:barcode-reader:1.1.5] /root/.gradle/caches/transforms-2/files-2.1/a736510c50dec868589cf7e8a8255151/AndroidManifest.xml:2:1-15:12
 MERGED from [io.github.tonnyl:light:1.0.0] /root/.gradle/caches/transforms-2/files-2.1/67747d6c25338d94fa43984787a3f3bb/AndroidManifest.xml:2:1-15:12
@@ -58,20 +58,20 @@ MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /root/.gradle/caches/tr
 MERGED from [android.arch.lifecycle:viewmodel:1.1.0] /root/.gradle/caches/transforms-2/files-2.1/93a1a5b07e69e6a74ab53b861589300e/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:runtime:1.1.0] /root/.gradle/caches/transforms-2/files-2.1/bff107431047d1cb31e32dd4e5a8da09/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.0] /root/.gradle/caches/transforms-2/files-2.1/83de0605f951ab9092773dec7500c7f2/AndroidManifest.xml:17:1-22:12
-INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
-INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
-INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
+INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
+INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
+INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
 	package
 		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:3:5-35
 		INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml
 		INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
 		INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml
 	android:versionCode
 		INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-121:12
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:1-123:12
 		INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:2:11-69
@@ -140,7 +140,7 @@ ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:15:5-45
 	android:name
 		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:15:22-42
 application
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:17:5-119:19
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:17:5-121:19
 MERGED from [com.ramotion.cardslider:card-slider:0.3.0] /root/.gradle/caches/transforms-2/files-2.1/543dc7cc75b3e86edfdc26de77669d68/AndroidManifest.xml:11:5-15:19
 MERGED from [com.ramotion.cardslider:card-slider:0.3.0] /root/.gradle/caches/transforms-2/files-2.1/543dc7cc75b3e86edfdc26de77669d68/AndroidManifest.xml:11:5-15:19
 MERGED from [io.github.tonnyl:light:1.0.0] /root/.gradle/caches/transforms-2/files-2.1/67747d6c25338d94fa43984787a3f3bb/AndroidManifest.xml:9:5-13:19
@@ -256,135 +256,137 @@ ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:42:17-45
 	android:pathPattern
 		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:44:21-45
 activity#com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:49:8-51:52
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:49:8-53:11
 	android:screenOrientation
 		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:50:12-48
+	android:autoRemoveFromRecents
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:52:12-48
 	android:theme
 		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:51:12-50
 	android:name
 		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:49:18-82
 activity#com.theartofdev.edmodo.cropper.CropImageActivity
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:54:9-56:59
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:56:9-58:59
 	android:theme
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:56:13-56
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:58:13-56
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:55:13-76
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:57:13-76
 activity#com.integrals.inlens.Activities.LoginActivity
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:57:9-60:51
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:59:9-62:51
 	android:screenOrientation
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:59:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:61:13-49
 	android:theme
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:60:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:62:13-49
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:58:13-53
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:60:13-53
 activity#com.integrals.inlens.Activities.AttachSituation
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:61:9-65:52
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:63:9-67:52
 	android:screenOrientation
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:65:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:67:13-49
 	android:excludeFromRecents
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:63:13-46
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:65:13-46
 	android:launchMode
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:64:13-48
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:66:13-48
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:62:13-55
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:64:13-55
 activity#com.integrals.inlens.Activities.AttachSituation$WeatherLayout
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:66:9-69:51
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:68:9-71:51
 	android:excludeFromRecents
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:68:13-46
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:70:13-46
 	android:launchMode
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:69:13-48
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:71:13-48
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:67:13-69
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:69:13-69
 activity#com.integrals.inlens.Activities.CreateCloudAlbum
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:70:9-73:51
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:72:9-75:51
 	android:screenOrientation
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:72:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:74:13-49
 	android:theme
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:73:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:75:13-49
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:71:13-56
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:73:13-56
 activity#com.integrals.inlens.Activities.RegisterUser
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:76:9-79:51
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:78:9-81:51
 	android:screenOrientation
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:78:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:80:13-49
 	android:theme
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:79:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:81:13-49
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:77:13-52
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:79:13-52
 activity#com.integrals.inlens.Activities.CloudAlbum
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:80:9-84:54
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:82:9-86:54
 	android:screenOrientation
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:83:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:85:13-49
 	android:parentActivityName
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:82:13-55
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:84:13-55
 	android:theme
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:84:13-52
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:86:13-52
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:81:13-50
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:83:13-50
 activity#com.integrals.inlens.Activities.QRCodeGenerator
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:85:9-87:52
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:87:9-89:52
 	android:screenOrientation
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:87:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:89:13-49
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:86:13-55
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:88:13-55
 activity#com.integrals.inlens.Activities.QRCodeReader
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:88:9-90:52
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:90:9-92:52
 	android:screenOrientation
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:90:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:92:13-49
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:89:13-52
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:91:13-52
 meta-data#com.google.android.gms.vision
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:92:9-94:39
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:94:9-96:39
 	android:value
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:94:13-36
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:96:13-36
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:93:13-57
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:95:13-57
 meta-data#preloaded_fonts
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:95:9-97:57
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:97:9-99:57
 	android:resource
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:97:13-54
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:99:13-54
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:96:13-43
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:98:13-43
 service#com.integrals.inlens.ServiceImplementation.Service.UploadService
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:99:9-80
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:101:9-80
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:99:18-77
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:101:18-77
 service#com.integrals.inlens.ServiceImplementation.JobScheduler.JobService
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:100:9-102:73
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:102:9-104:73
 	android:permission
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:102:14-70
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:104:14-70
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:101:14-75
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:103:14-75
 service#com.integrals.inlens.ServiceImplementation.JobScheduler.AlertNotificationJobPackage.JobService
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:104:9-105:72
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:106:9-107:72
 	android:permission
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:105:13-69
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:107:13-69
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:104:18-107
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:106:18-107
 activity#com.integrals.inlens.Activities.ResetPassword
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:109:9-110:51
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:111:9-112:51
 	android:theme
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:110:13-49
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:112:13-49
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:109:19-59
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:111:19-59
 activity#com.integrals.inlens.Activities.PhotoView
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:111:9-58
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:113:9-58
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:111:19-55
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:113:19-55
 activity#com.integrals.inlens.Activities.IntroActivity
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:112:9-114:55
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:114:9-116:55
 	android:theme
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:114:13-52
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:116:13-52
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:113:13-53
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:115:13-53
 activity#com.integrals.inlens.Activities.SharedImageActivity
-ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:115:9-118:55
+ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:117:9-120:55
 	android:parentActivityName
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:117:13-55
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:119:13-55
 	android:theme
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:118:13-52
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:120:13-52
 	android:name
-		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:116:13-59
+		ADDED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml:118:13-59
 uses-sdk
 INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/athul/InLens/Update_2/app/src/main/AndroidManifest.xml
