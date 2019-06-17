@@ -40,6 +40,9 @@ public  class UploadDatabaseHelper extends SQLiteOpenHelper {
                 "IMAGEURI TEXT,WEATHERDETAILS TEXT,LOCATIONDETAILS TEXT," +
                 "TIMETAKEN TEXT,UPLOADSTATUS TEXT,TEXTCAPTION TEXT," +
                 "UPLOADERID TEXT,USERNAME TEXT,PROFILEPICURI TEXT,AUDIOCAPTION TEXT,CURRENTTIMEMILLISECOND TEXT);");
+
+        Log.d("InLens:","Upload Database Created");
+
     }
 
 

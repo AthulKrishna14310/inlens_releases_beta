@@ -54,8 +54,7 @@ public class AlbumStartingServices {
     public void deleteDatabases(){
         CurrentDatabase currentDatabase1 = new CurrentDatabase(context, "", null, 1);
         currentDatabase1.DeleteDatabase();
-        UploadDatabaseHelper uploadDatabaseHelper1 =
-                new UploadDatabaseHelper(context, "", null, 1);
+        UploadDatabaseHelper uploadDatabaseHelper1 = new UploadDatabaseHelper(context, "", null, 1);
         uploadDatabaseHelper1.DeleteDatabase();
 
     }
@@ -71,8 +70,8 @@ public class AlbumStartingServices {
            albumCreated = day + "-" + month + "-" + year;
 
        }
-       CurrentDatabase currentDatabase= new CurrentDatabase(context,"",null,1);
-        currentDatabase.InsertUploadValues(PostKey,1,1,0,AlbumTime,1,1,"",albumCreated);
+        CurrentDatabase currentDatabase= new CurrentDatabase(context,"",null,1);
+        currentDatabase.InsertUploadValues(PostKey,0,1,0,AlbumTime,1,1,"",albumCreated);
         currentDatabase.close();
 
     }

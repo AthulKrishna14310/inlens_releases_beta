@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 public class CurrentDatabase extends SQLiteOpenHelper {
     private Context context;
+
     public CurrentDatabase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, "CurrentDatabase.db", factory, version);
         this.context=context;
@@ -31,6 +32,7 @@ public class CurrentDatabase extends SQLiteOpenHelper {
                 "RECENT_TOTAL INTEGER, ALBUMEXPIRY TEXT,RECENT_IMAGE_INDEX INTEGER," +
                 "UPLOADING_INDEX INTEGER,CURRENT_IMAGE TEXT,ALBUM_CREATED TEXT);");
 
+        Log.d("InLens::","Current Database Created");
 
     }
 
@@ -113,6 +115,7 @@ public class CurrentDatabase extends SQLiteOpenHelper {
         }
         return S;
     }
+
     public int GetRecentTotal() {
         int S=0;
         Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM CURRENT WHERE ID =" + 1, null);
@@ -121,6 +124,7 @@ public class CurrentDatabase extends SQLiteOpenHelper {
         }
         return S;
     }
+
     public String GetCurrentImage() {
         String S=null;
         Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM CURRENT WHERE ID =" + 1, null);

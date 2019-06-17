@@ -24,8 +24,6 @@ import id.zelory.compressor.Compressor;
 public class NotificationHelper extends ContextWrapper {
 
     private NotificationManager notificationManager;
-    private NotificationManager uploadnotificationManager;
-    private NotificationCompat.Builder uploadbuilder;
     private RemoteViews remoteViews;
     private Bitmap      logoBitmap;
     private Context     context;
@@ -51,14 +49,6 @@ public class NotificationHelper extends ContextWrapper {
             notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
             getNotificationManager().createNotificationChannel(notificationChannel);
-
-        }
-
-        NotificationChannel uploadNotificationChannel= null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            uploadNotificationChannel = new NotificationChannel("ID_503","Upload  Notification",
-                    NotificationManager.IMPORTANCE_MIN);
-            getNotificationManager().createNotificationChannel(uploadNotificationChannel);
 
         }
 
@@ -148,8 +138,9 @@ public class NotificationHelper extends ContextWrapper {
                 NotificationCompat.Builder builder =
                         (NotificationCompat.Builder)
                                 new NotificationCompat.Builder(getApplicationContext())
-                                        .setContentTitle("New image detected")
-                                        .setContentText("Inlens has detected a new image. Expand to get more info.")
+                                        .setContentTitle("Tap to view recent-images")
+                                        .setContentText("View all recent-images that was " +
+                                                "captured after the  Cloud-Album creation. ")
                                         .setDefaults(Notification.DEFAULT_ALL)
                                         .setOnlyAlertOnce(true)
                                         .setOngoing(true)
@@ -300,38 +291,6 @@ public class NotificationHelper extends ContextWrapper {
 
         return builder;
     }
-
-    public Notification.Builder builderNotificationForUploadDataOreo(int uploadID,int Record)
-    {
-
-        Notification.Builder Uploadbuilder = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Uploadbuilder = (Notification.Builder) new Notification.Builder(getApplicationContext(),"ID_504")
-                    .setContentTitle("Upload Started")
-                    .setContentText("Uploading your images to InLens-Cloud")
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.inlens_logo_m)
-                    .setProgress(100, 0, true);
-        }
-
-        return Uploadbuilder;
-    }
-
-    public void cancelUploadDataNotification()
-    {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationManager.cancel(672);
-            }else{
-                uploadnotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                uploadnotificationManager.cancel(672);
-            }
-        }catch (NullPointerException e)
-        {
-         e.printStackTrace();
-        }
-    }
-
     public void cancelNotificationRecentImage()
     {try
     {
@@ -341,35 +300,4 @@ public class NotificationHelper extends ContextWrapper {
         e.printStackTrace();
     }
     }
-
-    public void notifyUploadData(int uploadID,int record)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification.Builder builder=this.builderNotificationForUploadDataOreo(
-                    uploadID,
-                    record
-            );
-            builder.setAutoCancel(true);
-            this.getNotificationManager().notify(672,builder.build());
-
-        }
-        else{
-            uploadnotificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            uploadbuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
-                    .setContentTitle("Upload Started")
-                    .setContentText("Uploading your images to InLens-Cloud")
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.inlens_logo_m)
-                    .setAutoCancel(true)
-                    .setPriority(Notification.PRIORITY_MIN)
-                    .setProgress(100, 0, true);
-
-            uploadnotificationManager.notify(672, uploadbuilder.build());
-
-        }
-
-    }
-
-
-
 }

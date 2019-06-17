@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteReadOnlyDatabaseException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,7 +32,7 @@ public class UploadServiceHelper {
     private ArrayList<String>  stringArrayList;
     private String             uploadUrl;
     private NotificationHelper notificationHelper;
-    private int                uploadID=0;
+    private int                uploadID;
     private FirebaseAuth       firebaseAuth;
     private FirebaseUser       firebaseUser;
     private StorageReference   postStorageReference;
@@ -51,16 +50,18 @@ public class UploadServiceHelper {
     private File                    thumbFile;
     private File                    imageFile;
     private UploadDatabaseHelper    uploadDatabaseHelper;
+    private CurrentDatabase         currentDatabase;
 
     public UploadServiceHelper(Context context,
                                ArrayList<String>stringArrayList,
                                String titleValue,
                                String timeTaken,
-                               UploadDatabaseHelper uploadDatabaseHelper
-    )
+                               UploadDatabaseHelper uploadDatabaseHelper,
+                               CurrentDatabase currentDatabase,int uploadID,String communityID)
     {
+
         this.stringArrayList=stringArrayList;
-        uploadUrl=stringArrayList.get(uploadID);
+        uploadUrl=stringArrayList.get(0);
         notificationHelper=new NotificationHelper(context);
 
         bitmapCompressionHelper=new BitmapCompressionHelper(
@@ -76,7 +77,9 @@ public class UploadServiceHelper {
         this.downloadThumbUrl=null;
         this.titleValue=titleValue;
         this.timeTaken=timeTaken;
-
+        this.currentDatabase=currentDatabase;
+        this.uploadID=uploadID;
+        this.communityID=communityID;
     }
 
 
@@ -89,9 +92,8 @@ public class UploadServiceHelper {
             @Override
             protected Object doInBackground(Object[] objects) {
 
-                Log.d("Upload::Compression","Started bitmap compression");
 
-
+                uploadDatabaseHelper.UpdateUploadStatus(uploadID,"UPLOADING");
                 bitmapCompressionHelper.compressUploadFile();
                 uploadImageUri=bitmapCompressionHelper.getResultUri();
                 bitmapCompressionHelper.compressThumbImageFile();
@@ -99,7 +101,7 @@ public class UploadServiceHelper {
                 thumbFile=new File(thumbImageUri.getPath());
                 imageFile=new File(uploadImageUri.getPath());
 
-                Log.d("Upload::STATUS","Uploading started");
+
 
                 final StorageReference FilePath = postStorageReference.child("CommunityPosts").child(uploadImageUri.getLastPathSegment());
                 final StorageReference ThumbNailImage = postStorageReference.child("OriginalImage_thumb").child(uploadImageUri.getLastPathSegment() + System.currentTimeMillis());
@@ -109,7 +111,6 @@ public class UploadServiceHelper {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 downloadThumbUrl = taskSnapshot.getDownloadUrl();
-                                Log.d("Upload::STATUS","Thumb image uploaded");
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -136,7 +137,6 @@ public class UploadServiceHelper {
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
 
-                                        Log.d("Upload::STATUS","Image file uploaded");
 
                                             final DatabaseReference NewPost = postDatabaseReference.push();
                                             inUserReference.addValueEventListener(new ValueEventListener() {
@@ -156,7 +156,6 @@ public class UploadServiceHelper {
                                                 NewPost.child("PostedByProfilePic").setValue(dataSnapshot.child("Profile_picture").getValue());
                                                 NewPost.child("UserName").setValue(dataSnapshot.child("Name").getValue());
 
-                                                Log.d("Upload::STATUS","Data uploaded");
                                                 bitmapCompressionHelper.deleteFile(imageFile);
                                                 bitmapCompressionHelper.deleteFile(thumbFile);
 
@@ -164,25 +163,12 @@ public class UploadServiceHelper {
 
 
                                                 try {
-
                                                     uploadDatabaseHelper.UpdateUploadStatus(uploadID, "UPLOADED");
-                                                    Log.d("Upload::STATUS","UPLOAD_DATABASE " +
-                                                            "updated");
-
-
                                                 } catch (SQLiteReadOnlyDatabaseException e) {
                                                     e.printStackTrace();
                                                 }
-
-                                                CurrentDatabase currentDatabase =
-                                                        new CurrentDatabase(context, "", null, 1);
-                                                int Value = currentDatabase.GetUploadingTargetColumn();
-                                                currentDatabase.ResetUploadTargetColumn((Value + 1));
-                                                currentDatabase.close();
-                                                uploadDatabaseHelper.close();
-                                                Log.d("Upload::STATUS","CURRENT_DATABASE " +
-                                                        "updated");
-                                                Log.d("Upload::STATUS","All upload operation done");
+                                                int Value=uploadID+1;
+                                                currentDatabase.ResetUploadTargetColumn(Value);
 
 
                                             }
@@ -223,16 +209,10 @@ public class UploadServiceHelper {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                Log.d("Upload::STATUS","Async task initialised");
 
-                CurrentDatabase currentDatabase=new CurrentDatabase(context,"",null,1);
-                communityID=currentDatabase.GetLiveCommunityID();
-                currentDatabase.close();
-
-                firebaseAuth = FirebaseAuth.getInstance();
+                               firebaseAuth = FirebaseAuth.getInstance();
                 firebaseUser = firebaseAuth.getCurrentUser();
                 postStorageReference= FirebaseStorage.getInstance().getReference();
-                notificationHelper.notifyUploadData(uploadID,stringArrayList.size());
                 postDatabaseReference = FirebaseDatabase.getInstance().getReference()
                         .child("Communities")
                         .child(communityID)
@@ -243,14 +223,11 @@ public class UploadServiceHelper {
                         .child("Users")
                         .child(firebaseUser.getUid());
 
-                Log.d("Upload::STATUS","Async task pre-excecuted");
-            }
+              }
 
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                Log.d("Upload::STATUS","Upload Post-Excecuted");
-                notificationHelper.cancelUploadDataNotification();
             }
 
             @Override
@@ -261,20 +238,14 @@ public class UploadServiceHelper {
                 bitmapCompressionHelper.deleteFile(thumbFile);
                 uploadDatabaseHelper.UpdateUploadStatus(uploadID, "NOT_UPLOADED");
 
-                CurrentDatabase currentDatabase = new CurrentDatabase(context, "", null, 1);
                 int Value = currentDatabase.GetUploadingTargetColumn();
                 currentDatabase.ResetUploadTargetColumn((Value));
-                currentDatabase.close();
-                uploadDatabaseHelper.close();
-
-                notificationHelper.cancelUploadDataNotification();
             }
 
             @Override
             protected void onProgressUpdate(Object[] values) {
                 super.onProgressUpdate(values);
-                Log.d("Upload::STATUS","Upload on progress");
-            }
+             }
         };
 
     }
@@ -282,14 +253,12 @@ public class UploadServiceHelper {
     public void proceedUploadOperation()
     {
         uploadAsyncTask.execute("");
-        Log.d("Upload::STATUS","Upload process started to run on async task");
 
     }
 
     public void cancelUploadOperation()
     {
         uploadAsyncTask.cancel(false);
-        Log.d("Upload::STATUS","Upload process stopped");
 
     }
 }

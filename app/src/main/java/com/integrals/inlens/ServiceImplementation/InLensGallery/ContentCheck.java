@@ -76,12 +76,11 @@ public class ContentCheck {
             }
             try {
                 if(d1.compareTo(d2)>=0) {
-
                     return true;
                 }
                 else {
                     return false;
-                }
+                     }
 
             } catch (NullPointerException e) {
             Log.d("InLens::","Null for date");

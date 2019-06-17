@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView MemoryRecyclerView;
     private DatabaseReference InDatabaseReference;
 
-    private String CommunityPostKey;
     private String CurrentUser;
     private FirebaseAuth InAuthentication;
     private FirebaseUser firebaseUser;

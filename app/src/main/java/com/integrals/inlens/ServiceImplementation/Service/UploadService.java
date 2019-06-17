@@ -44,7 +44,6 @@ public class UploadService extends Service {
         albumStoppingServices=new AlbumStoppingServices(getApplicationContext());
         uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
         currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
-        uploadDatabaseHelper.UpdateUploadStatus(currentDatabase.GetUploadingTargetColumn(), "NOT_UPLOADED");
         checker=new Checker(getApplicationContext());
 
     }
@@ -112,18 +111,17 @@ public class UploadService extends Service {
         UploadingIntegerID = currentDatabase.GetUploadingTargetColumn();
         Record = currentDatabase.GetUploadingTotal();
         UPLOAD_STATUS = uploadDatabaseHelper.GetUploadStatus(UploadingIntegerID);
-
+        Log.d("InLens:U:","->Record:"+Record+"->UploadIntegerID:"+UploadingIntegerID+
+                "->UPLOAD_STATUS:"+UPLOAD_STATUS+"->COMMUNITY_ID:"+CommunityID);
         if ((UploadingIntegerID <= Record)) {
             try {
                 if (UPLOAD_STATUS.contentEquals("NOT_UPLOADED")) {
-                    initiateUploadHelper(uploadDatabaseHelper,UploadingIntegerID);
+                    initiateUploadHelper(uploadDatabaseHelper,UploadingIntegerID,CommunityID);
                 }
 
                 } catch (NullPointerException e) {
                 e.printStackTrace();
 
-                uploadDatabaseHelper.close();
-                currentDatabase.close();
 
                 Log.d("InLens","Cancelled upload");
                 albumStoppingServices.deinitiateUploadService();
@@ -133,18 +131,14 @@ public class UploadService extends Service {
         }
         else
             {
-            uploadDatabaseHelper.close();
-            currentDatabase.close();
             Log.d("InLens","No image to upload");
             albumStoppingServices.deinitiateUploadService();
             }
 
-        uploadDatabaseHelper.close();
-        currentDatabase.close();
-    }
+     }
 
     private void initiateUploadHelper(UploadDatabaseHelper uploadDatabaseHelper ,
-                                      int uploadingIntegerID)
+                                      int uploadingIntegerID,String communityID)
     {
 
         ArrayList<String> list=new ArrayList<>();
@@ -152,7 +146,8 @@ public class UploadService extends Service {
         UploadServiceHelper uploadServiceHelper=new UploadServiceHelper(
                 getApplicationContext(),
                 list,""
-                ,uploadDatabaseHelper.GetTimeTaken(uploadingIntegerID),uploadDatabaseHelper
+                ,uploadDatabaseHelper.GetTimeTaken(uploadingIntegerID),uploadDatabaseHelper,
+                currentDatabase,UploadingIntegerID,communityID
         );
         Log.d("Upload::Status",uploadDatabaseHelper.GetUploadStatus(uploadingIntegerID));
         Log.d("Upload::URI",uploadDatabaseHelper.GetPhotoUri(uploadingIntegerID));
@@ -172,6 +167,14 @@ public class UploadService extends Service {
             protected Object doInBackground(Object[] objects) {
                 handler.removeCallbacks(runnable);
                 return null;
+
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+               Log.d("InLens:","Handler deleted");
+                super.onPostExecute(o);
+
             }
         }.execute("");
 

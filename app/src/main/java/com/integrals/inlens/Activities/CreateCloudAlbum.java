@@ -43,7 +43,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.integrals.inlens.AlbumProcedures.AlbumStartingServices;
-import com.integrals.inlens.Helper.UploadDatabaseHelper;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -55,7 +54,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.integrals.inlens.Helper.CurrentDatabase;
 import com.integrals.inlens.MainActivity;
 import com.integrals.inlens.R;
 
@@ -545,7 +543,9 @@ public class CreateCloudAlbum extends AppCompatActivity {
                                                 albumStartingServices.deleteDatabases();
                                                 albumStartingServices.createDatabases(PostKey,AlbumTime);
 
+
                                                 StartServices();
+
                                                 SharedPreferences AlbumClickDetails = getSharedPreferences("LastClickedAlbum",MODE_PRIVATE);
                                                 SharedPreferences.Editor  AlbumEditor = AlbumClickDetails.edit();
                                                 AlbumEditor.putInt("last_clicked_position",0);
@@ -677,12 +677,15 @@ public class CreateCloudAlbum extends AppCompatActivity {
                                     UploadProgress.setVisibility(View.INVISIBLE);
                                     SubmitButton.setVisibility(View.VISIBLE);
                                     CloudAlbumDone=true;
+
+                                    albumStartingServices.deleteDatabases();
+                                    albumStartingServices.createDatabases(PostKey,AlbumTime);
+
                                     StartServices();
                                     SharedPreferences AlbumClickDetails = getSharedPreferences("LastClickedAlbum",MODE_PRIVATE);
                                     SharedPreferences.Editor  AlbumEditor = AlbumClickDetails.edit();
                                     AlbumEditor.putInt("last_clicked_position",0);
                                     AlbumEditor.apply();
-                                    finish();
 
                                 }
 
@@ -795,12 +798,10 @@ public class CreateCloudAlbum extends AppCompatActivity {
     private void CreateSituation()
     {
 
-        CurrentDatabase currentDatabase=new CurrentDatabase(getApplicationContext(),"",null,1);
-        final String CommunityID=currentDatabase.GetLiveCommunityID();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Communities")
-                .child(CommunityID).child("Situations");
+                .child(PostKey).child("Situations");
         ComNotyRef = FirebaseDatabase.getInstance().getReference().child("Communities")
-                .child(CommunityID).child("CommunityPhotographer");
+                .child(PostKey).child("CommunityPhotographer");
         calendar=Calendar.getInstance();
         String SituationTimeIntervel=calendar.get(Calendar.YEAR)+ "-"
                 +calendar.get(Calendar.MONTH)+"-"
@@ -827,7 +828,7 @@ public class CreateCloudAlbum extends AppCompatActivity {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     String id = snapshot.child("Photographer_UID").getValue().toString();
-                    dref.child(id).push().child("comid").setValue(CommunityID);
+                    dref.child(id).push().child("comid").setValue(PostKey);
                 }
 
             }
@@ -862,7 +863,6 @@ public class CreateCloudAlbum extends AppCompatActivity {
 
 
 
-       currentDatabase.close();
     }
 
 
