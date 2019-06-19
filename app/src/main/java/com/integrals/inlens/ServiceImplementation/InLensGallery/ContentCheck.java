@@ -55,17 +55,17 @@ public class ContentCheck {
         return stringDate;
     }
 
-    public boolean isImageDateAfterAlbumCreatedDate(String imageDate,String albumCreatedDate)
+    public boolean isImageDateAfterAlbumCreatedDate(String imageDate,String albumCreatedDate,
+                                                    String albumExpiry)
     {
-        Log.d("InLens_Compare:",imageDate);
-        Log.d("InLens_Compare:",albumCreatedDate);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            Date d1 = null, d2 = null;
+            Date d1 = null, d2 = null,d3=null;
             try {
 
                 d1 = dateFormat.parse(imageDate);
                 d2 = dateFormat.parse(albumCreatedDate);
+                d3=dateFormat.parse(albumExpiry);
 
             } catch (ParseException e) {
                e.printStackTrace();
@@ -76,7 +76,9 @@ public class ContentCheck {
             }
             try {
                 if(d1.compareTo(d2)>=0) {
-                    return true;
+                    if(d1.compareTo(d3)<=0) {
+                        return true;
+                    }
                 }
                 else {
                     return false;

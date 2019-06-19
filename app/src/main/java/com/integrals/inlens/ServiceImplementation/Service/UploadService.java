@@ -63,8 +63,12 @@ public class UploadService extends Service {
 
 
             Notification notification = new NotificationCompat.Builder(this, "ID_505")
+                    .setOnlyAlertOnce(true)
+
                     .setContentTitle("InLens Upload Service running background")
+
                     .setContentText(input)
+
                     .setSmallIcon(R.drawable.inlens_notification)
                     .setContentIntent(pendingIntent)
                     .build();

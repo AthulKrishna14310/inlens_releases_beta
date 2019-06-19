@@ -803,13 +803,24 @@ public class CreateCloudAlbum extends AppCompatActivity {
         ComNotyRef = FirebaseDatabase.getInstance().getReference().child("Communities")
                 .child(PostKey).child("CommunityPhotographer");
         calendar=Calendar.getInstance();
-        String SituationTimeIntervel=calendar.get(Calendar.YEAR)+ "-"
-                +calendar.get(Calendar.MONTH)+"-"
-                +calendar.get(Calendar.DAY_OF_MONTH)+"T"
-                +calendar.get(Calendar.HOUR_OF_DAY)+"-"
-                +calendar.get(Calendar.MINUTE)+"-"
-                +calendar.get(Calendar.SECOND);
+        int m=calendar.get(Calendar.MONTH);
+        String SituationTimeIntervel=null;
+        if(m<9){
+             SituationTimeIntervel=calendar.get(Calendar.YEAR)+ "-0"
+                    +calendar.get(Calendar.MONTH)+"-"
+                    +calendar.get(Calendar.DAY_OF_MONTH)+"T"
+                    +calendar.get(Calendar.HOUR_OF_DAY)+"-"
+                    +calendar.get(Calendar.MINUTE)+"-"
+                    +calendar.get(Calendar.SECOND);
 
+        }else {
+             SituationTimeIntervel = calendar.get(Calendar.YEAR) + "-"
+                    + calendar.get(Calendar.MONTH) + "-"
+                    + calendar.get(Calendar.DAY_OF_MONTH) + "T"
+                    + calendar.get(Calendar.HOUR_OF_DAY) + "-"
+                    + calendar.get(Calendar.MINUTE) + "-"
+                    + calendar.get(Calendar.SECOND);
+        }
         Map situationmap = new HashMap();
         situationmap.put("name","Event Started");
         situationmap.put("time", ServerValue.TIMESTAMP);

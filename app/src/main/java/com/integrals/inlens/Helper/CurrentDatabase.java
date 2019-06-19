@@ -29,7 +29,7 @@ public class CurrentDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE CURRENT( ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "LIVECOMMUNITY TEXT,UPLOADING_TOTAL INTEGER,UPLOADING_TARGET_COLUMN INTEGER," +
-                "RECENT_TOTAL INTEGER, ALBUMEXPIRY TEXT,RECENT_IMAGE_INDEX INTEGER," +
+                "RECENT_TOTAL INTEGER, ALBUMEXPIRY TEXT,EXPIRY_INDEX INTEGER," +
                 "UPLOADING_INDEX INTEGER,CURRENT_IMAGE TEXT,ALBUM_CREATED TEXT);");
 
         Log.d("InLens::","Current Database Created");
@@ -37,7 +37,7 @@ public class CurrentDatabase extends SQLiteOpenHelper {
     }
 
     public void InsertUploadValues(String LiveCommunityID,int UploadingTotal,int UploadingTargetColumn,
-                                   int RecentTotal, String AlbumExpiry,int RecentImageIndex,
+                                   int RecentTotal, String AlbumExpiry,int ExpiryIndex,
                                    int UploadingIndex,String CurrentImage,
                                    String AlbumCreated) {
         ContentValues contentValues = new ContentValues();
@@ -46,7 +46,7 @@ public class CurrentDatabase extends SQLiteOpenHelper {
         contentValues.put("UPLOADING_TARGET_COLUMN",UploadingTargetColumn);
         contentValues.put("RECENT_TOTAL",RecentTotal);
         contentValues.put("ALBUMEXPIRY",AlbumExpiry);
-        contentValues.put("RECENT_IMAGE_INDEX",RecentImageIndex);
+        contentValues.put("EXPIRY_INDEX",ExpiryIndex);
         contentValues.put("UPLOADING_INDEX",UploadingIndex);
         contentValues.put("CURRENT_IMAGE",CurrentImage);
         contentValues.put("ALBUM_CREATED",AlbumCreated);
@@ -89,7 +89,7 @@ public class CurrentDatabase extends SQLiteOpenHelper {
         return S;
     }
 
-    public int GetRecentImageIndex() {
+    public int GetExpiryIndex() {
         int S=0;
         Cursor cursor = this.getReadableDatabase().rawQuery("SELECT * FROM CURRENT WHERE ID =" + 1, null);
         while (cursor.moveToNext()) {
@@ -146,6 +146,11 @@ public class CurrentDatabase extends SQLiteOpenHelper {
 
             }
 
+    public void ResetExpiryIndex(int FinalValue){
+        this.getWritableDatabase().execSQL("UPDATE CURRENT" + " SET EXPIRY_INDEX='" + FinalValue +
+                "' WHERE ID='" + 1 + "'");
+
+    }
 
 
     public void ResetUploadTargetColumn(int FinalValue){

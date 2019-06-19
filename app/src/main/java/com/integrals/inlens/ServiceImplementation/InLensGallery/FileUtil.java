@@ -21,14 +21,17 @@ class FileUtil {
     private static  Cursor cursor;
     private static List<String> arrayPath;
     private static String requiredDate;
-    private static String albumExpiry;
+    private static String albumCreated;
     private static String time;
     private static List<String> timeList;
     private static String replacetime1,replacetime2;
     private static String TAG="InLens";
     private static int x=0;
+    private static String albumExpiry;
 
-    public static List<String> findMediaFiles(Context context,String albumExpiryD) {
+    public static List<String> findMediaFiles(Context context,
+											  String albumCreatedD,
+											  String albumExpiryD) {
 
 		 fileList = new ArrayList<>();
 		 timeList=new ArrayList<>();
@@ -42,8 +45,8 @@ class FileUtil {
 				null, orderBy);
 
 		 contentCheck=new ContentCheck("",context);
+		 albumCreated=albumCreatedD;
 		 albumExpiry=albumExpiryD;
-
 
 		 if (cursor != null) {
              showLog("Cursor found");
@@ -72,7 +75,7 @@ class FileUtil {
 
 
 
-                if(contentCheck.isImageDateAfterAlbumCreatedDate(requiredDate,albumExpiry)==true){
+                if(contentCheck.isImageDateAfterAlbumCreatedDate(requiredDate,albumCreated,albumExpiry)==true){
                 	 replacetime1=time.replaceAll(":","-");
 					 replacetime2=replacetime1.replaceAll(" ","T");
 					 fileList.add(arrayPath.get(arrayPath.size()-1));

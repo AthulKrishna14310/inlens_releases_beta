@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import com.integrals.inlens.Helper.CurrentDatabase;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

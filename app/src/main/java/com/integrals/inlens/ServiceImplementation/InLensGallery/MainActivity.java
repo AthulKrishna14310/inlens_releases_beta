@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private CurrentDatabase currentDatabase;
     private Queue<String> timeQueue;
     private Queue<String> imageUriQueue;
-
+    private String albumExpiry;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -62,11 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
         currentDatabase=new CurrentDatabase(getApplicationContext(),"",null,1);
         albumCreated=currentDatabase.GetAlbumCreated();
+        albumExpiry=currentDatabase.GetAlbumExpiry();
         currentDatabase.close();
 
         timeQueue=new LinkedList<>();
         imageUriQueue=new LinkedList<>();
-        Log.d("InLens::AlbumExpiry::",albumCreated);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
-                mFiles = FileUtil.findMediaFiles(getApplicationContext(),albumCreated);
+                mFiles = FileUtil.findMediaFiles(getApplicationContext(),albumCreated,albumExpiry);
                 mTimes = FileUtil.getTimeList();
 
                 return null;

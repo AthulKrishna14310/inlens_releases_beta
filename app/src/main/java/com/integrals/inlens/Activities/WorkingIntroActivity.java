@@ -67,6 +67,7 @@ public class WorkingIntroActivity extends AppCompatActivity {
 
             TourViewFlipper.setInAnimation(getApplicationContext(),R.anim.cloud_album_fade_in);
             TourViewFlipper.setOutAnimation(getApplicationContext(),R.anim.cloud_album_fade_out);
+
         }
 
 
