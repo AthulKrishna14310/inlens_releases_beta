@@ -144,9 +144,6 @@
         <service
             android:name="com.integrals.inlens.ServiceImplementation.JobScheduler.JobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name="com.integrals.inlens.ServiceImplementation.JobScheduler.AlertNotificationJobPackage.JobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
             android:name="com.integrals.inlens.Activities.ResetPassword"
@@ -260,10 +257,6 @@
             android:name="com.squareup.picasso.PicassoProvider"
             android:authorities="com.integrals.inlens.com.squareup.picasso"
             android:exported="false" />
-        <provider
-            android:name="com.android.tools.ir.server.InstantRunContentProvider"
-            android:authorities="com.integrals.inlens.com.android.tools.ir.server.InstantRunContentProvider"
-            android:multiprocess="true" />
     </application>
 
 </manifest>

@@ -19,8 +19,6 @@ public class AlbumStartingServices {
 
     private JobHelper jobHelper;
     private Context context;
-    private com.integrals.inlens.ServiceImplementation.
-        JobScheduler.AlertNotificationJobPackage.JobHelper jobHelperAlert;
     private NotificationHelper notificationHelper;
     private CurrentDatabase currentDatabase;
 
@@ -28,9 +26,6 @@ public class AlbumStartingServices {
     {
         this.context = context;
         this.jobHelper=new JobHelper(context);
-        this.jobHelperAlert=
-                new com.integrals.inlens.ServiceImplementation.JobScheduler.
-                        AlertNotificationJobPackage.JobHelper(context);
         notificationHelper=new NotificationHelper(context);
         currentDatabase=new CurrentDatabase(context,"",null,1);
     }
@@ -46,8 +41,6 @@ public class AlbumStartingServices {
 
     jobHelper.initiateJobInfo();
     jobHelper.scheduleJob();
-    jobHelperAlert.initiateJobInfo();
-    jobHelperAlert.scheduleJob();
 
     }
 

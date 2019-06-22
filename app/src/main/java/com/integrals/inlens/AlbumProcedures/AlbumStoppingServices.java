@@ -22,17 +22,12 @@ public class AlbumStoppingServices {
 
     private JobHelper jobHelper;
     private Context context;
-    private com.integrals.inlens.ServiceImplementation.
-            JobScheduler.AlertNotificationJobPackage.JobHelper jobHelperAlert;
     private NotificationHelper notificationHelper;
 
     public AlbumStoppingServices(Context context) {
 
         this.context = context;
         this.jobHelper=new JobHelper(context);
-        this.jobHelperAlert=
-                new com.integrals.inlens.ServiceImplementation.JobScheduler.
-                        AlertNotificationJobPackage.JobHelper(context);
         notificationHelper=new NotificationHelper(context);
 
 
@@ -45,7 +40,6 @@ public class AlbumStoppingServices {
         notificationManager.cancelAll();
 
         jobHelper.stopJob();
-        jobHelperAlert.stopJob();
 
     }
 
