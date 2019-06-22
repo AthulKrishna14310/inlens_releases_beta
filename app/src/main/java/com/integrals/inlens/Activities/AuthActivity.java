@@ -42,7 +42,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 import com.integrals.inlens.MainActivity;
 import com.integrals.inlens.R;
-import com.integrals.inlens.UI.Extras.CountryItem;
+import com.integrals.inlens.Helper.CountryItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

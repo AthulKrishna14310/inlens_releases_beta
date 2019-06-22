@@ -628,8 +628,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick (View view){
 
         if (isOpen) {
-            CloseFabs();
-            isOpen = false;
+            AnimateFab();
         }
         if (MainCloudAlbumInfoBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED ||
                 MainCloudAlbumInfoBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
@@ -987,7 +986,7 @@ public class MainActivity extends AppCompatActivity {
                 AnimateFab();
 
                 SharedPreferences sharedPreferences1 = getSharedPreferences("InCommunity.pref", MODE_PRIVATE);
-                if (sharedPreferences1.getBoolean("UsingCommunity::", false) == true) {
+                if (sharedPreferences1.getBoolean("UsingCommunity::", false)) {
                     Toast.makeText(getApplicationContext(), "Sorry,You can't scan a new Cloud-Album before you quit the current one.", Toast.LENGTH_LONG).show();
                 } else {
                     startActivity(new Intent(MainActivity.this, QRCodeReader.class));
@@ -1012,27 +1011,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void CloseFabs() {
-        if (MainDimBackground.isShown()) {
-
-            MainDimBackground.setVisibility(View.GONE);
-            ScanQrFab.clearAnimation();
-            ScanQrFab.setAnimation(FabClose);
-            ScanQrFab.getAnimation().start();
-
-            CreateAlbumFab.clearAnimation();
-            CreateAlbumFab.setAnimation(FabClose);
-            CreateAlbumFab.getAnimation().start();
-
-            CreateAlbumFab.setVisibility(View.INVISIBLE);
-            ScanQrFab.setVisibility(View.INVISIBLE);
-
-            MainFab.clearAnimation();
-            MainFab.setAnimation(FabRotateBackward);
-            MainFab.getAnimation().start();
-        }
-        isOpen = false;
-    }
 
     private void AnimateFab() {
 
@@ -1047,20 +1025,8 @@ public class MainActivity extends AppCompatActivity {
             CreateAlbumFab.setAnimation(FabClose);
             CreateAlbumFab.getAnimation().start();
 
-            /*
-            MainScanQrTxtview.clearAnimation();
-            MainScanQrTxtview.setAnimation(FabClose);
-            MainScanQrTxtview.getAnimation().start();
-
-            MainCreateAlbumTxtview.clearAnimation();
-            MainCreateAlbumTxtview.setAnimation(FabClose);
-            MainCreateAlbumTxtview.getAnimation().start();
-             */
-
             CreateAlbumFab.setVisibility(View.INVISIBLE);
             ScanQrFab.setVisibility(View.INVISIBLE);
-            //MainCreateAlbumTxtview.setVisibility(View.INVISIBLE);
-            //MainScanQrTxtview.setVisibility(View.INVISIBLE);
 
             MainFab.clearAnimation();
             MainFab.setAnimation(FabRotateBackward);
@@ -1077,20 +1043,8 @@ public class MainActivity extends AppCompatActivity {
             CreateAlbumFab.setAnimation(FabOpen);
             CreateAlbumFab.getAnimation().start();
 
-            /*
-            MainScanQrTxtview.clearAnimation();
-            MainScanQrTxtview.setAnimation(FabOpen);
-            MainScanQrTxtview.getAnimation().start();
-
-            MainCreateAlbumTxtview.clearAnimation();
-            MainCreateAlbumTxtview.setAnimation(FabOpen);
-            MainCreateAlbumTxtview.getAnimation().start();
-             */
-
             CreateAlbumFab.setVisibility(View.VISIBLE);
             ScanQrFab.setVisibility(View.VISIBLE);
-            //MainScanQrTxtview.setVisibility(View.VISIBLE);
-            //MainCreateAlbumTxtview.setVisibility(View.VISIBLE);
 
             MainFab.clearAnimation();
             MainFab.setAnimation(FabRotateForward);
@@ -1121,35 +1075,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void DisplayAllParticipantsAsBottomSheet(String postKeyForEdit, DatabaseReference getParticipantDatabaseReference) {
 
-        final Dialog BottomSheetUserDialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar);
-        BottomSheetUserDialog.setCancelable(true);
-        BottomSheetUserDialog.setCanceledOnTouchOutside(true);
-        BottomSheetUserDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        BottomSheetUserDialog.setContentView(R.layout.custom_profile_dialog);
-        BottomSheetUserDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        BottomSheetUserDialog.getWindow().getAttributes().windowAnimations = R.style.BottomUpSlideDialogAnimation;
-
-        Window BottomSheetUserDialogWindow = BottomSheetUserDialog.getWindow();
-        BottomSheetUserDialogWindow.setGravity(Gravity.BOTTOM);
-        BottomSheetUserDialogWindow.setLayout(GridLayout.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.WRAP_CONTENT);
-        BottomSheetUserDialogWindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        BottomSheetUserDialogWindow.setDimAmount(0.75f);
-
-        final ProgressBar bprogressBar = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_progressbar);
-        final CircleImageView UserImage = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_userprofilepic);
-        ImageButton ChangeuserImage = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_profilechangebtn);
-        ChangeuserImage.setVisibility(View.GONE);
-        final TextView ProfileUserEmail = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_useremail);
-        final TextView ProfileuserName = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_username);
-        ImageButton CloseProfileDialog = BottomSheetUserDialog.findViewById(R.id.custom_profile_dialog_closebtn);
-
-        CloseProfileDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                BottomSheetUserDialog.dismiss();
-            }
-        });
 
         final List<String> MemberImageList = new ArrayList<>();
         final List<String> MemberNamesList = new ArrayList<>();
@@ -1856,8 +1781,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (MainCloudAlbumInfoBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED || MainCloudAlbumInfoBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             MainCloudAlbumInfoBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         } else if (isOpen) {
-            CloseFabs();
-            isOpen = false;
+            AnimateFab();
         } else {
             super.onBackPressed();
         }
@@ -1890,34 +1814,11 @@ private class MainSearchAdapter extends RecyclerView.Adapter<AlbumViewHolder> {
         holder.SetAlbumCover(getApplicationContext(), AlbumList.get(position).getAlbumCoverImage());
         holder.SetTitle(AlbumList.get(position).getAlbumTitle());
         holder.SetProfilePic(getApplicationContext(), AlbumList.get(position).getPostedByProfilePic());
-        if (holder.AlbumContainer.isShown()) {
-
-
-            holder.DetailsAlbumn.clearAnimation();
-            holder.DetailsAlbumn.setAnimation(AlbumCardClose);
-            holder.DetailsAlbumn.getAnimation().start();
-
-            holder.DetailsAlbumn.setVisibility(View.INVISIBLE);
-
-        } else {
-
-
-            holder.DetailsAlbumn.clearAnimation();
-            holder.DetailsAlbumn.setAnimation(AlbumCardOpen);
-            holder.DetailsAlbumn.getAnimation().start();
-
-
-            holder.DetailsAlbumn.setVisibility(View.VISIBLE);
-
-        }
-
 
         holder.DetailsAlbumn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
-                CloseFabs();
 
                 DisplayAllParticipantsAsBottomSheet(AlbumKeyIDs.get(position), FirebaseDatabase.getInstance().getReference());
 
@@ -2104,7 +2005,7 @@ private class MainSearchAdapter extends RecyclerView.Adapter<AlbumViewHolder> {
             @Override
             public void onClick(View v) {
 
-                CloseFabs();
+                AnimateFab();
 
                 final String PostKey = AlbumKeyIDs.get(position);
                 if (!TextUtils.isEmpty(PostKey)) {

@@ -1,6 +1,10 @@
-package com.integrals.inlens.UI.Extras;
+package com.integrals.inlens.Helper;
 
 public class CountryItem {
+
+    /*
+    Phone Auth
+     */
 
     private String CountryName;
     private String CountryCode;

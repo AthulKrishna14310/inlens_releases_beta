@@ -88,9 +88,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheme"/>
         <activity
-            android:name=".Activities.QRCodeGenerator"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activities.QRCodeReader"
             android:screenOrientation="portrait" />
         <activity
