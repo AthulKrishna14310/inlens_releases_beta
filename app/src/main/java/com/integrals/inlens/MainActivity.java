@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -86,6 +87,7 @@ import com.integrals.inlens.AlbumProcedures.Checker;
 import com.integrals.inlens.AlbumProcedures.QuitCloudAlbumProcess;
 import com.integrals.inlens.Helper.NotificationHelper;
 import com.integrals.inlens.Helper.UploadDatabaseHelper;
+import com.integrals.inlens.ServiceImplementation.BroadCastReceivers.NotificationWorks;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -191,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
     private NotificationCompat.Builder ImageNotyBuilder;
     private NotificationHelper ImageNotyHelper;
 
+    private NotificationWorks notificationWorks;
 
     private ImageButton MainMenuButton , MainSearchButton , MainBackButton;
     private EditText MainSearchEdittext;
@@ -200,6 +203,8 @@ public class MainActivity extends AppCompatActivity {
     String MemberName="";
     String MemberImage="";
     private AlbumStartingServices albumStartingServices;
+
+
     public MainActivity() {
     }
 
@@ -207,6 +212,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        notificationWorks=new NotificationWorks();
 
         //User Authentication
         InAuthentication = FirebaseAuth.getInstance();
@@ -2051,6 +2058,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 }
+
 
 

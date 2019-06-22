@@ -18,6 +18,7 @@ public class RecentImage {
         tempImagePathString="";
     }
 
+
     public String recentImagePath()
     {
 
@@ -66,4 +67,59 @@ public class RecentImage {
         }
         return recentImageStringPath;
     }
+
+
+
+    public String imagePath(int index)
+    {
+
+
+        projection[0] = new String[]{
+                MediaStore.Images.ImageColumns._ID,
+                MediaStore.Images.ImageColumns.DATA,
+                MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.ImageColumns.DATE_MODIFIED,
+                MediaStore.Images.ImageColumns.MIME_TYPE
+
+        };
+
+
+        cursor = context.getContentResolver().
+                query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        projection[0], null, null,
+                        MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
+
+        //Cursor Control
+        try {
+
+            if (cursor.moveToPosition(index))
+
+            {
+                tempImagePathString = cursor.getString(1);
+                File file = new File(tempImagePathString);
+
+                if (file.exists()) {
+                    if ((!tempImagePathString.contains("/WhatsApp/"))
+                            && !tempImagePathString.contains("/Screenshots/")
+                    ) {
+                        recentImageStringPath=tempImagePathString;
+                    }
+
+                } else {
+
+                    projection[0] = null;
+                    cursor.close();
+                }
+
+            }
+        }
+        //Error Fix 7
+        catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        return recentImageStringPath;
+    }
+
 }
+
+

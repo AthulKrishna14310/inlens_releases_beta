@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -73,12 +74,37 @@ public class NotificationHelper extends ContextWrapper {
         return notificationManager;
     }
 
+    private void doPendingIntent(){
+
+        Intent upload_intent = new Intent("com.InLens.UPLOAD");
+        Intent right_intent = new Intent("com.InLens.RIGHT");
+        Intent left_intent = new Intent("com.InLens.LEFT");
+        upload_intent.setComponent(new ComponentName(getPackageName(),
+               "com.integrals.inlens.ServiceImplementation.BroadCastReceivers.NotificationWorks"));
+
+
+        left_intent.setComponent(new ComponentName(getPackageName(),
+                "com.integrals.inlens.ServiceImplementation.BroadCastReceivers.NotificationWorks"));
+
+        right_intent.setComponent(new ComponentName(getPackageName(),
+                "com.integrals.inlens.ServiceImplementation.BroadCastReceivers.NotificationWorks"));
+
+        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 9388,upload_intent , 0);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 8086, right_intent, 0);
+        PendingIntent pendingIntent3 = PendingIntent.getBroadcast(getApplicationContext(), 1428, left_intent, 0);
+        remoteViews.setOnClickPendingIntent(R.id.uploadNotificationButton,pendingIntent1);
+        remoteViews.setOnClickPendingIntent(R.id.rightNotificationArrow, pendingIntent2);
+        remoteViews.setOnClickPendingIntent(R.id.leftButtonNotification, pendingIntent3);
+        Log.d("InLens::","Intent made");
+
+    }
+
     public void notifyRecentImage(String imageLocation)
     {
         try {
             generateNotificationBitmap(imageLocation);
             remoteViews = new RemoteViews(getPackageName(), R.layout.notification_layout);
-            remoteViews.setImageViewBitmap(R.id.UploadImageViewNotification,recentImageBitmap);
+            doPendingIntent();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Notification.Builder builder = this.builderNotificationForRecentImageOreo();
                 builder.setOnlyAlertOnce(true);
@@ -117,9 +143,10 @@ public class NotificationHelper extends ContextWrapper {
         }catch (NullPointerException e){
             e.printStackTrace();
             Log.d("InLens","No recent image found");
+
             remoteViews = new RemoteViews(getPackageName(), R.layout.notification_layout);
-            Bitmap tempB=BitmapFactory.decodeResource(getResources(),R.drawable.ic_photo_camera);
-            remoteViews.setImageViewBitmap(R.id.UploadImageViewNotification,tempB);
+            doPendingIntent();
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Notification.Builder builder = this.builderNotificationForRecentImageOreo();
                 builder.setOnlyAlertOnce(true);
@@ -167,7 +194,7 @@ public class NotificationHelper extends ContextWrapper {
         try {
             generateNotificationBitmap(imageLocation);
             remoteViews = new RemoteViews(getPackageName(), R.layout.notification_layout);
-            remoteViews.setImageViewBitmap(R.id.UploadImageViewNotification,recentImageBitmap);
+            doPendingIntent();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Notification.Builder builder = this.builderNotificationForRecentImageOreo();
@@ -206,8 +233,7 @@ public class NotificationHelper extends ContextWrapper {
             e.printStackTrace();
             Log.d("InLens","No recent image found");
             remoteViews = new RemoteViews(getPackageName(), R.layout.notification_layout);
-            Bitmap tempB=BitmapFactory.decodeResource(getResources(),R.drawable.ic_photo_camera);
-            remoteViews.setImageViewBitmap(R.id.UploadImageViewNotification,tempB);
+            doPendingIntent();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Notification.Builder builder = this.builderNotificationForRecentImageOreo();
                 builder.setOnlyAlertOnce(true);

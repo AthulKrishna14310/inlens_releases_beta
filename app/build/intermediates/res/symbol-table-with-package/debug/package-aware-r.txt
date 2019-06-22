@@ -1019,6 +1019,7 @@ drawable ic_success_white_24dp
 drawable ic_swipe_left
 drawable ic_tick
 drawable ic_up
+drawable ic_upload_notification
 drawable ic_visibility_off
 drawable ic_visibility_on
 drawable ic_warning_outline_white_24dp
@@ -1040,6 +1041,7 @@ drawable notification_bg_low_pressed
 drawable notification_bg_normal
 drawable notification_bg_normal_pressed
 drawable notification_icon_background
+drawable notification_right
 drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
@@ -1054,7 +1056,6 @@ drawable upload_icon_notification
 drawable white_stroke
 font acme
 id ALT
-id AddForUpload
 id AddLocationButton
 id AddWeather
 id AlbumDescriptionEditText
@@ -1085,7 +1086,6 @@ id EmailLayout
 id EventTypeText
 id FUNCTION
 id ForgotPassword
-id GotoUploadActivity
 id ImageProgress
 id ImageView_image
 id InviteLinkButton
@@ -1322,6 +1322,7 @@ id item_img
 id item_touch_helper_previous_elevation
 id largeLabel
 id left
+id leftButtonNotification
 id light
 id line1
 id line3
@@ -1373,6 +1374,7 @@ id never
 id nocloudalbumtextview
 id none
 id normal
+id notificationText
 id notification_background
 id notification_main_column
 id notification_main_column_container
@@ -1397,7 +1399,6 @@ id progress_circular
 id progress_horizontal
 id quit_cloud_album
 id radio
-id recentImageTextView
 id rectangle
 id recycler_view
 id reg_confirm_show_password
@@ -1407,6 +1408,7 @@ id reg_show_password_vis_on
 id renamesituation
 id restart_service
 id right
+id rightNotificationArrow
 id right_icon
 id right_side
 id root_for_cloud_album
@@ -1466,7 +1468,6 @@ id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
 id textView
-id textView2
 id textViewAlbumQR
 id text_input_password_toggle
 id textinput_counter
@@ -1497,6 +1498,7 @@ id txtTime
 id txtWind
 id uniform
 id up
+id uploadNotificationButton
 id upload_activity
 id useLogo
 id view_offset_helper

@@ -81,6 +81,17 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name="com.integrals.inlens.ServiceImplementation.BroadCastReceivers.NotificationWorks"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="com.InLens.UPLOAD" />
+                <action android:name="com.InLens.RIGHT" />
+                <action android:name="com.InLens.LEFT" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name="com.integrals.inlens.ServiceImplementation.InLensGallery.MainActivity"
             android:autoRemoveFromRecents="true"
