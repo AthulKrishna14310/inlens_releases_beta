@@ -44,6 +44,8 @@ public class UploadService extends Service {
         albumStoppingServices=new AlbumStoppingServices(getApplicationContext());
         uploadDatabaseHelper = new UploadDatabaseHelper(getApplicationContext(), "", null, 1);
         currentDatabase = new CurrentDatabase(getApplicationContext(), "", null, 1);
+        int up=currentDatabase.GetUploadingTargetColumn();
+        uploadDatabaseHelper.UpdateUploadStatus(up,"NOT_UPLOADED");
         checker=new Checker(getApplicationContext());
 
     }
@@ -53,7 +55,7 @@ public class UploadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId)
     {
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
         {
 
             String input = intent.getStringExtra("inputExtra");
